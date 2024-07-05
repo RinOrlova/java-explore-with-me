@@ -30,9 +30,9 @@ public class StatisticsController {
 
     @GetMapping(ApiPathConstants.STATS_PATH)
     public Collection<StatisticsResponse> getStatistics(@DateTimeFormat(pattern = StatisticsConstants.DATE_FORMAT)
-                                                  @RequestParam(value = "start") String startParam,
+                                                        @RequestParam(value = "start") String startParam,
                                                         @DateTimeFormat(pattern = StatisticsConstants.DATE_FORMAT)
-                                                  @RequestParam(value = "end") String endParam,
+                                                        @RequestParam(value = "end") String endParam,
                                                         @RequestParam(required = false) List<String> uris,
                                                         @RequestParam(required = false, defaultValue = "false") Boolean unique) {
         LocalDateTime start = dataTimeParamsEncoder.getLocalDateTimeParamOfEncodedValue(startParam);

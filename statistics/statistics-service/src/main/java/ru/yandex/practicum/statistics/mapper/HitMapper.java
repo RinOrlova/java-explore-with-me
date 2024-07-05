@@ -10,5 +10,4 @@ public interface HitMapper {
     @Mapping(target = "id", ignore = true)
     HitEntity map(HitRequest hitRequest);
 
-    // TODO add mapper HitEntity -> StatisticsResponse
 }

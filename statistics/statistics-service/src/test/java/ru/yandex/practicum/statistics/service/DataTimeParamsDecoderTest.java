@@ -17,14 +17,14 @@ class DataTimeParamsDecoderTest {
 
     @Test
     void positive_regularEncodedString() {
-        String formattedDateTime = TestConstants.DEFAULT_TIMESTAMP.format(StatisticsConstants.DATE_TIME_FORMATTER);
+        String formattedDateTime = TestConstants.defaultTimestamp.format(StatisticsConstants.DATE_TIME_FORMATTER);
         LocalDateTime decodedValue = dataTimeParamsDecoder.getLocalDateTimeParamOfEncodedValue(formattedDateTime);
-        assertEquals(TestConstants.DEFAULT_TIMESTAMP, decodedValue);
+        assertEquals(TestConstants.defaultTimestamp, decodedValue);
     }
 
     @Test
     void negative_notLocalDateTimeFormat_exceptionExpected() {
-        String formattedDateTime = TestConstants.DEFAULT_TIMESTAMP.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String formattedDateTime = TestConstants.defaultTimestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         assertThrows(InvalidDateFormatRequestedException.class, () -> dataTimeParamsDecoder.getLocalDateTimeParamOfEncodedValue(formattedDateTime));
     }
 

@@ -40,7 +40,7 @@ class StatisticsStorageImplTest {
         hitRequest.setApp("app");
         hitRequest.setUri("/uri");
         hitRequest.setIp("127.0.0.1");
-        hitRequest.setTimestamp(TestConstants.DEFAULT_TIMESTAMP);
+        hitRequest.setTimestamp(TestConstants.defaultTimestamp);
 
         statisticsStorage.addHitRequest(hitRequest);
 
@@ -50,7 +50,7 @@ class StatisticsStorageImplTest {
         assertEquals("app", hitEntity.getApp());
         assertEquals("/uri", hitEntity.getUri());
         assertEquals("127.0.0.1", hitEntity.getIp());
-        assertEquals(TestConstants.DEFAULT_TIMESTAMP, hitEntity.getTimestamp());
+        assertEquals(TestConstants.defaultTimestamp, hitEntity.getTimestamp());
     }
 
     @Test

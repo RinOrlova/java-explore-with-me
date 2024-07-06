@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class InvalidDateRequestedException extends RuntimeException{
+public class InvalidDateRequestedException extends RuntimeException {
 
     private static final String EXCEPTION_MESSAGE = "Start=%s must be before or equal end=%s";
 

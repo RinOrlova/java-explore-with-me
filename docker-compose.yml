@@ -23,16 +23,33 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
     volumes:
-      - pgdata:/var/lib/postgresql/data/
+      - pgdata:/var/lib/postgresql/stats/data/
+    ports:
+      - "5433:5432"
     networks:
       - app-network
 
- # ewm-service:
- #   ports:
- #     - "8080:8080"
+  ewm-service:
+    build: ./explore-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ewm-db
+    networks:
+      - app-network
 
-#  ewm-db:
-#    image: postgres:14-alpine
+  ewm-db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=ewm
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - pgdata:/var/lib/postgresql/ewm/data/
+    ports:
+      - "5434:5432"
+    networks:
+      - app-network
 
 networks:
   app-network:

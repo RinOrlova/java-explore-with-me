@@ -11,7 +11,13 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationException(InvalidDateRequestedException exc){
+    public ErrorResponse handleInvalidDateRequestedException(InvalidDateRequestedException exc) {
+        return new ErrorResponse("Invalid data in request.", exc.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidDateFormatRequestedException(InvalidDateFormatRequestedException exc) {
         return new ErrorResponse("Invalid data in request.", exc.getMessage());
     }
 

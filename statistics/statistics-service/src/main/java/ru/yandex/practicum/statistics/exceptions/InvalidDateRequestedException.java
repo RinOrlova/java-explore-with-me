@@ -12,7 +12,7 @@ public class InvalidDateRequestedException extends RuntimeException{
     private static final String EXCEPTION_MESSAGE = "Start=%s must be before or equal end=%s";
 
     public InvalidDateRequestedException(LocalDateTime start,
-                                         LocalDateTime end){
+                                         LocalDateTime end) {
         super(String.format(EXCEPTION_MESSAGE, start, end));
     }
 }

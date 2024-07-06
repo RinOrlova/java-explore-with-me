@@ -10,7 +10,7 @@ import java.util.List;
 public interface HitRepository extends JpaRepository<HitEntity, Long> {
 
     @Query(value = "SELECT h.app, h.uri, " +
-            "COUNT(DISTINCT CASE WHEN :unique = true THEN h.ip ELSE h.id END) as count " +
+            "COUNT(DISTINCT CASE WHEN :unique = true THEN h.ip ELSE CAST(h.id AS VARCHAR) END) as count " +
             "FROM hits h " +
             "WHERE h.timestamp >= :start AND h.timestamp <= :end " +
             "GROUP BY h.app, h.uri", nativeQuery = true)
@@ -19,7 +19,7 @@ public interface HitRepository extends JpaRepository<HitEntity, Long> {
                                      @Param("unique") boolean unique);
 
     @Query(value = "SELECT h.app, h.uri, " +
-            "COUNT(DISTINCT CASE WHEN :unique = true THEN h.ip ELSE h.id END) as count " +
+            "COUNT(DISTINCT CASE WHEN :unique = true THEN h.ip ELSE CAST(h.id AS VARCHAR) END) as count " +
             "FROM hits h " +
             "WHERE h.timestamp >= :start AND h.timestamp <= :end " +
             "AND h.uri IN :uris " +

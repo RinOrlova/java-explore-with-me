@@ -24,7 +24,7 @@ public class StatisticsStorageImpl implements StatisticsStorage {
     }
 
     @Override
-    public List<StatisticsResponse> getAllStatistics(LocalDateTime start, LocalDateTime end, boolean unique){
+    public List<StatisticsResponse> getAllStatistics(LocalDateTime start, LocalDateTime end, boolean unique) {
         List<Object[]> results = hitRepository.findAllStatistics(start, end, unique);
         return results.stream()
                 .map(result -> new StatisticsResponse((String) result[0], (String) result[1], ((Number) result[2]).longValue()))
@@ -32,7 +32,7 @@ public class StatisticsStorageImpl implements StatisticsStorage {
     }
 
     @Override
-    public List<StatisticsResponse> getStatisticsByURIs(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique){
+    public List<StatisticsResponse> getStatisticsByURIs(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         List<Object[]> results = hitRepository.findStatisticsByURIs(start, end, uris, unique);
         return results.stream()
                 .map(result -> new StatisticsResponse((String) result[0], (String) result[1], ((Number) result[2]).longValue()))

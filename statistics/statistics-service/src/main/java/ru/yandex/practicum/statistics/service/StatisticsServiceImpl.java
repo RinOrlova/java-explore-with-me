@@ -25,9 +25,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public Collection<StatisticsResponse> getStatistics(LocalDateTime start,
-                                                  LocalDateTime end,
-                                                  @Nullable List<String> uris,
-                                                  boolean unique) {
+                                                        LocalDateTime end,
+                                                        @Nullable List<String> uris,
+                                                        boolean unique) {
         validateInputDateTimeParams(start, end);
         return getStatisticsFromStorage(start, end, uris, unique);
     }
@@ -35,8 +35,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     private Collection<StatisticsResponse> getStatisticsFromStorage(LocalDateTime start,
                                                                     LocalDateTime end,
                                                                     @Nullable List<String> uris,
-                                                                    boolean unique){
-        if(uris == null || uris.isEmpty()) {
+                                                                    boolean unique) {
+        if (uris == null || uris.isEmpty()) {
             return statisticsStorage.getAllStatistics(start, end, unique);
         }
         return statisticsStorage.getStatisticsByURIs(start, end, uris, unique);

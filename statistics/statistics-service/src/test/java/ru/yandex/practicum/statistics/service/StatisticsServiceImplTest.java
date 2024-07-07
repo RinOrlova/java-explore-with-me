@@ -32,7 +32,7 @@ class StatisticsServiceImplTest {
         hitRequest.setApp("app");
         hitRequest.setUri("/uri");
         hitRequest.setIp("127.0.0.1");
-        hitRequest.setTimestamp(TestConstants.DEFAULT_TIMESTAMP);
+        hitRequest.setTimestamp(TestConstants.defaultTimestamp);
 
         subject.saveRequest(hitRequest);
 
@@ -43,8 +43,8 @@ class StatisticsServiceImplTest {
 
     @Test
     void positive_getStatistics_nullableURIs() {
-        LocalDateTime end = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
-        LocalDateTime start = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime end = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime start = TestConstants.defaultTimestamp.minusSeconds(1);
         when(statisticsStorage.getAllStatistics(any(LocalDateTime.class), any(LocalDateTime.class), anyBoolean()))
                 .thenReturn(emptyList());
 
@@ -58,8 +58,8 @@ class StatisticsServiceImplTest {
 
     @Test
     void positive_getStatisticsByURIs_nonEmptyURIs() {
-        LocalDateTime end = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
-        LocalDateTime start = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime end = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime start = TestConstants.defaultTimestamp.minusSeconds(1);
         List<String> uris = List.of("/uri", "/uri2");
         when(statisticsStorage.getStatisticsByURIs(any(LocalDateTime.class), any(LocalDateTime.class), anyList(), anyBoolean()))
                 .thenReturn(emptyList());
@@ -74,8 +74,8 @@ class StatisticsServiceImplTest {
 
     @Test
     void negative_getStatisticsByURIs_emptyURIs() {
-        LocalDateTime end = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
-        LocalDateTime start = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime end = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime start = TestConstants.defaultTimestamp.minusSeconds(1);
         List<String> uris = emptyList();
         when(statisticsStorage.getAllStatistics(any(LocalDateTime.class), any(LocalDateTime.class), anyBoolean()))
                 .thenReturn(emptyList());
@@ -91,8 +91,8 @@ class StatisticsServiceImplTest {
 
     @Test
     void negative_invalidInputDateParams() {
-        LocalDateTime endParam = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
-        LocalDateTime startParam = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
+        LocalDateTime endParam = TestConstants.defaultTimestamp.minusSeconds(1);
+        LocalDateTime startParam = TestConstants.defaultTimestamp.plusSeconds(1);
         assertThrows(InvalidDateRequestedException.class, () -> subject.getStatistics(startParam, endParam, null, false));
         assertThrows(InvalidDateRequestedException.class, () -> subject.getStatistics(startParam, endParam, null, true));
         assertThrows(InvalidDateRequestedException.class, () -> subject.getStatistics(startParam, endParam, emptyList(), true));

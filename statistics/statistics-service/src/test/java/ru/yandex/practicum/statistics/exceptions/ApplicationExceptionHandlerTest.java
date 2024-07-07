@@ -38,7 +38,7 @@ class ApplicationExceptionHandlerTest {
 
         @GetMapping("/invalidDateRequested")
         public void throwInvalidDataInRequestException() {
-            throw new InvalidDateRequestedException(TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1), TestConstants.DEFAULT_TIMESTAMP);
+            throw new InvalidDateRequestedException(TestConstants.defaultTimestamp.plusSeconds(1), TestConstants.defaultTimestamp);
         }
     }
 

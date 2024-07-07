@@ -45,7 +45,7 @@ class StatisticsAppTest {
         hitRequest.setApp("app");
         hitRequest.setIp("127.0.0.1");
         hitRequest.setUri("/uri");
-        hitRequest.setTimestamp(TestConstants.DEFAULT_TIMESTAMP);
+        hitRequest.setTimestamp(TestConstants.defaultTimestamp);
 
         // Add hit from the same IP twice
         mockMvc.perform(post(ApiPathConstants.HIT_PATH)
@@ -60,8 +60,8 @@ class StatisticsAppTest {
         // Get statistics for non-unique IPs
         String getStatisticsUrl = new StringBuilder()
                 .append(ApiPathConstants.STATS_PATH)
-                .append("?start=").append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1)))
-                .append("&end=").append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1)))
+                .append("?start=").append(encodeDateForRequestURI(TestConstants.defaultTimestamp.minusSeconds(1)))
+                .append("&end=").append(encodeDateForRequestURI(TestConstants.defaultTimestamp.plusSeconds(1)))
                 .append("&uris=").append("/uri")
                 .toString();
 
@@ -80,8 +80,8 @@ class StatisticsAppTest {
         // Get statistics for unique IPs
         String getStatisticsUrlUnique = new StringBuilder()
                 .append(ApiPathConstants.STATS_PATH)
-                .append("?start=").append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1)))
-                .append("&end=").append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1)))
+                .append("?start=").append(encodeDateForRequestURI(TestConstants.defaultTimestamp.minusSeconds(1)))
+                .append("&end=").append(encodeDateForRequestURI(TestConstants.defaultTimestamp.plusSeconds(1)))
                 .append("&uris=").append("/uri")
                 .append("&unique=").append(true)
                 .toString();
@@ -101,8 +101,8 @@ class StatisticsAppTest {
         // Get statistics - not found by uri
         String getStatisticsUrlNotFoundByUri = new StringBuilder()
                 .append(ApiPathConstants.STATS_PATH)
-                .append("?start=").append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1)))
-                .append("&end=").append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1)))
+                .append("?start=").append(encodeDateForRequestURI(TestConstants.defaultTimestamp.minusSeconds(1)))
+                .append("&end=").append(encodeDateForRequestURI(TestConstants.defaultTimestamp.plusSeconds(1)))
                 .append("&uris=").append("/nonExistingUri")
                 .toString();
 
@@ -116,8 +116,8 @@ class StatisticsAppTest {
         // Get statistics - not found by dateTime
         String getStatisticsUrlNotFoundByDateTime = new StringBuilder()
                 .append(ApiPathConstants.STATS_PATH)
-                .append("?start=").append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP.minusSeconds(2)))
-                .append("&end=").append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1)))
+                .append("?start=").append(encodeDateForRequestURI(TestConstants.defaultTimestamp.minusSeconds(2)))
+                .append("&end=").append(encodeDateForRequestURI(TestConstants.defaultTimestamp.minusSeconds(1)))
                 .append("&uris=").append("/uri")
                 .toString();
 

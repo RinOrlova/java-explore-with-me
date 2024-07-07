@@ -2,11 +2,10 @@ version: '3.1'
 services:
 
   stats-server:
-    build: ./statistics/stats-server
+    build: ./stats/stats-server
     ports:
       - "9090:9090"
     environment:
-      SPRING_PROFILES_ACTIVE: postgres
       SPRING_DATASOURCE_URL: jdbc:postgresql://stats-db:5432/explore_with_me
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
@@ -16,6 +15,11 @@ services:
         condition: service_healthy
     networks:
       - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:9090/actuator/health || exit 1" ]
+      interval: 1m
+      timeout: 30s
+      retries: 10
     deploy:
       resources:
         limits:
@@ -60,6 +64,11 @@ services:
         condition: service_healthy
     networks:
       - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
+      interval: 1m
+      timeout: 30s
+      retries: 10
     deploy:
       resources:
         limits:

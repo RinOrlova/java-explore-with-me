@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>ru.yandex.practicum</groupId>
-    <artifactId>statistics</artifactId>
+    <artifactId>stats</artifactId>
     <packaging>pom</packaging>
     <modules>
         <module>client</module>

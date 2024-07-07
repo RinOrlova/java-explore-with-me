@@ -2,7 +2,7 @@ version: '3.1'
 services:
 
   stats-server:
-    build: ./statistics/statistics-service
+    build: ./statistics/stats-server
     ports:
       - "9090:9090"
     environment:
@@ -36,7 +36,7 @@ services:
       retries: 5
 
   ewm-service:
-    build: ./explore-service
+    build: ./ewm-service
     ports:
       - "8080:8080"
     depends_on:

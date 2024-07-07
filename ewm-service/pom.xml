@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>ru.yandex.practicum</groupId>
-    <artifactId>explore-service</artifactId>
+    <artifactId>ewm-service</artifactId>
 
     <dependencies>
         <dependency>

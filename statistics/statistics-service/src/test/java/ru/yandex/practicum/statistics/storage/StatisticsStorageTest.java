@@ -36,7 +36,7 @@ class StatisticsStorageTest {
         assertEquals("app", hitEntityFromStorage.getApp());
         assertEquals("/uri", hitEntityFromStorage.getUri());
         assertEquals("127.0.0.1", hitEntityFromStorage.getIp());
-        assertEquals(TestConstants.defaultTimestamp, hitEntityFromStorage.getTimestamp());
+        assertEquals(TestConstants.DEFAULT_TIMESTAMP, hitEntityFromStorage.getTimestamp());
     }
 
     @Test
@@ -44,8 +44,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity = getDefaultHitEntity();
         hitRepository.save(hitEntity);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<Object[]> allStatistics = hitRepository.findAllStatistics(timestampBefore, timestampAfter, false);
         assertEquals(1, allStatistics.size());
@@ -63,8 +63,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity2 = getDefaultHitEntity();
         hitRepository.save(hitEntity2);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<Object[]> allStatistics = hitRepository.findAllStatistics(timestampBefore, timestampAfter, false);
         assertEquals(1, allStatistics.size());
@@ -82,8 +82,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity2 = getDefaultHitEntity();
         hitRepository.save(hitEntity2);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<Object[]> allStatistics = hitRepository.findAllStatistics(timestampBefore, timestampAfter, true);
         assertEquals(1, allStatistics.size());
@@ -102,8 +102,8 @@ class StatisticsStorageTest {
         hitEntity2.setIp("127.0.0.2");
         hitRepository.save(hitEntity2);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<Object[]> allStatistics = hitRepository.findAllStatistics(timestampBefore, timestampAfter, true);
         assertEquals(1, allStatistics.size());
@@ -122,8 +122,8 @@ class StatisticsStorageTest {
         hitEntity2.setApp("app2");
         hitRepository.save(hitEntity2);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<Object[]> allStatistics = hitRepository.findAllStatistics(timestampBefore, timestampAfter, true);
         assertEquals(2, allStatistics.size());
@@ -149,8 +149,8 @@ class StatisticsStorageTest {
         hitEntity2.setUri("/uri2");
         hitRepository.save(hitEntity2);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<Object[]> allStatistics = hitRepository.findAllStatistics(timestampBefore, timestampAfter, true);
         assertEquals(2, allStatistics.size());
@@ -173,8 +173,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity = getDefaultHitEntity();
         hitRepository.save(hitEntity);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(2);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.minusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(2);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
 
         List<Object[]> allStatisticsNonGrouped = hitRepository.findAllStatistics(timestampBefore, timestampAfter, false);
         assertTrue(allStatisticsNonGrouped.isEmpty());
@@ -187,8 +187,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity = getDefaultHitEntity();
         hitRepository.save(hitEntity);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.plusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(2);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(2);
 
         List<Object[]> allStatisticsNonGrouped = hitRepository.findAllStatistics(timestampBefore, timestampAfter, false);
         assertTrue(allStatisticsNonGrouped.isEmpty());
@@ -201,8 +201,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity = getDefaultHitEntity();
         hitRepository.save(hitEntity);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<String> uris = List.of("/uri", "/non_existing_uri");
         List<Object[]> allStatistics = hitRepository.findStatisticsByURIs(timestampBefore, timestampAfter, uris, false);
@@ -221,8 +221,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity2 = getDefaultHitEntity();
         hitRepository.save(hitEntity2);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<String> uris = List.of("/uri", "/non_existing_uri");
         List<Object[]> allStatistics = hitRepository.findStatisticsByURIs(timestampBefore, timestampAfter, uris, false);
@@ -241,8 +241,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity2 = getDefaultHitEntity();
         hitRepository.save(hitEntity2);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<String> uris = List.of("/uri", "/non_existing_uri");
         List<Object[]> allStatistics = hitRepository.findStatisticsByURIs(timestampBefore, timestampAfter, uris, true);
@@ -262,8 +262,8 @@ class StatisticsStorageTest {
         hitEntity2.setIp("127.0.0.2");
         hitRepository.save(hitEntity2);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<String> uris = List.of("/uri", "/non_existing_uri");
         List<Object[]> allStatistics = hitRepository.findStatisticsByURIs(timestampBefore, timestampAfter, uris, true);
@@ -283,8 +283,8 @@ class StatisticsStorageTest {
         hitEntity2.setApp("app2");
         hitRepository.save(hitEntity2);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<String> uris = List.of("/uri");
         List<Object[]> allStatistics = hitRepository.findStatisticsByURIs(timestampBefore, timestampAfter, uris, true);
@@ -311,8 +311,8 @@ class StatisticsStorageTest {
         hitEntity2.setUri("/uri2");
         hitRepository.save(hitEntity2);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<String> uris = List.of("/uri", "/uri2");
         List<Object[]> allStatistics = hitRepository.findStatisticsByURIs(timestampBefore, timestampAfter, uris, true);
@@ -336,8 +336,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity = getDefaultHitEntity();
         hitRepository.save(hitEntity);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
 
         List<String> uris = List.of("/non_existing_uri");
         List<Object[]> allStatisticsNonGrouped = hitRepository.findStatisticsByURIs(timestampBefore, timestampAfter, uris, false);
@@ -351,8 +351,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity = getDefaultHitEntity();
         hitRepository.save(hitEntity);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.minusSeconds(2);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.minusSeconds(1);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(2);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
 
         List<String> uris = List.of("/uri");
         List<Object[]> allStatisticsNonGrouped = hitRepository.findStatisticsByURIs(timestampBefore, timestampAfter, uris, false);
@@ -366,8 +366,8 @@ class StatisticsStorageTest {
         HitEntity hitEntity = getDefaultHitEntity();
         hitRepository.save(hitEntity);
 
-        LocalDateTime timestampBefore = TestConstants.defaultTimestamp.plusSeconds(1);
-        LocalDateTime timestampAfter = TestConstants.defaultTimestamp.plusSeconds(2);
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(2);
 
         List<String> uris = List.of("/uri");
         List<Object[]> allStatisticsNonGrouped = hitRepository.findStatisticsByURIs(timestampBefore, timestampAfter, uris, false);
@@ -382,7 +382,7 @@ class StatisticsStorageTest {
         hitEntity.setApp("app");
         hitEntity.setUri("/uri");
         hitEntity.setIp("127.0.0.1");
-        hitEntity.setTimestamp(TestConstants.defaultTimestamp);
+        hitEntity.setTimestamp(TestConstants.DEFAULT_TIMESTAMP);
         return hitEntity;
     }
 }

@@ -12,48 +12,60 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
       DB_HOST: stats-db
     depends_on:
-      - stats-db
+      stats-db:
+        condition: service_healthy
     networks:
       - app-network
 
-
   stats-db:
-    image: postgres:latest
+    image: postgres:14-alpine
     environment:
       - POSTGRES_DB=explore_with_me
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
     volumes:
-      - pgdata:/var/lib/postgresql/stats/data/
+      - pgdata-stats:/var/lib/postgresql/stats/data/
     ports:
       - "5433:5432"
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d explore_with_me"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   ewm-service:
     build: ./explore-service
     ports:
       - "8080:8080"
     depends_on:
-      - ewm-db
+      ewm-db:
+        condition: service_healthy
     networks:
       - app-network
 
   ewm-db:
-    image: postgres:latest
+    image: postgres:14-alpine
     environment:
       - POSTGRES_DB=ewm
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
     volumes:
-      - pgdata:/var/lib/postgresql/ewm/data/
+      - pgdata-ewm:/var/lib/postgresql/ewm/data/
     ports:
       - "5434:5432"
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d ewm"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   app-network:
 
 volumes:
-  pgdata:
+  pgdata-stats:
+  pgdata-ewm:

@@ -10,20 +10,22 @@ import java.util.List;
 public interface HitRepository extends JpaRepository<HitEntity, Long> {
 
     @Query(value = "SELECT h.app, h.uri, " +
-            "COUNT(DISTINCT CASE WHEN :unique = true THEN h.ip ELSE CAST(h.id AS VARCHAR) END) as count " +
+            "COUNT(DISTINCT CASE WHEN :unique = true THEN h.ip ELSE CAST(h.id AS VARCHAR) END) as hitCount " +
             "FROM hits h " +
             "WHERE h.timestamp >= :start AND h.timestamp <= :end " +
-            "GROUP BY h.app, h.uri", nativeQuery = true)
+            "GROUP BY h.app, h.uri " +
+            "ORDER BY hitCount DESC", nativeQuery = true)
     List<Object[]> findAllStatistics(@Param("start") LocalDateTime start,
                                      @Param("end") LocalDateTime end,
                                      @Param("unique") boolean unique);
 
     @Query(value = "SELECT h.app, h.uri, " +
-            "COUNT(DISTINCT CASE WHEN :unique = true THEN h.ip ELSE CAST(h.id AS VARCHAR) END) as count " +
+            "COUNT(DISTINCT CASE WHEN :unique = true THEN h.ip ELSE CAST(h.id AS VARCHAR) END) as hitCount " +
             "FROM hits h " +
             "WHERE h.timestamp >= :start AND h.timestamp <= :end " +
             "AND h.uri IN :uris " +
-            "GROUP BY h.app, h.uri", nativeQuery = true)
+            "GROUP BY h.app, h.uri " +
+            "ORDER BY hitCount DESC", nativeQuery = true)
     List<Object[]> findStatisticsByURIs(@Param("start") LocalDateTime start,
                                         @Param("end") LocalDateTime end,
                                         @Param("uris") List<String> uris,

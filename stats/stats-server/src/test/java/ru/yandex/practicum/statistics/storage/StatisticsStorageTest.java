@@ -76,6 +76,34 @@ class StatisticsStorageTest {
     }
 
     @Test
+    void test_findAllStatistics_timeRangeCoversHitTimestamp_multipleHits_nonGrouped_sorted() {
+        HitEntity hitEntity = getDefaultHitEntity();
+        hitRepository.save(hitEntity);
+        HitEntity hitEntity2 = getDefaultHitEntity();
+        hitRepository.save(hitEntity2);
+        HitEntity hitEntity3 = getDefaultHitEntity();
+        hitEntity3.setUri("/uri1");
+        hitRepository.save(hitEntity3);
+
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
+
+        List<Object[]> allStatistics = hitRepository.findAllStatistics(timestampBefore, timestampAfter, false);
+        assertEquals(2, allStatistics.size());
+        List<StatisticsResponse> statisticsResponses = allStatistics.stream()
+                .map(statistics -> new StatisticsResponse((String) statistics[0], (String) statistics[1], ((Number) statistics[2]).longValue()))
+                .collect(Collectors.toList());
+        StatisticsResponse statisticsResponse1 = statisticsResponses.get(0);
+        assertEquals("app", statisticsResponse1.getApp());
+        assertEquals("/uri", statisticsResponse1.getUri());
+        assertEquals(2L, statisticsResponse1.getHits());
+        StatisticsResponse statisticsResponse2 = statisticsResponses.get(1);
+        assertEquals("app", statisticsResponse2.getApp());
+        assertEquals("/uri1", statisticsResponse2.getUri());
+        assertEquals(1L, statisticsResponse2.getHits());
+    }
+
+    @Test
     void test_findAllStatistics_timeRangeCoversHitTimestamp_multipleHits_grouped() {
         HitEntity hitEntity = getDefaultHitEntity();
         hitRepository.save(hitEntity);
@@ -232,6 +260,35 @@ class StatisticsStorageTest {
         assertEquals("app", statisticsResponse.getApp());
         assertEquals("/uri", statisticsResponse.getUri());
         assertEquals(2L, statisticsResponse.getHits());
+    }
+
+    @Test
+    void test_findStatisticsByURIs_timeRangeCoversHitTimestamp_multipleHits_nonGrouped_sorted() {
+        HitEntity hitEntity = getDefaultHitEntity();
+        hitRepository.save(hitEntity);
+        HitEntity hitEntity2 = getDefaultHitEntity();
+        hitRepository.save(hitEntity2);
+        HitEntity hitEntity3 = getDefaultHitEntity();
+        hitEntity3.setUri("/uri1");
+        hitRepository.save(hitEntity3);
+
+        LocalDateTime timestampBefore = TestConstants.DEFAULT_TIMESTAMP.minusSeconds(1);
+        LocalDateTime timestampAfter = TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1);
+
+        List<String> uris = List.of("/uri", "/uri1");
+        List<Object[]> allStatistics = hitRepository.findStatisticsByURIs(timestampBefore, timestampAfter, uris, false);
+        assertEquals(2, allStatistics.size());
+        List<StatisticsResponse> statisticsResponses = allStatistics.stream()
+                .map(statistics -> new StatisticsResponse((String) statistics[0], (String) statistics[1], ((Number) statistics[2]).longValue()))
+                .collect(Collectors.toList());
+        StatisticsResponse statisticsResponse1 = statisticsResponses.get(0);
+        assertEquals("app", statisticsResponse1.getApp());
+        assertEquals("/uri", statisticsResponse1.getUri());
+        assertEquals(2L, statisticsResponse1.getHits());
+        StatisticsResponse statisticsResponse2 = statisticsResponses.get(1);
+        assertEquals("app", statisticsResponse2.getApp());
+        assertEquals("/uri1", statisticsResponse2.getUri());
+        assertEquals(1L, statisticsResponse2.getHits());
     }
 
     @Test

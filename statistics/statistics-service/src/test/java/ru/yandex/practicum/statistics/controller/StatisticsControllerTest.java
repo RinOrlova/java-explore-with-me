@@ -50,7 +50,7 @@ class StatisticsControllerTest {
         hitRequest.setApp("app");
         hitRequest.setIp("127.0.0.1");
         hitRequest.setUri("/uri");
-        hitRequest.setTimestamp(TestConstants.defaultTimestamp);
+        hitRequest.setTimestamp(TestConstants.DEFAULT_TIMESTAMP);
 
         mockMvc.perform(post(ApiPathConstants.HIT_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -65,9 +65,9 @@ class StatisticsControllerTest {
         String urlTemplate = new StringBuilder()
                 .append(ApiPathConstants.STATS_PATH)
                 .append("?start=")
-                .append(encodeDateForRequestURI(TestConstants.defaultTimestamp))
+                .append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP))
                 .append("&end=")
-                .append(encodeDateForRequestURI(TestConstants.defaultTimestamp.plusSeconds(1)))
+                .append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1)))
                 .toString();
         Collection<StatisticsResponse> statistics = List.of(
                 new StatisticsResponse("app", "/uri", 1L),
@@ -84,7 +84,7 @@ class StatisticsControllerTest {
         });
         assertEquals(statistics, statisticsResponses);
 
-        verify(statisticsService, times(1)).getStatistics(TestConstants.defaultTimestamp, TestConstants.defaultTimestamp.plusSeconds(1), null, false);
+        verify(statisticsService, times(1)).getStatistics(TestConstants.DEFAULT_TIMESTAMP, TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1), null, false);
     }
 
     @Test
@@ -92,9 +92,9 @@ class StatisticsControllerTest {
         String urlTemplate = new StringBuilder()
                 .append(ApiPathConstants.STATS_PATH)
                 .append("?start=")
-                .append(encodeDateForRequestURI(TestConstants.defaultTimestamp))
+                .append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP))
                 .append("&end=")
-                .append(encodeDateForRequestURI(TestConstants.defaultTimestamp.plusSeconds(1)))
+                .append(encodeDateForRequestURI(TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1)))
                 .append("&uris=")
                 .append("/uri1,/uri2")
                 .append("&unique=true")
@@ -103,7 +103,7 @@ class StatisticsControllerTest {
                 new StatisticsResponse("app", "/uri1", 1L),
                 new StatisticsResponse("app", "/uri2", 2L)
         );
-        when(statisticsService.getStatistics(TestConstants.defaultTimestamp, TestConstants.defaultTimestamp.plusSeconds(1), List.of("/uri1", "/uri2"), true))
+        when(statisticsService.getStatistics(TestConstants.DEFAULT_TIMESTAMP, TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1), List.of("/uri1", "/uri2"), true))
                 .thenReturn(statistics);
 
         String statisticsResponseJson = mockMvc.perform(get(urlTemplate))
@@ -114,7 +114,7 @@ class StatisticsControllerTest {
         });
         assertEquals(statistics, statisticsResponses);
 
-        verify(statisticsService, times(1)).getStatistics(TestConstants.defaultTimestamp, TestConstants.defaultTimestamp.plusSeconds(1), List.of("/uri1", "/uri2"), true);
+        verify(statisticsService, times(1)).getStatistics(TestConstants.DEFAULT_TIMESTAMP, TestConstants.DEFAULT_TIMESTAMP.plusSeconds(1), List.of("/uri1", "/uri2"), true);
     }
 
     private static String encodeDateForRequestURI(LocalDateTime localDateTime) {

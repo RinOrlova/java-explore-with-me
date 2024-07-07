@@ -18,7 +18,7 @@ class HitMapperTest {
         hitRequest.setApp("app");
         hitRequest.setIp("127.0.0.1");
         hitRequest.setUri("/uri");
-        hitRequest.setTimestamp(TestConstants.defaultTimestamp);
+        hitRequest.setTimestamp(TestConstants.DEFAULT_TIMESTAMP);
 
         HitEntity hitEntity = hitMapper.map(hitRequest);
         assertEquals(hitRequest.getApp(), hitEntity.getApp());

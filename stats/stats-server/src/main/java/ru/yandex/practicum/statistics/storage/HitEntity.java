@@ -21,11 +21,11 @@ public class HitEntity {
     @Column(name = "id")
     private Long id;
     @Column(name = "app", nullable = false)
-    String app;
+    private String app;
     @Column(name = "uri", nullable = false)
-    String uri;
+    private String uri;
     @Column(name = "ip", nullable = false)
-    String ip;
+    private String ip;
     @Column(name = "timestamp", nullable = false)
-    LocalDateTime timestamp;
+    private LocalDateTime timestamp;
 }

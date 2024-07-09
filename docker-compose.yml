@@ -1,15 +1,80 @@
 version: '3.1'
 services:
+
   stats-server:
+    build: ./stats/stats-server
     ports:
       - "9090:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://stats-db:5432/explore_with_me
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      DB_HOST: stats-db
+    depends_on:
+      stats-db:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:9090/actuator/health || exit 1" ]
+      interval: 1m
+      timeout: 30s
+      retries: 10
 
   stats-db:
     image: postgres:14-alpine
+    environment:
+      - POSTGRES_DB=explore_with_me
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - pgdata-stats:/var/lib/postgresql/stats/data/
+    ports:
+      - "5433:5432"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d explore_with_me"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   ewm-service:
+    build: ./ewm-service
     ports:
       - "8080:8080"
+    depends_on:
+      ewm-db:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
+      interval: 1m
+      timeout: 30s
+      retries: 10
 
   ewm-db:
     image: postgres:14-alpine
+    environment:
+      - POSTGRES_DB=ewm
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - pgdata-ewm:/var/lib/postgresql/ewm/data/
+    ports:
+      - "5434:5432"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d ewm"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  app-network:
+
+volumes:
+  pgdata-stats:
+  pgdata-ewm:

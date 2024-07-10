@@ -14,4 +14,24 @@ public class CategoryStorageImpl implements CategoryStorage {
         return null;
     }
 
+    @Override
+    public Category getCategoryById(Long id) {
+        return null;
+    }
+
+    @Override
+    public Category add(String categoryName) {
+        return null;
+    }
+
+    @Override
+    public Category update(Long catId, String newName) {
+        return null;
+    }
+
+    @Override
+    public void delete(Long catId) {
+
+    }
+
 }

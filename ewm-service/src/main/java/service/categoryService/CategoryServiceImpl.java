@@ -21,6 +21,21 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getCategoryById(Long id) {
-        return null;
+        return categoryStorage.getCategoryById(id);
+    }
+
+    @Override
+    public Category addCategory(String categoryName) {
+        return categoryStorage.add(categoryName);
+    }
+
+    @Override
+    public Category updateCategory(Long catId, String newName) {
+        return categoryStorage.update(catId, newName);
+    }
+
+    @Override
+    public void deleteCategory(Long catId) {
+        categoryStorage.delete(catId);
     }
 }

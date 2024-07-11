@@ -6,13 +6,13 @@ import java.util.Collection;
 
 public interface CategoryStorage {
 
-    Collection<Category> getCategories(Integer from, Integer size);
+    Collection<Category> getCategories(int from, int size);
 
     Category getCategoryById(Long id);
 
-    Category add(String categoryName);
+    Category add(Category categoryName);
 
-    Category update(Long catId, String newName);
+    Category update(Category category);
 
     void delete(Long catId);
 }

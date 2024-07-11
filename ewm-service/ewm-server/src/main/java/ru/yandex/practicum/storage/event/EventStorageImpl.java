@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.enums.Sort;
-import ru.yandex.practicum.exceptions.NotFoundException;
+import ru.yandex.practicum.exceptions.EventNotFoundException;
 import ru.yandex.practicum.mapper.EventMapper;
 
 import java.util.Collection;
@@ -35,13 +35,14 @@ public class EventStorageImpl implements EventStorage {
     public EventShort getEventShortById(Long id) {
         return eventRepository.findById(id)
                 .map(eventMapper::mapToEventShort)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new EventNotFoundException(id));
     }
 
     @Override
     public EventFull getEventFullById(Long id) {
         return eventRepository.findById(id)
                 .map(eventMapper::mapToEventFull)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new EventNotFoundException(id));
+
     }
 }

@@ -1,9 +1,8 @@
 package ru.yandex.practicum.service.category;
 
-import ru.yandex.practicum.dto.category.Category;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.storage.category.CategoryStorage;
 
 import java.util.Collection;
@@ -15,7 +14,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryStorage categoryStorage;
 
     @Override
-    public Collection<Category> getCategories(@Nullable Integer from, @Nullable Integer size) {
+    public Collection<Category> getCategories(int from, int size) {
         return categoryStorage.getCategories(from, size);
     }
 
@@ -25,13 +24,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category addCategory(String categoryName) {
+    public Category addCategory(Category categoryName) {
         return categoryStorage.add(categoryName);
     }
 
     @Override
     public Category updateCategory(Long catId, String newName) {
-        return categoryStorage.update(catId, newName);
+        Category categoryById = getCategoryById(catId);
+        categoryById.setName(newName);
+        return categoryStorage.update(categoryById);
     }
 
     @Override

@@ -9,6 +9,7 @@ public class ApiPathConstants {
     public static final String CATEGORY_PATH = "/categories";
     public static final String EVENT_PATH = "/events";
     public static final String ADMIN_PATH = "/admin";
+    public static final String USERS_PATH = "/users";
 
 
 }

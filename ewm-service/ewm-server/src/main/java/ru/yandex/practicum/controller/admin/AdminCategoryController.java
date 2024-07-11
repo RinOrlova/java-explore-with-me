@@ -1,9 +1,9 @@
-package controller.admin;
+package ru.yandex.practicum.controller.admin;
 
-import ru.yandex.practicum.dto.category.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.service.category.CategoryService;
 import ru.yandex.practicum.utils.ApiPathConstants;
 
@@ -19,19 +19,19 @@ public class AdminCategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Category addCategory(@Valid @RequestBody String categoryName) {
+    public Category addCategory(@Valid @RequestBody Category categoryName) {
         return categoryService.addCategory(categoryName);
     }
 
     @PatchMapping(ApiPathConstants.BY_ID_PATH) //нужна новая константа?
-    public Category updateCategory(@PathVariable @Positive Long catId,
+    public Category updateCategory(@PathVariable @Positive Long id,
                                    @RequestBody @Valid String newName) {
-        return categoryService.updateCategory(catId, newName);
+        return categoryService.updateCategory(id, newName);
     }
 
     @DeleteMapping(ApiPathConstants.BY_ID_PATH)
-    public void deleteCategory(@PathVariable @Positive Long catId) {
-        categoryService.deleteCategory(catId);
+    public void deleteCategory(@PathVariable @Positive Long id) {
+        categoryService.deleteCategory(id);
     }
 
 

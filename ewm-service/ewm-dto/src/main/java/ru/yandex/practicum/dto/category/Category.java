@@ -14,6 +14,6 @@ public class Category {
 
     private Long id;
     @NotBlank
-    @JsonProperty("description")
+    @JsonProperty("name")
     private String name;
 }

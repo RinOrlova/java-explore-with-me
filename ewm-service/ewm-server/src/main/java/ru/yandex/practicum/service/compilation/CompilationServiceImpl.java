@@ -1,10 +1,12 @@
 package ru.yandex.practicum.service.compilation;
 
-import ru.yandex.practicum.dto.event.EventShort;
+import ru.yandex.practicum.dto.compilation.CompilationRequest;
+import ru.yandex.practicum.dto.compilation.CompilationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.storage.compilation.CompilationStorage;
+import ru.yandex.practicum.storage.event.EventStorage;
 
 import java.util.Collection;
 
@@ -12,16 +14,36 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class CompilationServiceImpl implements CompilationService {
 
-    public static CompilationStorage eventStorage;
+    private final CompilationStorage compilationStorage;
+    private final EventStorage eventStorage;
+
     @Override
-    public Collection<EventShort> getCompilation(@Nullable Boolean pinned,
-                                                 @Nullable Integer from,
-                                                 @Nullable Integer size) {
-        return eventStorage.getCompilation(pinned, from, size);
+    public Collection<CompilationResponse> getCompilation(@Nullable Boolean pinned,
+                                                 int from,
+                                                 int size) {
+        return compilationStorage.getCompilation(pinned, from, size);
     }
 
     @Override
-    public EventShort getCompilationById(Long id) {
-        return eventStorage.getCompilationById(id);
+    public CompilationResponse getCompilationById(Long id) {
+        return compilationStorage.getCompilationById(id);
+    }
+
+    @Override
+    public CompilationResponse addCompilation(CompilationRequest compilationRequest) {
+        for (Long eventId : compilationRequest.getEvents()) {
+            eventStorage.getEventShortById(eventId);
+        }
+        return compilationStorage.addCompilation(compilationRequest);
+    }
+
+    @Override
+    public void deleteCompilation(Long id) {
+        compilationStorage.deleteCompilation(id);
+    }
+
+    @Override
+    public CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest) {
+        return null;
     }
 }

@@ -23,7 +23,7 @@ public class AdminCategoryController {
         return categoryService.addCategory(categoryName);
     }
 
-    @PatchMapping(ApiPathConstants.BY_ID_PATH) //нужна новая константа?
+    @PatchMapping(ApiPathConstants.BY_ID_PATH)
     public Category updateCategory(@PathVariable @Positive Long id,
                                    @RequestBody @Valid String newName) {
         return categoryService.updateCategory(id, newName);

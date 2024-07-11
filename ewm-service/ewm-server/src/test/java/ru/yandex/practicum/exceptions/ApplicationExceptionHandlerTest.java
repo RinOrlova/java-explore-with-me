@@ -45,6 +45,11 @@ class ApplicationExceptionHandlerTest {
             throw new EventNotFoundException(1L);
         }
 
+        @GetMapping("/notFound/compilation")
+        public void throwCompilationNotFoundException() {
+            throw new CompilationNotFoundException(1L);
+        }
+
         @GetMapping("/technical")
         public void throwRuntimeException() {
             throw new NullPointerException();
@@ -68,6 +73,11 @@ class ApplicationExceptionHandlerTest {
                 .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andExpect(jsonPath("$.reason").value("The required object was not found."))
                 .andExpect(jsonPath("$.message").value("Event by id=1 not found"));
+        mockMvc.perform(get("/notFound/compilation"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value("NOT_FOUND"))
+                .andExpect(jsonPath("$.reason").value("The required object was not found."))
+                .andExpect(jsonPath("$.message").value("Compilation by id=1 not found"));
     }
 
     @Test

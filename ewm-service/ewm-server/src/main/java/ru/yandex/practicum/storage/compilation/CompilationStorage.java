@@ -1,12 +1,19 @@
 package ru.yandex.practicum.storage.compilation;
 
-import ru.yandex.practicum.dto.event.EventShort;
+import ru.yandex.practicum.dto.compilation.CompilationRequest;
+import ru.yandex.practicum.dto.compilation.CompilationResponse;
 
 import java.util.Collection;
 
 public interface CompilationStorage {
-    Collection<EventShort> getCompilation(Boolean pinned, Integer from, Integer size);
 
-    EventShort getCompilationById(Long id);
+    Collection<CompilationResponse> getAllCompilations(int from, int size);
 
+    Collection<CompilationResponse> getCompilation(boolean pinned, int from, int size);
+
+    CompilationResponse getCompilationById(Long id);
+
+    void deleteCompilation(Long id);
+
+    CompilationResponse addCompilation(CompilationRequest compilationRequest);
 }

@@ -34,6 +34,7 @@ public class ParticipationEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime created;
 
+    // TODO: replace with regular enum
     @NotNull
     @Column(nullable = false, length = 7000)
     private String status;

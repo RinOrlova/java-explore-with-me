@@ -86,7 +86,7 @@ class ExploreWithMeAppTest {
         assertThat(usersById).extracting("name").containsExactly("User Name");
         assertThat(usersById).extracting("email").containsExactly("email@domain.com");
 
-        // Get all users by id
+        // Get all users considering paging
         String getUsersPagingUrl = new StringBuilder()
                 .append(ApiPathConstants.ADMIN_PATH + ApiPathConstants.USERS_PATH)
                 .append("?from=").append(0)

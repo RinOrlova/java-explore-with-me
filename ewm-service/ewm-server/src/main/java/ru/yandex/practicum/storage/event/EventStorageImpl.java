@@ -7,7 +7,6 @@ import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.enums.Sort;
 import ru.yandex.practicum.exceptions.EventNotFoundException;
 import ru.yandex.practicum.mapper.EventMapper;
-import ru.yandex.practicum.storage.participation.ParticipationEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,7 +45,6 @@ public class EventStorageImpl implements EventStorage {
         if (eventFromStorage.isPresent()) {
             EventEntity eventEntity = eventFromStorage.get();
             setViewsToEventEntity(eventEntity);
-            setViewsToEventEntity(eventEntity);
             setConfirmedRequestsToEventEntity(eventEntity);
             return eventMapper.mapToEventShort(eventEntity);
         }
@@ -82,13 +80,13 @@ public class EventStorageImpl implements EventStorage {
     private long getConfirmedRequests(EventEntity entity){
         return entity.getParticipationRequests()
                 .stream()
-                .filter(participationEntity -> isPublishedStatus(participationEntity.getStatus()))
+                .filter(participationEntity -> isConfirmedStatus(participationEntity.getStatus()))
                 .count();
 
     }
 
-    private boolean isPublishedStatus(String status){
-        return "PUBLISHED".equals(status);
+    private boolean isConfirmedStatus(String status){
+        return "CONFIRMED".equals(status);
     }
 
 

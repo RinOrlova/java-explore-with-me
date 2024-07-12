@@ -1,10 +1,10 @@
 package ru.yandex.practicum.service.compilation;
 
-import ru.yandex.practicum.dto.compilation.CompilationRequest;
-import ru.yandex.practicum.dto.compilation.CompilationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.dto.compilation.CompilationRequest;
+import ru.yandex.practicum.dto.compilation.CompilationResponse;
 import ru.yandex.practicum.storage.compilation.CompilationStorage;
 import ru.yandex.practicum.storage.event.EventStorage;
 
@@ -21,6 +21,9 @@ public class CompilationServiceImpl implements CompilationService {
     public Collection<CompilationResponse> getCompilation(@Nullable Boolean pinned,
                                                  int from,
                                                  int size) {
+        if(pinned == null){
+            return compilationStorage.getAllCompilations(from, size);
+        }
         return compilationStorage.getCompilation(pinned, from, size);
     }
 
@@ -44,6 +47,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest) {
+        // TODO add realization
         return null;
     }
 }

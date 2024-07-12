@@ -25,8 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@EnableJpaRepositories(basePackages = "ru.yandex.practicum.storage.user")
-@EntityScan(basePackages = "ru.yandex.practicum.storage.user")
 public class UserStorageImplTest {
 
     private UserStorageImpl userStorage;

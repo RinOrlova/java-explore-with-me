@@ -1,8 +1,8 @@
 package ru.yandex.practicum.storage.event;
 
 import ru.yandex.practicum.dto.event.EventFull;
-import ru.yandex.practicum.enums.Sort;
 import ru.yandex.practicum.dto.event.EventShort;
+import ru.yandex.practicum.enums.Sort;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,5 +20,8 @@ public interface EventStorage {
                                      Integer size);
 
     EventShort getEventShortById(Long id);
+
     EventFull getEventFullById(Long id);
+
+    EventFull getEventByCreatorAndId(Long userId, Long eventId);
 }

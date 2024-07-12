@@ -1,30 +1,32 @@
 package ru.yandex.practicum.dto.event;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import ru.yandex.practicum.common.deserialize.LocalDateTimeDeserializer;
-import ru.yandex.practicum.dto.category.Category;
-import ru.yandex.practicum.dto.user.User;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
+import ru.yandex.practicum.common.serialization.LocalDateTimeSerializer;
+import ru.yandex.practicum.dto.category.Category;
+import ru.yandex.practicum.dto.user.User;
 
 import java.time.LocalDateTime;
 
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Jacksonized
 public class EventShort {
 
     private String annotation;
     private Category category;
-    private Long id;
-    private String name;
-    private Long confirmedRequests;
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private long confirmedRequests;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime eventDate;
+    private Long id;
     private User initiator;
-    private Boolean paid;
+    private boolean paid;
     private String title;
-    private Long views;
-
+    private long views;
 }

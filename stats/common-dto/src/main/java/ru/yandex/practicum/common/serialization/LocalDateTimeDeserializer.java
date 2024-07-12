@@ -1,4 +1,4 @@
-package ru.yandex.practicum.common.deserialize;
+package ru.yandex.practicum.common.serialization;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

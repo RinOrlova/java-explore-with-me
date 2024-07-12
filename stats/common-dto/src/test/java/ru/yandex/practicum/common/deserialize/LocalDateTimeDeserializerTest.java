@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.common.dto.HitRequest;
+import ru.yandex.practicum.common.serialization.LocalDateTimeDeserializer;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

@@ -7,9 +7,11 @@ import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.enums.Sort;
 import ru.yandex.practicum.exceptions.EventNotFoundException;
 import ru.yandex.practicum.mapper.EventMapper;
+import ru.yandex.practicum.storage.participation.ParticipationEntity;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +19,7 @@ public class EventStorageImpl implements EventStorage {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+    private final UserEventViewRepository userEventViewRepository;
 
     @Override
     public Collection<EventShort> getEvents(String text,
@@ -32,17 +35,61 @@ public class EventStorageImpl implements EventStorage {
     }
 
     @Override
+    public EventFull getEventByCreatorAndId(Long userId, Long eventId) {
+        EventEntity eventEntity = eventRepository.findByIdAndInitiatorId(eventId, userId);
+        return eventMapper.mapToEventFull(eventEntity);
+    }
+
+    @Override
     public EventShort getEventShortById(Long id) {
-        return eventRepository.findById(id)
-                .map(eventMapper::mapToEventShort)
-                .orElseThrow(() -> new EventNotFoundException(id));
+        Optional<EventEntity> eventFromStorage = eventRepository.findById(id);
+        if (eventFromStorage.isPresent()) {
+            EventEntity eventEntity = eventFromStorage.get();
+            setViewsToEventEntity(eventEntity);
+            setViewsToEventEntity(eventEntity);
+            setConfirmedRequestsToEventEntity(eventEntity);
+            return eventMapper.mapToEventShort(eventEntity);
+        }
+        throw new EventNotFoundException(id);
     }
 
     @Override
     public EventFull getEventFullById(Long id) {
-        return eventRepository.findById(id)
-                .map(eventMapper::mapToEventFull)
-                .orElseThrow(() -> new EventNotFoundException(id));
+        Optional<EventEntity> eventFromStorage = eventRepository.findById(id);
+        if (eventFromStorage.isPresent()) {
+            EventEntity eventEntity = eventFromStorage.get();
+            setViewsToEventEntity(eventEntity);
+            setConfirmedRequestsToEventEntity(eventEntity);
+            return eventMapper.mapToEventFull(eventEntity);
+        }
+        throw new EventNotFoundException(id);
+    }
+
+    private void setViewsToEventEntity(EventEntity entity) {
+        long viewForEvent = getViewForEvent(entity);
+        entity.setViews(viewForEvent);
+    }
+
+    private long getViewForEvent(EventEntity entity) {
+        return userEventViewRepository.countByEvent(entity);
+    }
+
+    private void setConfirmedRequestsToEventEntity(EventEntity entity) {
+        long confirmedRequests = getConfirmedRequests(entity);
+        entity.setConfirmedRequests(confirmedRequests);
+    }
+
+    private long getConfirmedRequests(EventEntity entity){
+        return entity.getParticipationRequests()
+                .stream()
+                .filter(participationEntity -> isPublishedStatus(participationEntity.getStatus()))
+                .count();
 
     }
+
+    private boolean isPublishedStatus(String status){
+        return "PUBLISHED".equals(status);
+    }
+
+
 }

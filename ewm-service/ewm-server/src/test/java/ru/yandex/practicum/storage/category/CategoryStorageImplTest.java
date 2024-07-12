@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
-@EnableJpaRepositories(basePackages = "ru.yandex.practicum.storage.category")
-@EntityScan(basePackages = "ru.yandex.practicum.storage.category")
 public class CategoryStorageImplTest {
 
     private CategoryStorageImpl categoryStorage;

@@ -54,6 +54,16 @@ class ApplicationExceptionHandlerTest {
         public void throwRuntimeException() {
             throw new NullPointerException();
         }
+
+        @GetMapping("/forbidden")
+        public void throwForbiddenException() {
+            throw new ForbiddenException("ForbiddenExceptionMessage");
+        }
+
+        @GetMapping("/forbiddenDefault")
+        public void throwForbiddenExceptionDefault() {
+            throw new ForbiddenException();
+        }
     }
 
     @Test
@@ -87,5 +97,19 @@ class ApplicationExceptionHandlerTest {
                 .andExpect(jsonPath("$.status").value("INTERNAL_SERVER_ERROR"))
                 .andExpect(jsonPath("$.reason").value("Server error"))
                 .andExpect(jsonPath("$.message").value("Error occurred on server side."));
+    }
+
+    @Test
+    void handleForbiddenException() throws Exception {
+        mockMvc.perform(get("/forbidden"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.status").value("FORBIDDEN"))
+                .andExpect(jsonPath("$.reason").value("For the requested operation the conditions are not met."))
+                .andExpect(jsonPath("$.message").value("ForbiddenExceptionMessage"));
+        mockMvc.perform(get("/forbiddenDefault"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.status").value("FORBIDDEN"))
+                .andExpect(jsonPath("$.reason").value("For the requested operation the conditions are not met."))
+                .andExpect(jsonPath("$.message").value("Action forbidden"));
     }
 }

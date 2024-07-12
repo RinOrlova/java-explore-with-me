@@ -14,6 +14,7 @@ import ru.yandex.practicum.mapper.CompilationMapper;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,14 +24,14 @@ public class CompilationStorageImpl implements CompilationStorage {
     private final CompilationMapper compilationMapper;
 
     @Override
-    public CompilationResponse addCompilation(CompilationRequest compilationRequest){
+    public CompilationResponse addCompilation(CompilationRequest compilationRequest) {
         CompilationEntity compilationEntity = compilationMapper.mapCompilatioDtoToCompilationEntity(compilationRequest);
         CompilationEntity compilationFromStorage = compilationRepository.saveAndFlush(compilationEntity);
         return compilationMapper.mapCompilationEntityToCompilationResponse(compilationFromStorage);
     }
 
     @Override
-    public Collection<CompilationResponse> getAllCompilations(int from, int size){
+    public Collection<CompilationResponse> getAllCompilations(int from, int size) {
         PageRequest pageRequest = PageRequest.of(from, size, Sort.by(Sort.Direction.ASC, "id"));
         Page<CompilationEntity> compilationEntityPage = compilationRepository.findAll(pageRequest);
         return mapCompilationEntitiesToCompilationResponse(compilationEntityPage);
@@ -39,7 +40,7 @@ public class CompilationStorageImpl implements CompilationStorage {
     @Override
     public Collection<CompilationResponse> getCompilation(boolean pinned, int from, int size) {
         PageRequest pageRequest = PageRequest.of(from, size, Sort.by(Sort.Direction.ASC, "id"));
-        Page<CompilationEntity> compilationEntityPage = compilationRepository.findAllPinned(pinned, pageRequest);
+        Page<CompilationEntity> compilationEntityPage = compilationRepository.findAllConsideringPinned(pinned, pageRequest);
         return mapCompilationEntitiesToCompilationResponse(compilationEntityPage);
     }
 

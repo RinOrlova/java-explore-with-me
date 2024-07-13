@@ -75,17 +75,17 @@ public class EventSearchRepositoryTest {
 
         // Search with matching UserId
         AdminSearch adminSearch = AdminSearch.builder()
-                .userIds(Collections.singletonList(1L))
+                .userIds(Collections.singletonList(initiator.getId()))
                 .build();
 
         Page<EventEntity> result = eventSearchRepository.findAllByAdminSearchParams(adminSearch, PageRequest.of(0, 10));
 
         assertThat(result.getContent()).hasSize(1);
-        assertThat(result.getContent().get(0).getInitiator().getId()).isEqualTo(1L);
+        assertThat(result.getContent().get(0).getInitiator().getId()).isEqualTo(initiator.getId());
 
         // Search with mismatching UserId
         AdminSearch adminSearchMismatchByUserId = AdminSearch.builder()
-                .userIds(Collections.singletonList(2L))
+                .userIds(Collections.singletonList(999L))
                 .build();
 
         Page<EventEntity> resultMismatchByUserId = eventSearchRepository.findAllByAdminSearchParams(adminSearchMismatchByUserId, PageRequest.of(0, 10));

@@ -5,10 +5,8 @@ import ru.yandex.practicum.dto.event.EventRequest;
 import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.dto.search.AdminSearch;
 import ru.yandex.practicum.dto.search.PublicSearch;
-import ru.yandex.practicum.dto.search.enums.SortType;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface EventStorage {
 

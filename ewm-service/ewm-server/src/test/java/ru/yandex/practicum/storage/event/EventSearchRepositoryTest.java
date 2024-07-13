@@ -402,7 +402,7 @@ public class EventSearchRepositoryTest {
         PublicSearch publicSearchPaid = PublicSearch.builder()
                 .paid(true)
                 .build();
-        Page<EventEntity> resultPaid= eventSearchRepository.findAllByPublicSearchParams(publicSearchPaid, PageRequest.of(0, 10));
+        Page<EventEntity> resultPaid = eventSearchRepository.findAllByPublicSearchParams(publicSearchPaid, PageRequest.of(0, 10));
         assertThat(resultPaid.getContent()).hasSize(1);
         List<EventEntity> contentPaid = resultPaid.getContent();
         assertThat(contentPaid).hasSize(1);

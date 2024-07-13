@@ -28,7 +28,7 @@ public class PrivateParticipationController {
 
     @PatchMapping(ApiPathConstants.REQUESTS_ID_PATH + ApiPathConstants.CANCEL_PATH)
     public ParticipationRequestResponse cancelParticipationRequest(@PathVariable("id") Long userId,
-                                                                   @PathVariable(value = "requestId") Long requestId){
+                                                                   @PathVariable(value = "requestId") Long requestId) {
         return participationService.cancelRequestForUser(userId, requestId);
     }
 

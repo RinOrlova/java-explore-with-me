@@ -19,20 +19,20 @@ public class AdminCompilationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationResponse createCompilation(@RequestBody CompilationRequest compilationRequest){
+    public CompilationResponse createCompilation(@RequestBody CompilationRequest compilationRequest) {
         return compilationService.addCompilation(compilationRequest);
     }
 
 
     @DeleteMapping(ApiPathConstants.BY_ID_PATH)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompilation(@Positive @PathVariable (name = "id") Long id) {
+    public void deleteCompilation(@Positive @PathVariable(name = "id") Long id) {
         compilationService.deleteCompilation(id);
     }
 
     @PatchMapping(ApiPathConstants.BY_ID_PATH)
-    public CompilationResponse updateCompilation(@PathVariable(name="id") @Positive Long id,
-                                                 @RequestBody CompilationRequest compilationRequest){
+    public CompilationResponse updateCompilation(@PathVariable(name = "id") @Positive Long id,
+                                                 @RequestBody CompilationRequest compilationRequest) {
         return compilationService.updateCompilation(id, compilationRequest);
     }
 

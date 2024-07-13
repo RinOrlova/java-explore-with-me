@@ -30,7 +30,7 @@ public class PublicEventController {
                                             @RequestParam(name = "sortType", required = false) SortType sortType,
                                             @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
                                             @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
-        PublicSearch.PublicSearchBuilder<?,?> searchBuilder = PublicSearch.builder();
+        PublicSearch.PublicSearchBuilder<?, ?> searchBuilder = PublicSearch.builder();
 
         if (categoryId != null) {
             searchBuilder.categories(categoryId);

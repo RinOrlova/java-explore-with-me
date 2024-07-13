@@ -1,14 +1,12 @@
 package ru.yandex.practicum.service.event;
 
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventRequest;
 import ru.yandex.practicum.dto.event.EventRequestAdmin;
 import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.dto.search.AdminSearch;
 import ru.yandex.practicum.dto.search.PublicSearch;
-import ru.yandex.practicum.dto.search.enums.SortType;
 
 import java.util.Collection;
 import java.util.List;

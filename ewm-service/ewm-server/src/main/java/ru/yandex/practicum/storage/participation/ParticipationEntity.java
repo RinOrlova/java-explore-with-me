@@ -9,7 +9,6 @@ import ru.yandex.practicum.storage.event.EventEntity;
 import ru.yandex.practicum.storage.user.UserEntity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity

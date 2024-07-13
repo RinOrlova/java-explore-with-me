@@ -1,11 +1,11 @@
 package ru.yandex.practicum.storage.location;
 
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.yandex.practicum.storage.event.EventEntity;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Entity

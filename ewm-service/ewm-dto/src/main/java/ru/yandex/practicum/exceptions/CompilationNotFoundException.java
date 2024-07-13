@@ -1,6 +1,6 @@
 package ru.yandex.practicum.exceptions;
 
-public class CompilationNotFoundException extends NotFoundException{
+public class CompilationNotFoundException extends NotFoundException {
 
     private static final String DEFAULT_MESSAGE = "Compilation by id=%s not found";
 

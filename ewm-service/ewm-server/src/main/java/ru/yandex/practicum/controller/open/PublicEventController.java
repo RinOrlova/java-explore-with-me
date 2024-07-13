@@ -1,6 +1,7 @@
 package ru.yandex.practicum.controller.open;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.dto.search.PublicSearch;
@@ -41,12 +42,20 @@ public class PublicEventController {
         if (rangeEnd != null) {
             searchBuilder.rangeStart(rangeEnd);
         }
+        if (sortType != null) {
+            searchBuilder.sort(sortType);
+        }
+        if (StringUtils.hasText(text)) {
+            searchBuilder.text(text);
+        }
+        if (paid != null) {
+            searchBuilder.paid(paid);
+        }
         PublicSearch publicSearch = searchBuilder
+                .onlyAvailable(onlyAvailable)
                 .from(from)
                 .size(size)
                 .build();
-
-        searchBuilder.build();
         return eventService.getEventsPublic(publicSearch);
     }
 

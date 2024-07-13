@@ -28,7 +28,7 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handleForbiddenException(ForbiddenException exc) {
-        log.error("Operation failed with an exception: ", exc);
+        log.error("Operation failed with an exception: {}", exc.getMessage());
         return ErrorResponse.builder()
                 .status(HttpStatus.FORBIDDEN.name())
                 .reason("For the requested operation the conditions are not met.")
@@ -40,7 +40,7 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(NotFoundException exc) {
-        log.error("Requested entity not found: ", exc);
+        log.warn("Requested entity not found: {}", exc.getMessage());
         return ErrorResponse.builder()
                 .status(HttpStatus.NOT_FOUND.name())
                 .reason("The required object was not found.")

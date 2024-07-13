@@ -13,7 +13,7 @@ import ru.yandex.practicum.dto.user.User;
 import java.time.LocalDateTime;
 
 @Data
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Jacksonized

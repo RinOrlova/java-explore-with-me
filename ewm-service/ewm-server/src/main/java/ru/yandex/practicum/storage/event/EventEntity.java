@@ -44,7 +44,8 @@ public class EventEntity {
     @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;
 
-    @Column(name = "published_on", nullable = false)
+    // TODO: publishedOn should null until its status changes to PUBLISHED
+    @Column(name = "published_on")
     private LocalDateTime publishedOn;
 
     @Column(nullable = false)
@@ -64,15 +65,15 @@ public class EventEntity {
     @Column(nullable = false, length = 120)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "initiator_id", nullable = false)
     private UserEntity initiator;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "location_id", nullable = false)
     private LocationEntity location;
 

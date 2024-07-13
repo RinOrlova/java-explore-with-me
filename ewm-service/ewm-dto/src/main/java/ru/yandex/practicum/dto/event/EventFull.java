@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Jacksonized
@@ -29,4 +29,13 @@ public class EventFull extends EventShort {
     private boolean requestModeration;
     private EventStatus state;
     private Location location;
+
+    /**
+     * <ul>
+     * <li>Eсли для события лимит заявок равен 0 или отключена пре-модерация заявок, то подтверждение заявок не требуется</li>
+     * </ul>
+     */
+    public boolean isFreeToJoinEvent() {
+        return !requestModeration || participantLimit == 0;
+    }
 }

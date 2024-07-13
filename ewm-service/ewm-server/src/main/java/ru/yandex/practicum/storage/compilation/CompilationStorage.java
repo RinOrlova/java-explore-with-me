@@ -16,4 +16,6 @@ public interface CompilationStorage {
     void deleteCompilation(Long id);
 
     CompilationResponse addCompilation(CompilationRequest compilationRequest);
+
+    CompilationResponse updateCompilation(CompilationResponse compilationResponse);
 }

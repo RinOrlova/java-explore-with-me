@@ -19,9 +19,9 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public Collection<CompilationResponse> getCompilation(@Nullable Boolean pinned,
-                                                 int from,
-                                                 int size) {
-        if(pinned == null){
+                                                          int from,
+                                                          int size) {
+        if (pinned == null) {
             return compilationStorage.getAllCompilations(from, size);
         }
         return compilationStorage.getCompilation(pinned, from, size);
@@ -47,7 +47,10 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest) {
-        // TODO add realization
-        return null;
+        CompilationResponse compilationResponse = compilationStorage.getCompilationById(id);// Make sure compilation exists
+        for (Long eventId : compilationRequest.getEvents()) { // Make sure all listed events exist
+            eventStorage.getEventShortById(eventId);
+        }
+        return compilationStorage.updateCompilation(compilationResponse);
     }
 }

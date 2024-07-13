@@ -17,9 +17,9 @@ services:
       - app-network
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:9090/actuator/health || exit 1" ]
-      interval: 1m
-      timeout: 30s
-      retries: 10
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   stats-db:
     image: postgres:14-alpine
@@ -35,7 +35,7 @@ services:
       - app-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U root -d explore_with_me"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
 
@@ -47,6 +47,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://ewm-db:5432/ewm
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+      STATISTICS_SERVER_ENDPOINT: http://stats-server:9090
       DB_HOST: ewm-db
     depends_on:
       ewm-db:
@@ -57,9 +58,9 @@ services:
       - app-network
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
-      interval: 1m
-      timeout: 30s
-      retries: 10
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   ewm-db:
     image: postgres:14-alpine
@@ -75,7 +76,7 @@ services:
       - app-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U root -d ewm"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
 

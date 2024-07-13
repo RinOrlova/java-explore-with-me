@@ -3,11 +3,13 @@ package ru.yandex.practicum.controller.open;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.event.EventShort;
-import ru.yandex.practicum.enums.Sort;
+import ru.yandex.practicum.dto.search.PublicSearch;
+import ru.yandex.practicum.dto.search.enums.SortType;
 import ru.yandex.practicum.service.event.EventService;
 import ru.yandex.practicum.utils.ApiPathConstants;
 
 import javax.validation.constraints.Positive;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,20 +22,36 @@ public class PublicEventController {
 
     @GetMapping()
     public Collection<EventShort> getEvents(@RequestParam(name = "text") String text,
-                                            @RequestParam(name = "categories", required = false) List<Integer> categoryId,
+                                            @RequestParam(name = "categories", required = false) List<Long> categoryId,
                                             @RequestParam(name = "paid", required = false) Boolean paid,
-                                            @RequestParam(name = "rangeStart", required = false) String rangeStart,
-                                            @RequestParam(name = "rangeEnd", required = false) String rangeEnd,
+                                            @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
+                                            @RequestParam(name = "rangeEnd", required = false) LocalDateTime rangeEnd,
                                             @RequestParam(name = "onlyAvailable", required = false, defaultValue = "false") Boolean onlyAvailable,
-                                            @RequestParam(name = "sort", required = false) Sort sort,
+                                            @RequestParam(name = "sortType", required = false) SortType sortType,
                                             @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
                                             @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
-        return eventService.getEvents(text, categoryId, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+        PublicSearch.PublicSearchBuilder<?,?> searchBuilder = PublicSearch.builder();
+
+        if (categoryId != null) {
+            searchBuilder.categories(categoryId);
+        }
+        if (rangeStart != null) {
+            searchBuilder.rangeStart(rangeStart);
+        }
+        if (rangeEnd != null) {
+            searchBuilder.rangeStart(rangeEnd);
+        }
+        PublicSearch publicSearch = searchBuilder
+                .from(from)
+                .size(size)
+                .build();
+
+        searchBuilder.build();
+        return eventService.getEventsPublic(publicSearch);
     }
 
     @GetMapping(ApiPathConstants.BY_ID_PATH)
     public EventShort getEventById(@PathVariable @Positive Long id) {
         return eventService.getEventById(id);
     }
-
 }

@@ -8,11 +8,13 @@ import ru.yandex.practicum.dto.event.EventRequest;
 import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.dto.participation.AllParticipationRequestsResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
-import ru.yandex.practicum.dto.participation.ParticipationStatusRequest;
+import ru.yandex.practicum.dto.participation.ParticipationStatusUpdateRequest;
 import ru.yandex.practicum.service.event.EventService;
+import ru.yandex.practicum.service.participation.ParticipationService;
 import ru.yandex.practicum.utils.ApiPathConstants;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -21,6 +23,7 @@ import java.util.List;
 public class PrivateEventController {
 
     private final EventService eventService;
+    private final ParticipationService participationService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -50,16 +53,16 @@ public class PrivateEventController {
     }
 
     @GetMapping(ApiPathConstants.EVENT_BY_ID_PATH + ApiPathConstants.REQUESTS_PATH)
-    public ParticipationRequestResponse createParticipationRequest(@PathVariable("id") Long id,
-                                                                   @PathVariable("eventId") Long eventId) {
-        return eventService.createParticipationRequest(id, eventId);
+    public Collection<ParticipationRequestResponse> createParticipationRequest(@PathVariable("id") Long id,
+                                                                              @PathVariable("eventId") Long eventId) {
+        return participationService.getRequestsByUserAndEventIds(id, eventId);
     }
 
     @PatchMapping(ApiPathConstants.EVENT_BY_ID_PATH + ApiPathConstants.REQUESTS_PATH)
     public AllParticipationRequestsResponse changeParticipationStatus(@PathVariable("id") Long id,
                                                                       @PathVariable("eventId") Long eventId,
-                                                                      @Valid @RequestBody ParticipationStatusRequest participationStatusRequest) {
-        return eventService.changeParticipationStatus(id, eventId, participationStatusRequest);
+                                                                      @Valid @RequestBody ParticipationStatusUpdateRequest participationStatusUpdateRequest) {
+        return participationService.changeParticipationStatus(id, eventId, participationStatusUpdateRequest);
     }
 
 

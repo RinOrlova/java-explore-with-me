@@ -31,6 +31,13 @@ public class CompilationStorageImpl implements CompilationStorage {
     }
 
     @Override
+    public CompilationResponse updateCompilation(CompilationResponse compilationResponse) {
+        CompilationEntity compilationEntity = compilationMapper.mapCompilationToCompilationEntity(compilationResponse);
+        CompilationEntity compilationFromStorage = compilationRepository.saveAndFlush(compilationEntity);
+        return compilationMapper.mapCompilationEntityToCompilationResponse(compilationFromStorage);
+    }
+
+    @Override
     public Collection<CompilationResponse> getAllCompilations(int from, int size) {
         PageRequest pageRequest = PageRequest.of(from, size, Sort.by(Sort.Direction.ASC, "id"));
         Page<CompilationEntity> compilationEntityPage = compilationRepository.findAll(pageRequest);

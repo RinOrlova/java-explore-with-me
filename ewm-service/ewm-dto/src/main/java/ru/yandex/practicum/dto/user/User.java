@@ -12,9 +12,9 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class User {
 
-    @Email
-    private String email;
     @NotBlank
     private String name;
+    @Email
+    private String email;
 
 }

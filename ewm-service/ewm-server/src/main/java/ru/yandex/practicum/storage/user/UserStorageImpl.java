@@ -53,6 +53,14 @@ public class UserStorageImpl implements UserStorage {
         return mapUserEntitiesToUser(userEntityPage);
     }
 
+    @Override
+    public UserFull getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::mapUserEntityToUserFull)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+
     private Collection<UserFull> mapUserEntitiesToUser(Page<UserEntity> userEntityPage) {
         return userEntityPage
                 .stream()

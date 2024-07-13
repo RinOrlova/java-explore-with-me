@@ -13,4 +13,8 @@ public interface CompilationMapper {
 
     @Mapping(target = "events", source = "events", qualifiedByName = "mapToEventShort")
     CompilationResponse mapCompilationEntityToCompilationResponse(CompilationEntity compliationFromStorage);
+
+    @Mapping(target = "events", source = "events", qualifiedByName = "eventShortIdToEventEntity")
+    CompilationEntity mapCompilationToCompilationEntity(CompilationResponse compilationResponse);
+
 }

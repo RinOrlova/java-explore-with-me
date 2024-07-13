@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.yandex.practicum.dto.participation.ParticipationRequestStatus;
 import ru.yandex.practicum.storage.event.EventEntity;
 import ru.yandex.practicum.storage.user.UserEntity;
 
@@ -35,8 +36,8 @@ public class ParticipationEntity {
     private LocalDateTime created;
 
     // TODO: replace with regular enum
-    @NotNull
-    @Column(nullable = false, length = 7000)
-    private String status;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ParticipationRequestStatus status;
 
 }

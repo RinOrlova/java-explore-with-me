@@ -3,6 +3,7 @@ package ru.yandex.practicum.dto.event;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 import org.springframework.lang.Nullable;
 import ru.yandex.practicum.common.serialization.LocalDateTimeDeserializer;
 import ru.yandex.practicum.dto.location.Location;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@Jacksonized
 public class EventRequestAdmin {
 
     @Nullable

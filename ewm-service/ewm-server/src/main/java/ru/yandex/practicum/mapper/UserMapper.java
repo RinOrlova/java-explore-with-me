@@ -10,6 +10,9 @@ import ru.yandex.practicum.storage.user.UserEntity;
 public interface UserMapper {
     UserEntity mapUserToUserEntity(User user);
 
+    @Named("mapUserFullToUserEntity")
+    UserEntity mapUserFullToUserEntity(UserFull userFull);
+
     @Named("mapUserIdToUserEntity")
     default UserEntity mapUserIdToUserEntity(Long userId) {
         if (userId == null) {

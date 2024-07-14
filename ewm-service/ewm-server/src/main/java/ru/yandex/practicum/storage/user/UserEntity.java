@@ -1,9 +1,6 @@
 package ru.yandex.practicum.storage.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.yandex.practicum.storage.event.EventEntity;
 import ru.yandex.practicum.storage.participation.ParticipationEntity;
 
@@ -17,6 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
+@EqualsAndHashCode(exclude = {"events"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

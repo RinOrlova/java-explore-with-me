@@ -26,6 +26,7 @@ public interface EventMapper {
     }
 
     @Mapping(target = "initiator", source = "initiator", qualifiedByName = "mapUserEntityToUserFull")
+    @Mapping(target = "state", source = "status")
     EventFull mapToEventFull(EventEntity eventEntity);
 
     @Mapping(target = "status", constant = "PENDING")
@@ -47,5 +48,7 @@ public interface EventMapper {
         return eventEntity;
     }
 
+    @Mapping(target = "status", source = "state")
+    @Mapping(target = "initiator", source = "initiator", qualifiedByName = "mapUserFullToUserEntity")
     EventEntity mapEventFullToEventEntity(EventFull updatedEvent);
 }

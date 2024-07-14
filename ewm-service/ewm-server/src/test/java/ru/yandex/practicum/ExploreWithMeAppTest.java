@@ -13,17 +13,22 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.client.StatisticsClient;
+import ru.yandex.practicum.dto.category.Category;
+import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.user.User;
 import ru.yandex.practicum.dto.user.UserFull;
 import ru.yandex.practicum.utils.ApiPathConstants;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.yandex.practicum.utils.ApiPathConstants.EVENT_PATH;
+import static ru.yandex.practicum.utils.ApiPathConstants.USERS_PATH;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -127,5 +132,60 @@ class ExploreWithMeAppTest {
         });
         assertEquals(0, usersAfterDeletion.size());
 
+    }
+
+    @Test
+    void test_eventsOperations() throws Exception {
+        User user = new User();
+        user.setName("User Name 2");
+        user.setEmail("email2@domain.com");
+
+        // Create user
+        String userResponseJson = mockMvc.perform(post(ApiPathConstants.ADMIN_PATH + ApiPathConstants.USERS_PATH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        var userFull = objectMapper.readValue(userResponseJson, UserFull.class);
+
+        // Create category
+        String categoryRequestJson = "{\"name\":\"CategoryName\"}";
+        String categoryResponseJson = mockMvc.perform(post(ApiPathConstants.ADMIN_PATH + ApiPathConstants.CATEGORY_PATH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(categoryRequestJson))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        var category = objectMapper.readValue(categoryResponseJson, Category.class);
+
+
+        String jsonRequest = "{\n" +
+                "  \"annotation\": \"Error sunt autem officia reprehenderit voluptas cum porro fuga vel. Magnam et sit. At quas recusandae quia. Provident incidunt officiis.\",\n" +
+                "  \"category\":" + category.getId() + ",\n" +
+                "  \"description\": \"Vero quo sed. Sit architecto quia cum qui voluptatem hic et. Fuga illum quibusdam iste. Voluptatibus officiis nulla nemo illo. Autem aliquam et possimus illo unde quam et eos.n rEa exercitationem ea non architecto. Quia ut tempora et iste accusantium ratione a voluptatibus voluptates. Eos reiciendis necessitatibus dolores voluptatem ducimus inventore. Sit provident dignissimos praesentium dolores. Porro ut aut. Qui cum ut quam veniam minus quia nemo voluptatem.n rMagnam porro ab. Voluptas in inventore dolores harum veritatis impedit consectetur expedita. Illo aut iure magni ut. Quia dolores quidem est amet dolores incidunt omnis facilis. Accusamus ipsa praesentium.\",\n" +
+                "  \"eventDate\": \"2024-07-14 20:52:21\",\n" +
+                "  \"location\": {\n" +
+                "    \"lat\": -24.5189,\n" +
+                "    \"lon\": 141.4601\n" +
+                "  },\n" +
+                "  \"paid\": \"false\",\n" +
+                "  \"participantLimit\": \"629\",\n" +
+                "  \"requestModeration\": \"true\",\n" +
+                "  \"title\": \"Possimus ab esse.\"\n" +
+                "}";
+
+        String response = mockMvc.perform(post(USERS_PATH + "/" + userFull.getId() + EVENT_PATH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        EventFull eventFull = objectMapper.readValue(response, EventFull.class);
+        assertEquals("Possimus ab esse.", eventFull.getTitle());
+        assertEquals("User Name 2", eventFull.getInitiator().getName());
+        assertEquals("email2@domain.com", eventFull.getInitiator().getEmail());
+        assertEquals(LocalDateTime.parse("2024-07-14T20:52:21"), eventFull.getEventDate());
+        assertFalse(eventFull.isPaid());
+        assertTrue(eventFull.isRequestModeration());
+        assertEquals(629, eventFull.getParticipantLimit());
+        assertEquals("CategoryName", eventFull.getCategory().getName());
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventRequest;
 import ru.yandex.practicum.dto.event.EventShort;
@@ -83,6 +84,7 @@ public class EventStorageImpl implements EventStorage {
     }
 
     @Override
+    @Transactional
     public EventFull updateEventAdmin(EventFull updatedEvent) {
         EventEntity eventEntity = eventMapper.mapEventFullToEventEntity(updatedEvent);
         EventEntity eventFromStorage = eventRepository.saveAndFlush(eventEntity);
@@ -91,6 +93,7 @@ public class EventStorageImpl implements EventStorage {
     }
 
     @Override
+    @Transactional
     public EventFull updateEvent(EventRequest eventRequest, Long userId) {
         LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(eventRequest.getLocation());
         EventEntity eventEntity = eventMapper.eventRequestToEventEntity(eventRequest, userId);
@@ -101,6 +104,7 @@ public class EventStorageImpl implements EventStorage {
     }
 
     @Override
+    @Transactional
     public EventFull addEvent(EventRequest eventRequest, Long userId) {
         LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(eventRequest.getLocation());
         EventEntity eventEntity = eventMapper.eventRequestToEventEntity(eventRequest, userId);

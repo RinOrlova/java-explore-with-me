@@ -12,7 +12,7 @@ import ru.yandex.practicum.storage.event.EventEntity;
 @Mapper(componentModel = org.mapstruct.MappingConstants.ComponentModel.SPRING, uses = {CategoryMapper.class, UserMapper.class, LocationMapper.class})
 public interface EventMapper {
     @Named("mapToEventShort")
-    @Mapping(target = "initiator", source = "initiator", qualifiedByName = "mapUserEntityToUser")
+    @Mapping(target = "initiator", source = "initiator", qualifiedByName = "mapUserEntityToUserFull")
     EventShort mapToEventShort(EventEntity eventEntity);
 
     @Named("eventShortIdToEventEntity")

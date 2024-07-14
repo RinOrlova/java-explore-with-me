@@ -1,9 +1,6 @@
 package ru.yandex.practicum.storage.category;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.yandex.practicum.storage.event.EventEntity;
 
 import javax.persistence.*;
@@ -14,6 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "categories")
 @Data
+@EqualsAndHashCode(exclude = {"events"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

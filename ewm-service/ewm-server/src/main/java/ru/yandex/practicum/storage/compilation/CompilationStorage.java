@@ -17,5 +17,5 @@ public interface CompilationStorage {
 
     CompilationResponse addCompilation(CompilationRequest compilationRequest);
 
-    CompilationResponse updateCompilation(CompilationResponse compilationResponse);
+    CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest);
 }

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.mapper;
 
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.yandex.practicum.dto.compilation.CompilationRequest;
@@ -17,4 +18,11 @@ public interface CompilationMapper {
     @Mapping(target = "events", source = "events", qualifiedByName = "eventShortIdToEventEntity")
     CompilationEntity mapCompilationToCompilationEntity(CompilationResponse compilationResponse);
 
+    @Mapping(target = "events", source = "compilationRequest.events", qualifiedByName = "eventIdToEventEntity")
+    @Mapping(target = "id", source = "id")
+    CompilationEntity mapCompilationRequestToCompilationEntity(Long id, CompilationRequest compilationRequest);
+
+    default CompilationEntity mapContext(@Context Long id, CompilationRequest compilationRequest) {
+        return mapCompilationRequestToCompilationEntity(id, compilationRequest);
+    }
 }

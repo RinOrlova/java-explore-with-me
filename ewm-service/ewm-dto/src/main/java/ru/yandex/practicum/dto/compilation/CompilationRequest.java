@@ -3,6 +3,7 @@ package ru.yandex.practicum.dto.compilation;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ import java.util.Collection;
 @Builder
 @Jacksonized
 public class CompilationRequest {
-
+    @Nullable
     Collection<Long> events;
     @Builder.Default
     Boolean pinned = false;

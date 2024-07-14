@@ -31,8 +31,8 @@ public class CompilationStorageImpl implements CompilationStorage {
     }
 
     @Override
-    public CompilationResponse updateCompilation(CompilationResponse compilationResponse) {
-        CompilationEntity compilationEntity = compilationMapper.mapCompilationToCompilationEntity(compilationResponse);
+    public CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest) {
+        CompilationEntity compilationEntity = compilationMapper.mapCompilationRequestToCompilationEntity(id, compilationRequest);
         CompilationEntity compilationFromStorage = compilationRepository.saveAndFlush(compilationEntity);
         return compilationMapper.mapCompilationEntityToCompilationResponse(compilationFromStorage);
     }

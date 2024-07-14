@@ -34,8 +34,10 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationResponse addCompilation(CompilationRequest compilationRequest) {
-        for (Long eventId : compilationRequest.getEvents()) {
-            eventStorage.getEventShortById(eventId);
+        if (compilationRequest.getEvents() != null) {
+            for (Long eventId : compilationRequest.getEvents()) {
+                eventStorage.getEventShortById(eventId);
+            }
         }
         return compilationStorage.addCompilation(compilationRequest);
     }
@@ -47,10 +49,14 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest) {
-        CompilationResponse compilationResponse = compilationStorage.getCompilationById(id);// Make sure compilation exists
-        for (Long eventId : compilationRequest.getEvents()) { // Make sure all listed events exist
-            eventStorage.getEventShortById(eventId);
+        compilationStorage.getCompilationById(id); // Make sure compilation exists
+        if (compilationRequest.getEvents() != null) {
+            for (Long eventId : compilationRequest.getEvents()) {
+                eventStorage.getEventShortById(eventId);
+            }
         }
-        return compilationStorage.updateCompilation(compilationResponse);
+        return compilationStorage.updateCompilation(id, compilationRequest);
     }
+
+
 }

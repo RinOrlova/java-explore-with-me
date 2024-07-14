@@ -1,9 +1,6 @@
 package ru.yandex.practicum.storage.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.yandex.practicum.dto.event.EventStatus;
 import ru.yandex.practicum.storage.category.CategoryEntity;
 import ru.yandex.practicum.storage.compilation.CompilationEntity;
@@ -19,6 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "events")
 @Data
+@EqualsAndHashCode(exclude = "participationRequests")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

@@ -8,6 +8,7 @@ import ru.yandex.practicum.dto.compilation.CompilationResponse;
 import ru.yandex.practicum.service.compilation.CompilationService;
 import ru.yandex.practicum.utils.ApiPathConstants;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @RestController
@@ -19,7 +20,7 @@ public class AdminCompilationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationResponse createCompilation(@RequestBody CompilationRequest compilationRequest) {
+    public CompilationResponse createCompilation(@Valid @RequestBody CompilationRequest compilationRequest) {
         return compilationService.addCompilation(compilationRequest);
     }
 
@@ -32,7 +33,7 @@ public class AdminCompilationController {
 
     @PatchMapping(ApiPathConstants.BY_ID_PATH)
     public CompilationResponse updateCompilation(@PathVariable(name = "id") @Positive Long id,
-                                                 @RequestBody CompilationRequest compilationRequest) {
+                                                 @Valid @RequestBody CompilationRequest compilationRequest) {
         return compilationService.updateCompilation(id, compilationRequest);
     }
 

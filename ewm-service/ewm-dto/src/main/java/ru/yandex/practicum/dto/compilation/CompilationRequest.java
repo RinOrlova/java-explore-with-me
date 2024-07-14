@@ -5,6 +5,8 @@ import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @Value
@@ -15,7 +17,9 @@ public class CompilationRequest {
     Collection<Long> events;
     @Builder.Default
     Boolean pinned = false;
+    @NotNull
     @NotBlank
+    @Size(max = 50)
     String title;
 
 }

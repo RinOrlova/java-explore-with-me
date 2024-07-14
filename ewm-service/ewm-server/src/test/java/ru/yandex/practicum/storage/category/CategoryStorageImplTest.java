@@ -7,7 +7,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.exceptions.CategoryNotFoundException;
 import ru.yandex.practicum.mapper.CategoryMapper;

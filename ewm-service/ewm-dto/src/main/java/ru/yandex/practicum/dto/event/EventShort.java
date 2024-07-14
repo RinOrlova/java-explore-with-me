@@ -8,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 import ru.yandex.practicum.common.serialization.LocalDateTimeSerializer;
 import ru.yandex.practicum.dto.category.Category;
-import ru.yandex.practicum.dto.user.User;
 import ru.yandex.practicum.dto.user.UserFull;
 
 import java.time.LocalDateTime;

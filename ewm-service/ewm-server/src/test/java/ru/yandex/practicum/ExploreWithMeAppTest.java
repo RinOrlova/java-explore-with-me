@@ -46,6 +46,47 @@ class ExploreWithMeAppTest {
     private StatisticsClient statisticsClient;
 
     @Test
+    void test_categoryOperations() throws Exception {
+        // add new category
+        Category category = new Category();
+        category.setName("ca$tegory");
+        mockMvc.perform(post("/admin/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(category)))
+                .andExpect(status().isCreated());
+
+        // get all categories paging 0-1000
+        String getCategoriesPagingURL = "/categories?from=0&size=1000";
+        String categoriesPagingResponseJson = mockMvc.perform(get(getCategoriesPagingURL))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Collection<Category> categories = objectMapper.readValue(categoriesPagingResponseJson, new TypeReference<>() {
+        });
+        assertEquals(1, categories.size());
+        Category resultCategory = categories.iterator().next();
+        assertEquals("ca$tegory", resultCategory.getName());
+        // update category
+        Category categoryNewName = new Category();
+        categoryNewName.setName("ca$teg#ry");
+        String updatedCategoriesPagingResponseJson = mockMvc.perform(patch("/admin/categories/" + resultCategory.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(categoryNewName)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Category updatedCategory = objectMapper.readValue(updatedCategoriesPagingResponseJson, Category.class);
+        assertEquals("ca$teg#ry", updatedCategory.getName());
+        // delete category
+        mockMvc.perform(delete("/admin/categories/" + resultCategory.getId()))
+                .andExpect(status().isNoContent());
+        String categoriesGetAllResponseJson = mockMvc.perform(get("/categories"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Collection<Category> categoriesGetAllResult = objectMapper.readValue(categoriesGetAllResponseJson, new TypeReference<>() {
+        });
+        assertTrue(categoriesGetAllResult.isEmpty());
+    }
+
+    @Test
     void test_admin_userOperations() throws Exception {
         User user = new User();
         user.setName("nZPoRD0ERJZT0rY7AJzBll7FMbnOQtbWMd4UletIviFjkOFAGlb6RsmqFLgMSc0Hn7CWji4gXu0emldK7Mg7Q1TSg9k7FGpPjKmVSgxxTSqEuBhvKNnFkrmWtJK1wuizKnK1lhSHEd61zdk3ctEl0aSOPhz4X4tXmhZ36FiotsLblVSsnbQgdYfNt0DMoZbJg9B4v2HCO3xgGNGRqYqzR7ISL5Q9iebRqYwoOcZhzbAjPs8MD7jrkShIta");

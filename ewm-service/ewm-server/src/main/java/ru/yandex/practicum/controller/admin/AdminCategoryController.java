@@ -25,11 +25,12 @@ public class AdminCategoryController {
 
     @PatchMapping(ApiPathConstants.BY_ID_PATH)
     public Category updateCategory(@PathVariable @Positive Long id,
-                                   @RequestBody @Valid String newName) {
-        return categoryService.updateCategory(id, newName);
+                                   @RequestBody @Valid Category updatedCategory) {
+        return categoryService.updateCategory(id, updatedCategory);
     }
 
     @DeleteMapping(ApiPathConstants.BY_ID_PATH)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable @Positive Long id) {
         categoryService.deleteCategory(id);
     }

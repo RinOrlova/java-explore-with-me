@@ -2,6 +2,7 @@ package ru.yandex.practicum.service.category;
 
 import ru.yandex.practicum.dto.category.Category;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 public interface CategoryService {
@@ -13,7 +14,7 @@ public interface CategoryService {
 
     Category addCategory(Category categoryName);
 
-    Category updateCategory(Long catId, String newName);
+    Category updateCategory(Long catId, @Valid Category newName);
 
     void deleteCategory(Long catId);
 

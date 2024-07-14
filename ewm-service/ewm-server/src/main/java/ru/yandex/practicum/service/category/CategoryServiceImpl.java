@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.storage.category.CategoryStorage;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @Service
@@ -29,9 +30,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(Long catId, String newName) {
+    public Category updateCategory(Long catId, @Valid Category updatedCategory) {
         Category categoryById = getCategoryById(catId);
-        categoryById.setName(newName);
+        categoryById.setName(updatedCategory.getName());
         return categoryStorage.update(categoryById);
     }
 

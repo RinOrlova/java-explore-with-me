@@ -23,6 +23,7 @@ public class CategoryEntity {
 
     @NotNull
     @Size(max = 100)
+    @Column(name = "cat_name", nullable = false)
     private String name;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")

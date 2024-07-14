@@ -15,7 +15,7 @@ public class EventDateValidator implements ConstraintValidator<EventDateConstrai
         }
 
         LocalDateTime twoHoursFromNow = LocalDateTime.now().plusHours(2);
-        if (!value.isBefore(twoHoursFromNow)) {
+        if (value.isBefore(twoHoursFromNow)) {
             throw new ForbiddenException("The event can only be changed 2 hours in advance or earlier");
         }
         return true;

@@ -14,5 +14,4 @@ public class ParticipationStatusUpdateRequest {
     @UniqueElements
     private Collection<Long> requestIds;
     private ParticipationRequestStatus status;
-
 }

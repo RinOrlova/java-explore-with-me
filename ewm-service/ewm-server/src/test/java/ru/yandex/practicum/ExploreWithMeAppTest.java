@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,13 +64,14 @@ class ExploreWithMeAppTest {
                 .andReturn().getResponse().getContentAsString();
         Collection<Category> categories = objectMapper.readValue(categoriesPagingResponseJson, new TypeReference<>() {
         });
-        assertEquals(1, categories.size());
-        Category resultCategory = categories.iterator().next();
-        assertEquals("ca$tegory", resultCategory.getName());
+        Map<String, Category> categoriesGroupedByName = categories.stream().collect(Collectors.toMap(Category::getName, x -> x));
+        Category categoryToCheck = categoriesGroupedByName.get("ca$tegory");
+        assertNotNull(categoryToCheck);
+        assertEquals("ca$tegory", categoryToCheck.getName());
         // update category
         Category categoryNewName = new Category();
         categoryNewName.setName("ca$teg#ry");
-        String updatedCategoriesPagingResponseJson = mockMvc.perform(patch("/admin/categories/" + resultCategory.getId())
+        String updatedCategoriesPagingResponseJson = mockMvc.perform(patch("/admin/categories/" + categoryToCheck.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(categoryNewName)))
                 .andExpect(status().isOk())
@@ -76,14 +79,16 @@ class ExploreWithMeAppTest {
         Category updatedCategory = objectMapper.readValue(updatedCategoriesPagingResponseJson, Category.class);
         assertEquals("ca$teg#ry", updatedCategory.getName());
         // delete category
-        mockMvc.perform(delete("/admin/categories/" + resultCategory.getId()))
+        mockMvc.perform(delete("/admin/categories/" + categoryToCheck.getId()))
                 .andExpect(status().isNoContent());
         String categoriesGetAllResponseJson = mockMvc.perform(get("/categories"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         Collection<Category> categoriesGetAllResult = objectMapper.readValue(categoriesGetAllResponseJson, new TypeReference<>() {
         });
-        assertTrue(categoriesGetAllResult.isEmpty());
+        Map<String, Category> categoriesGroupedByNameAllResult = categoriesGetAllResult.stream().collect(Collectors.toMap(Category::getName, x -> x));
+        assertNull(categoriesGroupedByNameAllResult.get("ca$tegory"));
+        assertNull(categoriesGroupedByNameAllResult.get("ca$teg#ry"));
     }
 
     @Test

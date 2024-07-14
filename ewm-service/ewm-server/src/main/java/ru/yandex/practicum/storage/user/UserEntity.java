@@ -25,12 +25,12 @@ public class UserEntity {
     private Long id;
 
     @NotNull
-    @Size(max = 100)
+    @Size(max = 250)
     private String name;
 
     @NotNull
     @Email
-    @Size(max = 100)
+    @Size(max = 254)
     private String email;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "requester")

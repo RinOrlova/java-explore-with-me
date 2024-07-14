@@ -7,7 +7,9 @@ import lombok.extern.jackson.Jacksonized;
 import org.springframework.lang.Nullable;
 import ru.yandex.practicum.common.serialization.LocalDateTimeDeserializer;
 import ru.yandex.practicum.dto.location.Location;
+import ru.yandex.practicum.dto.validation.EventDateAdminConstraint;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,12 +18,15 @@ import java.time.LocalDateTime;
 public class EventRequestAdmin {
 
     @Nullable
+    @Size(min = 20, max = 7000)
     private String annotation;
     @Nullable
     private Long category;
     @Nullable
+    @Size(min = 20, max = 7000)
     private String description;
     @Nullable
+    @EventDateAdminConstraint
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime eventDate;
     @Nullable
@@ -33,6 +38,7 @@ public class EventRequestAdmin {
     @Nullable
     private Boolean requestModeration;
     @Nullable
+    @Size(min = 3, max = 120)
     private String title;
     @Nullable
     private StateAction stateAction;

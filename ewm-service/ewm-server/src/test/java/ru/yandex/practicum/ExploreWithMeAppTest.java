@@ -48,7 +48,7 @@ class ExploreWithMeAppTest {
     @Test
     void test_admin_userOperations() throws Exception {
         User user = new User();
-        user.setName("User Name");
+        user.setName("nZPoRD0ERJZT0rY7AJzBll7FMbnOQtbWMd4UletIviFjkOFAGlb6RsmqFLgMSc0Hn7CWji4gXu0emldK7Mg7Q1TSg9k7FGpPjKmVSgxxTSqEuBhvKNnFkrmWtJK1wuizKnK1lhSHEd61zdk3ctEl0aSOPhz4X4tXmhZ36FiotsLblVSsnbQgdYfNt0DMoZbJg9B4v2HCO3xgGNGRqYqzR7ISL5Q9iebRqYwoOcZhzbAjPs8MD7jrkShIta");
         user.setEmail("email@domain.com");
         User user2 = new User();
         user2.setName("User Name 2");
@@ -75,7 +75,9 @@ class ExploreWithMeAppTest {
         Collection<UserFull> users = objectMapper.readValue(usersResponseJson, new TypeReference<>() {
         });
         assertEquals(2, users.size());
-        assertThat(users).extracting("name").containsExactly("User Name", "User Name 2");
+        assertThat(users).extracting("name").containsExactly(
+                "nZPoRD0ERJZT0rY7AJzBll7FMbnOQtbWMd4UletIviFjkOFAGlb6RsmqFLgMSc0Hn7CWji4gXu0emldK7Mg7Q1TSg9k7FGpPjKmVSgxxTSqEuBhvKNnFkrmWtJK1wuizKnK1lhSHEd61zdk3ctEl0aSOPhz4X4tXmhZ36FiotsLblVSsnbQgdYfNt0DMoZbJg9B4v2HCO3xgGNGRqYqzR7ISL5Q9iebRqYwoOcZhzbAjPs8MD7jrkShIta",
+                "User Name 2");
         assertThat(users).extracting("email").containsExactly("email@domain.com", "email2@domain.com");
 
         // Get all users by id
@@ -90,7 +92,7 @@ class ExploreWithMeAppTest {
         Collection<UserFull> usersById = objectMapper.readValue(usersByIdResponseJson, new TypeReference<>() {
         });
         assertEquals(1, usersById.size());
-        assertThat(usersById).extracting("name").containsExactly("User Name");
+        assertThat(usersById).extracting("name").containsExactly("nZPoRD0ERJZT0rY7AJzBll7FMbnOQtbWMd4UletIviFjkOFAGlb6RsmqFLgMSc0Hn7CWji4gXu0emldK7Mg7Q1TSg9k7FGpPjKmVSgxxTSqEuBhvKNnFkrmWtJK1wuizKnK1lhSHEd61zdk3ctEl0aSOPhz4X4tXmhZ36FiotsLblVSsnbQgdYfNt0DMoZbJg9B4v2HCO3xgGNGRqYqzR7ISL5Q9iebRqYwoOcZhzbAjPs8MD7jrkShIta");
         assertThat(usersById).extracting("email").containsExactly("email@domain.com");
 
         // Get all users considering paging
@@ -106,7 +108,7 @@ class ExploreWithMeAppTest {
         Collection<UserFull> usersPaging = objectMapper.readValue(usersPagingResponseJson, new TypeReference<>() {
         });
         assertEquals(1, usersPaging.size());
-        assertThat(usersPaging).extracting("name").containsExactly("User Name");
+        assertThat(usersPaging).extracting("name").containsExactly("nZPoRD0ERJZT0rY7AJzBll7FMbnOQtbWMd4UletIviFjkOFAGlb6RsmqFLgMSc0Hn7CWji4gXu0emldK7Mg7Q1TSg9k7FGpPjKmVSgxxTSqEuBhvKNnFkrmWtJK1wuizKnK1lhSHEd61zdk3ctEl0aSOPhz4X4tXmhZ36FiotsLblVSsnbQgdYfNt0DMoZbJg9B4v2HCO3xgGNGRqYqzR7ISL5Q9iebRqYwoOcZhzbAjPs8MD7jrkShIta");
         assertThat(usersPaging).extracting("email").containsExactly("email@domain.com");
 
         // Delete users

@@ -2,16 +2,17 @@ package ru.yandex.practicum.storage.category;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.exceptions.CategoryNotFoundException;
+import ru.yandex.practicum.exceptions.ForbiddenException;
 import ru.yandex.practicum.mapper.CategoryMapper;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -40,6 +41,11 @@ public class CategoryStorageImpl implements CategoryStorage {
 
     @Override
     public Category add(Category categoryName) {
+        Optional.ofNullable(categoryRepository.findByName(categoryName.getName()))
+                .ifPresent(categoryFromStorage -> {
+                            throw new ForbiddenException("Category with requested name already exists.");
+                        }
+                );
         CategoryEntity categoryEntity = categoryMapper.mapCategoryToCategoryEntity(categoryName);
         CategoryEntity categoryFromStorage = categoryRepository.saveAndFlush(categoryEntity);
         return categoryMapper.mapCategoryEntityToCategory(categoryFromStorage);
@@ -47,6 +53,11 @@ public class CategoryStorageImpl implements CategoryStorage {
 
     @Override
     public Category update(Category category) {
+        Optional.ofNullable(categoryRepository.findByName(category.getName()))
+                .ifPresent(categoryFromStorage -> {
+                            throw new ForbiddenException("Category with requested name already exists.");
+                        }
+                );
         CategoryEntity categoryEntity = categoryMapper.mapCategoryToCategoryEntity(category);
         CategoryEntity categoryFromStorage = categoryRepository.saveAndFlush(categoryEntity);
         return categoryMapper.mapCategoryEntityToCategory(categoryFromStorage);
@@ -55,12 +66,16 @@ public class CategoryStorageImpl implements CategoryStorage {
 
     @Override
     public void delete(Long catId) {
-        try {
-            categoryRepository.deleteById(catId);
-        } catch (EmptyResultDataAccessException exception) {
-            log.warn("Category not found by requested id:{}", catId);
-            throw new CategoryNotFoundException(catId);
+        Optional<CategoryEntity> categoryById = categoryRepository.findById(catId);
+        if (categoryById.isPresent()) {
+            if (categoryById.get().getEvents().isEmpty()) {
+                categoryRepository.deleteById(catId);
+            } else {
+                throw new ForbiddenException("Not allowed to remove category with linked events.");
+            }
         }
+        throw new CategoryNotFoundException(catId);
+
     }
 
 }

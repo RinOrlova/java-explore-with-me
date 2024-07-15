@@ -24,7 +24,7 @@ public class PublicEventController {
     private final EventService eventService;
 
     @GetMapping()
-    public Collection<EventShort> getEvents(@RequestParam(name = "text") String text,
+    public Collection<EventShort> getEvents(@RequestParam(name = "text", required = false) String text,
                                             @RequestParam(name = "categories", required = false) List<@Positive Long> categoryId,
                                             @RequestParam(name = "paid", required = false) Boolean paid,
                                             @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
@@ -46,6 +46,8 @@ public class PublicEventController {
         }
         if (rangeStart != null) {
             searchBuilder.rangeStart(rangeStart);
+        } else {
+            searchBuilder.rangeStart(LocalDateTime.now());
         }
         if (rangeEnd != null) {
             searchBuilder.rangeStart(rangeEnd);

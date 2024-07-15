@@ -57,8 +57,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFull updateEventAdmin(Long eventId, UpdateEventRequest updateEventRequest) {
         EventFull existingEvent = eventStorage.getEventFullById(eventId); // Make sure event exists, otherwise → EventNotFoundException + Code 404
-        EventFull updatedEvent = recreateEvent(existingEvent, updateEventRequest);
-        return eventStorage.updateEventAdmin(updatedEvent);
+        if (existingEvent.getState() == EventStatus.PENDING) {
+            EventFull updatedEvent = recreateEvent(existingEvent, updateEventRequest);
+            return eventStorage.updateEventAdmin(updatedEvent);
+        }
+        throw new ForbiddenException(String.format("Not allowed to change event status for event=%s.", existingEvent.getState()));
     }
 
     @Override

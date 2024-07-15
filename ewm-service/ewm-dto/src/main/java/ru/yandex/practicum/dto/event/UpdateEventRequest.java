@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class UpdateEventRequest {
 
     @Nullable
-    @Size(min = 20, max = 7000)
+    @Size(min = 20, max = 2000)
     private String annotation;
     @Nullable
     private Long category;

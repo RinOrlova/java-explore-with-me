@@ -30,7 +30,6 @@ public class EventStorageImpl implements EventStorage {
     private final EventRepository eventRepository;
     private final EventSearchRepository eventSearchRepository;
     private final EventMapper eventMapper;
-    private final UserEventViewRepository userEventViewRepository;
     private final LocationStorage locationStorage;
 
     @Override
@@ -156,7 +155,6 @@ public class EventStorageImpl implements EventStorage {
         Optional<EventEntity> eventFromStorage = eventRepository.findById(id);
         if (eventFromStorage.isPresent()) {
             EventEntity eventEntity = eventFromStorage.get();
-            setViewsToEventEntity(eventEntity);
             setConfirmedRequestsToEventEntity(eventEntity);
             return eventMapper.mapToEventShort(eventEntity);
         }
@@ -164,36 +162,28 @@ public class EventStorageImpl implements EventStorage {
     }
 
     @Override
+    @Transactional
     public EventFull getEventFullPublishedById(Long id) {
-        Optional<EventEntity> eventFromStorage = Optional.ofNullable(eventRepository.findByIdAndStatusPublished(id));
-        if (eventFromStorage.isPresent()) {
-            EventEntity eventEntity = eventFromStorage.get();
-            setViewsToEventEntity(eventEntity);
-            setConfirmedRequestsToEventEntity(eventEntity);
-            return eventMapper.mapToEventFull(eventEntity);
-        }
-        throw new EventNotFoundException(id);
+        return Optional.ofNullable(eventRepository.findByIdAndStatusPublished(id))
+                .map(this::getEventFull)
+                .orElseThrow(() -> new EventNotFoundException(id));
     }
 
     @Override
+    @Transactional
     public EventFull getEventFullById(Long id) {
-        Optional<EventEntity> eventFromStorage = eventRepository.findById(id);
-        if (eventFromStorage.isPresent()) {
-            EventEntity eventEntity = eventFromStorage.get();
-            setViewsToEventEntity(eventEntity);
-            setConfirmedRequestsToEventEntity(eventEntity);
-            return eventMapper.mapToEventFull(eventEntity);
-        }
-        throw new EventNotFoundException(id);
+        return eventRepository.findById(id)
+                .map(this::getEventFull)
+                .orElseThrow(() -> new EventNotFoundException(id));
     }
 
-    private void setViewsToEventEntity(EventEntity entity) {
-        long viewForEvent = getViewForEvent(entity);
-        entity.setViews(viewForEvent);
-    }
-
-    private long getViewForEvent(EventEntity entity) {
-        return userEventViewRepository.countByEvent(entity);
+    private EventFull getEventFull(EventEntity eventFromStorage) {
+        long views = eventFromStorage.getViews();
+        eventFromStorage.setViews(views + 1);
+        eventRepository.saveAndFlush(eventFromStorage);
+        eventRepository.refresh(eventFromStorage);
+        setConfirmedRequestsToEventEntity(eventFromStorage);
+        return eventMapper.mapToEventFull(eventFromStorage);
     }
 
     private void setConfirmedRequestsToEventEntity(EventEntity entity) {

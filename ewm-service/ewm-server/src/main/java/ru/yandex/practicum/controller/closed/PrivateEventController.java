@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventRequest;
 import ru.yandex.practicum.dto.event.EventShort;
+import ru.yandex.practicum.dto.event.UpdateEventRequest;
 import ru.yandex.practicum.dto.participation.AllParticipationRequestsResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
 import ru.yandex.practicum.dto.participation.ParticipationStatusUpdateRequest;
@@ -48,7 +49,7 @@ public class PrivateEventController {
     @PatchMapping(ApiPathConstants.EVENT_BY_ID_PATH)
     public EventFull updateEvent(@PathVariable("id") Long id,
                                  @PathVariable("eventId") Long eventId,
-                                 @Valid @RequestBody EventRequest eventRequest) {
+                                 @Valid @RequestBody UpdateEventRequest eventRequest) {
         return eventService.updateEvent(id, eventId, eventRequest);
     }
 

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @Jacksonized
-public class EventRequestAdmin {
+public class UpdateEventRequest {
 
     @Nullable
     @Size(min = 20, max = 7000)

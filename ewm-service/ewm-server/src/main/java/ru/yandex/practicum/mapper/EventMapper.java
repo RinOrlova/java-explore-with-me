@@ -51,4 +51,12 @@ public interface EventMapper {
     @Mapping(target = "status", source = "state")
     @Mapping(target = "initiator", source = "initiator", qualifiedByName = "mapUserFullToUserEntity")
     EventEntity mapEventFullToEventEntity(EventFull updatedEvent);
+
+    @Mapping(target = "status", source = "eventFull.state")
+    @Mapping(target = "initiator", source = "userId", qualifiedByName = "mapUserIdToUserEntity")
+    EventEntity eventFullToEventEntity(EventFull eventFull, Long userId);
+
+    default EventEntity mapContext(EventFull eventFull, @Context Long userId) {
+        return eventFullToEventEntity(eventFull, userId);
+    }
 }

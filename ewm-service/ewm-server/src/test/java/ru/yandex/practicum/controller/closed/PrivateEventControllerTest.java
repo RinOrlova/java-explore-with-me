@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventRequest;
 import ru.yandex.practicum.dto.event.EventShort;
+import ru.yandex.practicum.dto.event.UpdateEventRequest;
 import ru.yandex.practicum.dto.location.Location;
 import ru.yandex.practicum.dto.participation.AllParticipationRequestsResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
@@ -140,7 +141,7 @@ class PrivateEventControllerTest {
     @Test
     void test_updateEvent() throws Exception {
         EventFull mockEventFull = new EventFull();
-        EventRequest eventRequest = EventRequest.builder()
+        UpdateEventRequest eventRequest = UpdateEventRequest.builder()
                 .annotation("AnnotationAnnotationAnnotationAnnotation")
                 .description("DescriptionDescriptionDescriptionDescription")
                 .eventDate(LocalDateTime.now().plusDays(1))

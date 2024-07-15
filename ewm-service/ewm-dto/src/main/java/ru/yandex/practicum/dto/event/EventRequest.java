@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 import ru.yandex.practicum.common.serialization.LocalDateTimeDeserializer;
 import ru.yandex.practicum.dto.location.Location;
 import ru.yandex.practicum.dto.validation.EventDateConstraint;
@@ -53,5 +54,8 @@ public class EventRequest {
     @Size(min = 3, max = 120)
     @NotBlank
     private String title;
+
+    @Nullable
+    private StateAction stateAction;
 }
 

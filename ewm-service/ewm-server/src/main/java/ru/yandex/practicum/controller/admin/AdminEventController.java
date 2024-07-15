@@ -3,8 +3,8 @@ package ru.yandex.practicum.controller.admin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.event.EventFull;
-import ru.yandex.practicum.dto.event.EventRequestAdmin;
 import ru.yandex.practicum.dto.event.EventStatus;
+import ru.yandex.practicum.dto.event.UpdateEventRequest;
 import ru.yandex.practicum.dto.search.AdminSearch;
 import ru.yandex.practicum.service.event.EventService;
 import ru.yandex.practicum.utils.ApiPathConstants;
@@ -56,8 +56,8 @@ public class AdminEventController {
 
     @PatchMapping(ApiPathConstants.BY_ID_PATH)
     public EventFull updateEventState(@PathVariable("id") Long eventId,
-                                      @Valid @RequestBody EventRequestAdmin eventRequestAdmin) {
-        return eventService.updateEventAdmin(eventId, eventRequestAdmin);
+                                      @Valid @RequestBody UpdateEventRequest updateEventRequest) {
+        return eventService.updateEventAdmin(eventId, updateEventRequest);
     }
 
 }

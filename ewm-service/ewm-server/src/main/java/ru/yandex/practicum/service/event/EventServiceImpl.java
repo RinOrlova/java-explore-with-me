@@ -14,6 +14,7 @@ import ru.yandex.practicum.storage.event.EventStorage;
 import ru.yandex.practicum.storage.location.LocationStorage;
 import ru.yandex.practicum.storage.user.UserStorage;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -44,18 +45,19 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFull updateEvent(@NonNull Long userId, @NonNull Long eventId, @NonNull EventRequest eventRequest) {
-        EventFull eventFullById = eventStorage.getEventByCreatorAndId(userId, eventId);
-        if (eventFullById.getState() != EventStatus.PUBLISHED) {
-            return eventStorage.updateEvent(eventRequest, userId);
+    public EventFull updateEvent(@NonNull Long userId, @NonNull Long eventId, @NonNull @Valid UpdateEventRequest updateEventRequest) {
+        EventFull existingEvent = eventStorage.getEventByCreatorAndId(userId, eventId);
+        if (existingEvent.getState() != EventStatus.PUBLISHED) {
+            EventFull updatedEvent = recreateEvent(existingEvent, updateEventRequest);
+            return eventStorage.updateEvent(updatedEvent, userId);
         }
         throw new ForbiddenException("Only pending or canceled events can be changed");
     }
 
     @Override
-    public EventFull updateEventAdmin(Long eventId, EventRequestAdmin eventRequestAdmin) {
+    public EventFull updateEventAdmin(Long eventId, UpdateEventRequest updateEventRequest) {
         EventFull existingEvent = eventStorage.getEventFullById(eventId); // Make sure event exists, otherwise → EventNotFoundException + Code 404
-        EventFull updatedEvent = recreateEvent(existingEvent, eventRequestAdmin);
+        EventFull updatedEvent = recreateEvent(existingEvent, updateEventRequest);
         return eventStorage.updateEventAdmin(updatedEvent);
     }
 
@@ -76,46 +78,50 @@ public class EventServiceImpl implements EventService {
         return eventStorage.getEventByCreator(userId, from, size);
     }
 
-    private EventFull recreateEvent(EventFull existingEvent, EventRequestAdmin eventRequestAdmin) {
+    private EventFull recreateEvent(EventFull existingEvent, UpdateEventRequest updateEventRequest) {
         EventFull.EventFullBuilder<?, ?> fullBuilder = existingEvent.toBuilder();
-        if (Objects.nonNull(eventRequestAdmin.getRequestModeration())) {
-            fullBuilder.requestModeration(eventRequestAdmin.getRequestModeration());
+        if (Objects.nonNull(updateEventRequest.getRequestModeration())) {
+            fullBuilder.requestModeration(updateEventRequest.getRequestModeration());
         }
-        if (Objects.nonNull(eventRequestAdmin.getParticipantLimit())) {
-            fullBuilder.participantLimit(eventRequestAdmin.getParticipantLimit());
+        if (Objects.nonNull(updateEventRequest.getParticipantLimit())) {
+            fullBuilder.participantLimit(updateEventRequest.getParticipantLimit());
         }
-        if (Objects.nonNull(eventRequestAdmin.getEventDate())) {
-            fullBuilder.eventDate(eventRequestAdmin.getEventDate());
+        if (Objects.nonNull(updateEventRequest.getEventDate())) {
+            fullBuilder.eventDate(updateEventRequest.getEventDate());
         }
-        if (Objects.nonNull(eventRequestAdmin.getAnnotation())) {
-            fullBuilder.annotation(eventRequestAdmin.getAnnotation());
+        if (Objects.nonNull(updateEventRequest.getAnnotation())) {
+            fullBuilder.annotation(updateEventRequest.getAnnotation());
         }
-        if (Objects.nonNull(eventRequestAdmin.getPaid())) {
-            fullBuilder.paid(eventRequestAdmin.getPaid());
+        if (Objects.nonNull(updateEventRequest.getPaid())) {
+            fullBuilder.paid(updateEventRequest.getPaid());
         }
-        if (Objects.nonNull(eventRequestAdmin.getTitle())) {
-            fullBuilder.title(eventRequestAdmin.getTitle());
+        if (Objects.nonNull(updateEventRequest.getTitle())) {
+            fullBuilder.title(updateEventRequest.getTitle());
         }
-        if (Objects.nonNull(eventRequestAdmin.getDescription())) {
-            fullBuilder.description(eventRequestAdmin.getDescription());
+        if (Objects.nonNull(updateEventRequest.getDescription())) {
+            fullBuilder.description(updateEventRequest.getDescription());
         }
-        if (Objects.nonNull(eventRequestAdmin.getCategory())) {
-            Category category = categoryStorage.getCategoryById(eventRequestAdmin.getCategory());
+        if (Objects.nonNull(updateEventRequest.getCategory())) {
+            Category category = categoryStorage.getCategoryById(updateEventRequest.getCategory());
             fullBuilder.category(category);
         }
-        if (Objects.nonNull(eventRequestAdmin.getLocation())) {
-            Location location = locationStorage.getLocationIfAbsent(eventRequestAdmin.getLocation());
+        if (Objects.nonNull(updateEventRequest.getLocation())) {
+            Location location = locationStorage.getLocationIfAbsent(updateEventRequest.getLocation());
             fullBuilder.location(location);
         }
-        if (Objects.nonNull(eventRequestAdmin.getStateAction())) {
-            StateAction stateAction = eventRequestAdmin.getStateAction();
+        if (Objects.nonNull(updateEventRequest.getStateAction())) {
+            StateAction stateAction = updateEventRequest.getStateAction();
             switch (stateAction) {
                 case PUBLISH_EVENT:
                     fullBuilder.state(EventStatus.PUBLISHED);
                     fullBuilder.publishedOn(LocalDateTime.now());
                     break;
                 case REJECT_EVENT:
+                case CANCEL_REVIEW:
                     fullBuilder.state(EventStatus.CANCELLED);
+                    break;
+                case SEND_TO_REVIEW:
+                    fullBuilder.state(EventStatus.PENDING);
                     break;
             }
         }

@@ -86,15 +86,6 @@ public class EventStorageImpl implements EventStorage {
     }
 
     @Override
-    @Transactional
-    public EventFull updateEventAdmin(EventFull updatedEvent) {
-        EventEntity eventEntity = eventMapper.mapEventFullToEventEntity(updatedEvent);
-        EventEntity eventFromStorage = eventRepository.saveAndFlush(eventEntity);
-        eventRepository.refresh(eventFromStorage);
-        return eventMapper.mapToEventFull(eventFromStorage);
-    }
-
-    @Override
     public List<EventShort> getEventByCreator(Long userId, int from, int size) {
         PageRequest pageRequest = PageRequest.of(
                 from,
@@ -109,10 +100,19 @@ public class EventStorageImpl implements EventStorage {
 
     @Override
     @Transactional
-    public EventFull updateEvent(EventRequest eventRequest, Long userId) {
-        LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(eventRequest.getLocation());
-        EventEntity eventEntity = eventMapper.eventRequestToEventEntity(eventRequest, userId);
+    public EventFull updateEvent(EventFull updatedEvent, Long userId) {
+        LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(updatedEvent.getLocation());
+        EventEntity eventEntity = eventMapper.eventFullToEventEntity(updatedEvent, userId);
         eventEntity.setLocation(locationEntity);
+        EventEntity eventFromStorage = eventRepository.saveAndFlush(eventEntity);
+        eventRepository.refresh(eventFromStorage);
+        return eventMapper.mapToEventFull(eventFromStorage);
+    }
+
+    @Override
+    @Transactional
+    public EventFull updateEventAdmin(EventFull updatedEvent) {
+        EventEntity eventEntity = eventMapper.mapEventFullToEventEntity(updatedEvent);
         EventEntity eventFromStorage = eventRepository.saveAndFlush(eventEntity);
         eventRepository.refresh(eventFromStorage);
         return eventMapper.mapToEventFull(eventFromStorage);

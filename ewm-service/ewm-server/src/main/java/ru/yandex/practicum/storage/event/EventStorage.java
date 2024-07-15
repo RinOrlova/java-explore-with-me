@@ -18,7 +18,7 @@ public interface EventStorage {
 
     EventFull getEventByCreatorAndId(Long userId, Long eventId);
 
-    EventFull updateEvent(EventRequest eventRequest, Long userId);
+    EventFull updateEvent(EventFull eventRequest, Long userId);
 
     EventFull addEvent(EventRequest eventRequest, Long userId);
 

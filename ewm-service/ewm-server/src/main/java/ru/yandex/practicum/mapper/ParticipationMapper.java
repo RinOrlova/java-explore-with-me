@@ -13,16 +13,22 @@ public interface ParticipationMapper {
     @Mapping(target = "event", source = "eventId", qualifiedByName = "eventIdToEventEntity")
     @Mapping(target = "requester", source = "userId", qualifiedByName = "mapUserIdToUserEntity")
     @Mapping(target = "status", constant = "PENDING")
+    @Mapping(target = "created", expression = "java(java.time.LocalDateTime.now())")
     ParticipationEntity mapDefaultUserEventParamsToEntity(Long userId, Long eventId);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "event", source = "eventId", qualifiedByName = "eventIdToEventEntity")
     @Mapping(target = "requester", source = "userId", qualifiedByName = "mapUserIdToUserEntity")
     @Mapping(target = "status", constant = "CONFIRMED")
+    @Mapping(target = "created", expression = "java(java.time.LocalDateTime.now())")
     ParticipationEntity mapApprovedUserEventParamsToEntity(Long userId, Long eventId);
 
     default ParticipationEntity mapContext(@Context Long userId, @Context Long eventId) {
         return mapDefaultUserEventParamsToEntity(userId, eventId);
+    }
+
+    default ParticipationEntity mapApprovedContext(@Context Long userId, @Context Long eventId) {
+        return mapApprovedUserEventParamsToEntity(userId, eventId);
     }
 
     @Mapping(target = "event", source = "event.id")

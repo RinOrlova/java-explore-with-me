@@ -34,7 +34,6 @@ public class ParticipationEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime created;
 
-    // TODO: replace with regular enum
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private ParticipationRequestStatus status;

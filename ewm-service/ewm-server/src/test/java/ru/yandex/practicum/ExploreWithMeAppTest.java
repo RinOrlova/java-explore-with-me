@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.client.StatisticsClient;
 import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.dto.event.EventFull;
+import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.dto.event.EventStatus;
 import ru.yandex.practicum.dto.user.User;
 import ru.yandex.practicum.dto.user.UserFull;
@@ -237,6 +238,14 @@ class ExploreWithMeAppTest {
         assertEquals(629, eventFull.getParticipantLimit());
         assertEquals("CategoryName", eventFull.getCategory().getName());
         assertEquals(EventStatus.PENDING, eventFull.getState());
+
+        // Search event by initiator id;
+        String responseSearchEventByInitiator = mockMvc.perform(get(USERS_PATH + "/" + userFull.getId() + EVENT_PATH))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Collection<EventShort> eventsShort = objectMapper.readValue(responseSearchEventByInitiator, new TypeReference<>() {
+        });
+        assertEquals(1, eventsShort.size());
 
         // Admin changes Event Status
         String adminEventPublishRequest = "{\"stateAction\":\"PUBLISH_EVENT\"}";

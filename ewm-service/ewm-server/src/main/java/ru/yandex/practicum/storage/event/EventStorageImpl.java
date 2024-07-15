@@ -1,6 +1,7 @@
 package ru.yandex.practicum.storage.event;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import ru.yandex.practicum.storage.location.LocationStorage;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -90,6 +92,19 @@ public class EventStorageImpl implements EventStorage {
         EventEntity eventFromStorage = eventRepository.saveAndFlush(eventEntity);
         eventRepository.refresh(eventFromStorage);
         return eventMapper.mapToEventFull(eventFromStorage);
+    }
+
+    @Override
+    public List<EventShort> getEventByCreator(Long userId, int from, int size) {
+        PageRequest pageRequest = PageRequest.of(
+                from,
+                size,
+                Sort.by(Sort.Direction.ASC, "id")
+        );
+        Page<EventEntity> eventEntityPage = eventRepository.findByInitiatorId(userId, pageRequest);
+        return eventEntityPage.stream()
+                .map(eventMapper::mapToEventShort)
+                .collect(Collectors.toList());
     }
 
     @Override

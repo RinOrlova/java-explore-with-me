@@ -7,6 +7,7 @@ import ru.yandex.practicum.dto.search.AdminSearch;
 import ru.yandex.practicum.dto.search.PublicSearch;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface EventStorage {
 
@@ -30,4 +31,6 @@ public interface EventStorage {
     Collection<EventFull> searchEvents(AdminSearch adminSearch);
 
     EventFull updateEventAdmin(EventFull updatedEvent);
+
+    List<EventShort> getEventByCreator(Long userId, int from, int size);
 }

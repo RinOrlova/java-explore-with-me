@@ -70,10 +70,10 @@ public class EventServiceImpl implements EventService {
         return eventStorage.searchEvents(adminSearch);
     }
 
-
     @Override
     public List<EventShort> getEventsByCreator(@NonNull Long userId, int from, int size) {
-        return null;
+        userStorage.getUserById(userId); // make sure user exists
+        return eventStorage.getEventByCreator(userId, from, size);
     }
 
     private EventFull recreateEvent(EventFull existingEvent, EventRequestAdmin eventRequestAdmin) {

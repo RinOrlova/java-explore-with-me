@@ -64,6 +64,17 @@ public class ApplicationExceptionHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleConflictException(ConflictException exc) {
+        return ErrorResponse.builder()
+                .status(HttpStatus.CONFLICT.name())
+                .reason("Can't update entity.")
+                .message(exc.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleUnknownException(RuntimeException exc) {
         log.error("Operation failed with an exception: ", exc);

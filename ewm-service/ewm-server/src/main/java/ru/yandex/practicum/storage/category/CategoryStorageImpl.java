@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.category.Category;
+import ru.yandex.practicum.exceptions.CategoryNameConstraintException;
 import ru.yandex.practicum.exceptions.CategoryNotFoundException;
 import ru.yandex.practicum.exceptions.ForbiddenException;
 import ru.yandex.practicum.mapper.CategoryMapper;
@@ -40,7 +41,7 @@ public class CategoryStorageImpl implements CategoryStorage {
     @Override
     public Category add(Category categoryName) {
         Optional.ofNullable(categoryRepository.findByName(categoryName.getName())).ifPresent(categoryFromStorage -> {
-            throw new ForbiddenException("Category with requested name already exists.");
+            throw new CategoryNameConstraintException();
         });
         CategoryEntity categoryEntity = categoryMapper.mapCategoryToCategoryEntity(categoryName);
         CategoryEntity categoryFromStorage = categoryRepository.saveAndFlush(categoryEntity);
@@ -50,7 +51,9 @@ public class CategoryStorageImpl implements CategoryStorage {
     @Override
     public Category update(Category category) {
         Optional.ofNullable(categoryRepository.findByName(category.getName())).ifPresent(categoryFromStorage -> {
-            throw new ForbiddenException("Category with requested name already exists.");
+            if (!category.getId().equals(categoryFromStorage.getId())) {
+                throw new CategoryNameConstraintException();
+            }
         });
         CategoryEntity categoryEntity = categoryMapper.mapCategoryToCategoryEntity(category);
         CategoryEntity categoryFromStorage = categoryRepository.saveAndFlush(categoryEntity);

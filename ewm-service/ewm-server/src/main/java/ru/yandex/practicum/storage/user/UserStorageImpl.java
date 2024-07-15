@@ -24,6 +24,7 @@ public class UserStorageImpl implements UserStorage {
 
     @Override
     public UserFull addUser(User user) {
+        userRepository.findByName(user.getName());
         UserEntity userEntity = userMapper.mapUserToUserEntity(user);
         UserEntity userFromStorage = userRepository.saveAndFlush(userEntity);
         return userMapper.mapUserEntityToUserFull(userFromStorage);

@@ -8,7 +8,7 @@ import ru.yandex.practicum.dto.event.*;
 import ru.yandex.practicum.dto.location.Location;
 import ru.yandex.practicum.dto.search.AdminSearch;
 import ru.yandex.practicum.dto.search.PublicSearch;
-import ru.yandex.practicum.exceptions.ForbiddenException;
+import ru.yandex.practicum.exceptions.EventUpdateConflictException;
 import ru.yandex.practicum.storage.category.CategoryStorage;
 import ru.yandex.practicum.storage.event.EventStorage;
 import ru.yandex.practicum.storage.location.LocationStorage;
@@ -51,7 +51,7 @@ public class EventServiceImpl implements EventService {
             EventFull updatedEvent = recreateEvent(existingEvent, updateEventRequest);
             return eventStorage.updateEvent(updatedEvent, userId);
         }
-        throw new ForbiddenException("Only pending or canceled events can be changed");
+        throw new EventUpdateConflictException("Only pending or canceled events can be changed");
     }
 
     @Override
@@ -61,7 +61,7 @@ public class EventServiceImpl implements EventService {
             EventFull updatedEvent = recreateEvent(existingEvent, updateEventRequest);
             return eventStorage.updateEventAdmin(updatedEvent);
         }
-        throw new ForbiddenException(String.format("Not allowed to change event status for event=%s.", existingEvent.getState()));
+        throw new EventUpdateConflictException(String.format("Not allowed to change event status for event=%s.", existingEvent.getState()));
     }
 
     @Override

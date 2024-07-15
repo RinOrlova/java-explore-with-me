@@ -3,6 +3,7 @@ package ru.yandex.practicum.controller.open;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.dto.search.PublicSearch;
 import ru.yandex.practicum.dto.search.enums.SortType;
@@ -70,7 +71,7 @@ public class PublicEventController {
     }
 
     @GetMapping(ApiPathConstants.BY_ID_PATH)
-    public EventShort getEventById(@PathVariable @Positive Long id) {
+    public EventFull getEventById(@PathVariable @Positive Long id) {
         return eventService.getEventById(id);
     }
 }

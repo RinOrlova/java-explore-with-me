@@ -1,6 +1,7 @@
 package ru.yandex.practicum.controller.closed;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
 import ru.yandex.practicum.service.participation.ParticipationService;
@@ -21,6 +22,7 @@ public class PrivateParticipationController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestResponse createParticipationRequest(@PathVariable("id") Long userId,
                                                                    @RequestParam(value = "eventId") Long eventId) {
         return participationService.createParticipationRequest(userId, eventId);

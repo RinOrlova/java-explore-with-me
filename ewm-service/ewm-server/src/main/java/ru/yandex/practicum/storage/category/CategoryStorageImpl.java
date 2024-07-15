@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.exceptions.CategoryNameConstraintException;
 import ru.yandex.practicum.exceptions.CategoryNotFoundException;
-import ru.yandex.practicum.exceptions.ForbiddenException;
+import ru.yandex.practicum.exceptions.ConflictException;
 import ru.yandex.practicum.mapper.CategoryMapper;
 import ru.yandex.practicum.storage.event.EventEntity;
 
@@ -69,7 +69,7 @@ public class CategoryStorageImpl implements CategoryStorage {
             if (events == null || events.isEmpty()) {
                 categoryRepository.deleteById(catId);
             } else {
-                throw new ForbiddenException("Not allowed to remove category with linked events.");
+                throw new ConflictException("Not allowed to remove category with linked events.");
             }
         } else {
             throw new CategoryNotFoundException(catId);

@@ -77,7 +77,7 @@ class EventStorageImplTest {
         assertEquals(Double.valueOf("0.0"), eventFull.getLocation().getLon());
 
         // Public request for published Event
-        assertThrows(EventNotFoundException.class, () -> eventStorage.getEventShortPublishedById(eventFull.getId()));
+        assertThrows(EventNotFoundException.class, () -> eventStorage.getEventFullPublishedById(eventFull.getId()));
     }
 
 

@@ -8,6 +8,7 @@ import ru.yandex.practicum.dto.event.EventStatus;
 import ru.yandex.practicum.dto.participation.AllParticipationRequestsResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
 import ru.yandex.practicum.dto.participation.ParticipationStatusUpdateRequest;
+import ru.yandex.practicum.exceptions.ConflictException;
 import ru.yandex.practicum.exceptions.ForbiddenException;
 import ru.yandex.practicum.storage.event.EventStorage;
 import ru.yandex.practicum.storage.participation.ParticipationStorage;
@@ -28,12 +29,18 @@ public class ParticipationServiceImpl implements ParticipationService {
                                                                    @NonNull Long eventId) {
         userStorage.getUserById(userId); // Make sure user exists, otherwise → UserNotFoundException + Code 404
         EventFull eventFull = eventStorage.getEventFullById(eventId); // Make sure event exists, otherwise → EventNotFoundException + Code 404
+        if (!participationStorage.getAllRequestsForUserAndEventId(userId, eventId).isEmpty()) {
+            throw new ConflictException("Can't create multiple participation requests from the same user.");
+        }
+        if (eventFull.getInitiator().getId().equals(userId)) {
+            throw new ConflictException("Event initiator can't create participation requests for their event.");
+        }
         if (eventFull.getState() == EventStatus.PUBLISHED) {
             return eventFull.isFreeToJoinEvent()
                     ? participationStorage.addApprovedParticipationRequest(userId, eventId)
                     : participationStorage.addDefaultParticipationRequest(userId, eventId);
         }
-        throw new ForbiddenException("Not allowed to create request for not published event.");
+        throw new ConflictException("Not allowed to create request for not published event.");
     }
 
     @Override

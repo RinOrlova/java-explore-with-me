@@ -63,7 +63,9 @@ public class ParticipationStorageImpl implements ParticipationStorage {
     public ParticipationRequestResponse cancelRequest(Long requestById) {
         participationRepository.cancelRequestById(requestById);
         log.info("Request by id={} is confirmed.", requestById);
-        return null;
+        return participationRepository.findById(requestById)
+                .map(participationMapper::mapEntityToParticipationRequestResponse)
+                .orElseThrow(() -> new ParticipationNotFoundException(requestById));
     }
 
     private Collection<ParticipationRequestResponse> mapAllResults(Collection<ParticipationEntity> entities) {

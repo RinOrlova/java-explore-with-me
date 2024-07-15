@@ -16,7 +16,7 @@ public interface EventService {
 
     Collection<EventShort> getEventsPublic(PublicSearch publicSearch);
 
-    EventShort getEventById(Long id);
+    EventFull getEventById(Long id);
 
     EventFull getEventByCreatorAndId(@NonNull Long userId,
                                      @NonNull Long eventId);

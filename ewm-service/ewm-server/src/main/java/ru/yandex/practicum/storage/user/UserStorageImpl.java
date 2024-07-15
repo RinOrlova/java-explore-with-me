@@ -9,10 +9,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.dto.user.User;
 import ru.yandex.practicum.dto.user.UserFull;
+import ru.yandex.practicum.exceptions.ConflictException;
 import ru.yandex.practicum.exceptions.UserNotFoundException;
 import ru.yandex.practicum.mapper.UserMapper;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,7 +26,10 @@ public class UserStorageImpl implements UserStorage {
 
     @Override
     public UserFull addUser(User user) {
-        userRepository.findByName(user.getName());
+        Optional<UserEntity> userByEmail = Optional.ofNullable(userRepository.findByEmail(user.getEmail()));
+        if (userByEmail.isPresent()) {
+            throw new ConflictException("User with this email is already registered.");
+        }
         UserEntity userEntity = userMapper.mapUserToUserEntity(user);
         UserEntity userFromStorage = userRepository.saveAndFlush(userEntity);
         return userMapper.mapUserEntityToUserFull(userFromStorage);
@@ -56,16 +61,11 @@ public class UserStorageImpl implements UserStorage {
 
     @Override
     public UserFull getUserById(Long id) {
-        return userRepository.findById(id)
-                .map(userMapper::mapUserEntityToUserFull)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        return userRepository.findById(id).map(userMapper::mapUserEntityToUserFull).orElseThrow(() -> new UserNotFoundException(id));
     }
 
 
     private Collection<UserFull> mapUserEntitiesToUser(Page<UserEntity> userEntityPage) {
-        return userEntityPage
-                .stream()
-                .map(userMapper::mapUserEntityToUserFull)
-                .collect(Collectors.toList());
+        return userEntityPage.stream().map(userMapper::mapUserEntityToUserFull).collect(Collectors.toList());
     }
 }

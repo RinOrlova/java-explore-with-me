@@ -10,9 +10,8 @@ import java.util.Collection;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    UserEntity findByName(String name);
-
     @Query("SELECT u FROM UserEntity u WHERE u.id IN :userIds")
     Page<UserEntity> findAllByUserIds(@Param("userIds") Collection<Long> userIds, Pageable pageable);
 
+    UserEntity findByEmail(String email);
 }

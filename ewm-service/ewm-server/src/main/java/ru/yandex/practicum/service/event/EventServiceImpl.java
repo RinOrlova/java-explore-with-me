@@ -35,8 +35,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventShort getEventById(Long id) {
-        return eventStorage.getEventShortById(id);
+    public EventFull getEventById(Long id) {
+        return eventStorage.getEventFullPublishedById(id);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class EventServiceImpl implements EventService {
                     break;
                 case REJECT_EVENT:
                 case CANCEL_REVIEW:
-                    fullBuilder.state(EventStatus.CANCELLED);
+                    fullBuilder.state(EventStatus.CANCELED);
                     break;
                 case SEND_TO_REVIEW:
                     fullBuilder.state(EventStatus.PENDING);

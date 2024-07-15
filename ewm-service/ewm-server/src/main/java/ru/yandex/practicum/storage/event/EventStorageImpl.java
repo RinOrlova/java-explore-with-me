@@ -164,7 +164,7 @@ public class EventStorageImpl implements EventStorage {
     }
 
     @Override
-    public EventShort getEventShortPublishedById(Long id) {
+    public EventFull getEventFullPublishedById(Long id) {
         Optional<EventEntity> eventFromStorage = Optional.ofNullable(eventRepository.findByIdAndStatusPublished(id));
         if (eventFromStorage.isPresent()) {
             EventEntity eventEntity = eventFromStorage.get();

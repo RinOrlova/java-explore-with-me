@@ -7,23 +7,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.dto.error.ErrorResponse;
 
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 
 @Slf4j
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleUnknownException(RuntimeException exc) {
-        log.error("Operation failed with an exception: ", exc);
-        return ErrorResponse.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.name())
-                .reason("Server error")
-                .message("Error occurred on server side.")
-                .timestamp(LocalDateTime.now())
-                .build();
-    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -37,6 +26,31 @@ public class ApplicationExceptionHandler {
                 .build();
     }
 
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidDateRequestedException(InvalidDateRequestedException exc) {
+        log.error("Operation failed with an exception: {}", exc.getMessage());
+        return ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.name())
+                .reason("Request validation failed.")
+                .message(exc.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidDateRequestedException(ValidationException exc) {
+        log.error("Operation failed with an exception: {}", exc.getMessage());
+        return ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.name())
+                .reason("Request validation failed.")
+                .message(exc.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(NotFoundException exc) {
@@ -45,6 +59,18 @@ public class ApplicationExceptionHandler {
                 .status(HttpStatus.NOT_FOUND.name())
                 .reason("The required object was not found.")
                 .message(exc.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleUnknownException(RuntimeException exc) {
+        log.error("Operation failed with an exception: ", exc);
+        return ErrorResponse.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                .reason("Server error")
+                .message("Error occurred on server side.")
                 .timestamp(LocalDateTime.now())
                 .build();
     }

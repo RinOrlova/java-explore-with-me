@@ -2,7 +2,7 @@ package ru.yandex.practicum.statistics.service;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.common.utils.StatisticsConstants;
-import ru.yandex.practicum.statistics.exceptions.InvalidDateFormatRequestedException;
+import ru.yandex.practicum.exceptions.InvalidDateFormatRequestedException;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;

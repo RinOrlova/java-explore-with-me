@@ -12,6 +12,7 @@ import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventRequest;
 import ru.yandex.practicum.dto.location.Location;
 import ru.yandex.practicum.dto.user.User;
+import ru.yandex.practicum.exceptions.EventNotFoundException;
 import ru.yandex.practicum.storage.category.CategoryEntity;
 import ru.yandex.practicum.storage.category.CategoryStorage;
 import ru.yandex.practicum.storage.location.LocationStorage;
@@ -74,19 +75,18 @@ class EventStorageImplTest {
         assertEquals(user.getName(), eventFull.getInitiator().getName());
         assertEquals(Double.valueOf("0.0"), eventFull.getLocation().getLat());
         assertEquals(Double.valueOf("0.0"), eventFull.getLocation().getLon());
+
+        // Public request for published Event
+        assertThrows(EventNotFoundException.class, () -> eventStorage.getEventShortPublishedById(eventFull.getId()));
     }
 
 
     private static UserEntity getUserEntity(Long userId) {
-        return UserEntity.builder()
-                .id(userId)
-                .build();
+        return UserEntity.builder().id(userId).build();
     }
 
     private static CategoryEntity getCategoryEntity(Long categoryId) {
-        return CategoryEntity.builder()
-                .id(categoryId)
-                .build();
+        return CategoryEntity.builder().id(categoryId).build();
     }
 
     private static Location getLocationDto() {

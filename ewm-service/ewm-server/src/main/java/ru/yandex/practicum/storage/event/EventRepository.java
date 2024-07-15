@@ -11,6 +11,9 @@ public interface EventRepository extends JpaRepository<EventEntity, Long>, Refre
 
     EventEntity findByIdAndInitiatorId(Long id, Long initiatorId);
 
+    @Query("SELECT e FROM EventEntity e WHERE e.id = :id AND e.status='PUBLISHED'")
+    EventEntity findByIdAndStatusPublished(Long id);
+
     Page<EventEntity> findByInitiatorId(Long id, Pageable pageable);
 
     @Query("SELECT (COUNT(p) < e.participantLimit) " +

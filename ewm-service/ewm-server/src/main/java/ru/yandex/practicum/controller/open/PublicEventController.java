@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.dto.search.PublicSearch;
 import ru.yandex.practicum.dto.search.enums.SortType;
+import ru.yandex.practicum.exceptions.InvalidDateRequestedException;
 import ru.yandex.practicum.service.event.EventService;
 import ru.yandex.practicum.utils.ApiPathConstants;
 
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -23,14 +25,20 @@ public class PublicEventController {
 
     @GetMapping()
     public Collection<EventShort> getEvents(@RequestParam(name = "text") String text,
-                                            @RequestParam(name = "categories", required = false) List<Long> categoryId,
+                                            @RequestParam(name = "categories", required = false) List<@Positive Long> categoryId,
                                             @RequestParam(name = "paid", required = false) Boolean paid,
                                             @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
                                             @RequestParam(name = "rangeEnd", required = false) LocalDateTime rangeEnd,
                                             @RequestParam(name = "onlyAvailable", required = false, defaultValue = "false") Boolean onlyAvailable,
                                             @RequestParam(name = "sortType", required = false) SortType sortType,
-                                            @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
-                                            @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
+                                            @RequestParam(name = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
+                                            @RequestParam(name = "size", required = false, defaultValue = "10") @PositiveOrZero Integer size) {
+        if (rangeStart != null && rangeEnd != null) {
+            if (!rangeStart.isBefore(rangeEnd)) {
+                throw new InvalidDateRequestedException(rangeStart, rangeEnd);
+            }
+        }
+
         PublicSearch.PublicSearchBuilder<?, ?> searchBuilder = PublicSearch.builder();
 
         if (categoryId != null) {

@@ -14,6 +14,8 @@ public interface EventStorage {
 
     EventShort getEventShortById(Long id);
 
+    EventShort getEventShortPublishedById(Long id);
+
     EventFull getEventFullById(Long id);
 
     EventFull getEventByCreatorAndId(Long userId, Long eventId);

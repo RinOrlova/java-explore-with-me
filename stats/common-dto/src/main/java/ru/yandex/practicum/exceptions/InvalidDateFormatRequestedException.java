@@ -1,4 +1,4 @@
-package ru.yandex.practicum.statistics.exceptions;
+package ru.yandex.practicum.exceptions;
 
 public class InvalidDateFormatRequestedException extends RuntimeException {
 

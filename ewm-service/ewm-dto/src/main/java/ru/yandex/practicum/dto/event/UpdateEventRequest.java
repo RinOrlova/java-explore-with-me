@@ -9,6 +9,8 @@ import ru.yandex.practicum.common.serialization.LocalDateTimeDeserializer;
 import ru.yandex.practicum.dto.location.Location;
 import ru.yandex.practicum.dto.validation.EventDateAdminConstraint;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -26,6 +28,7 @@ public class UpdateEventRequest {
     @Size(min = 20, max = 7000)
     private String description;
     @Nullable
+    @Future
     @EventDateAdminConstraint
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime eventDate;
@@ -34,6 +37,7 @@ public class UpdateEventRequest {
     @Nullable
     private Boolean paid;
     @Nullable
+    @PositiveOrZero
     private Integer participantLimit;
     @Nullable
     private Boolean requestModeration;

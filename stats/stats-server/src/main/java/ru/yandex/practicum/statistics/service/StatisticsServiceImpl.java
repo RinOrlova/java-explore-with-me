@@ -5,7 +5,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.common.dto.HitRequest;
 import ru.yandex.practicum.common.dto.StatisticsResponse;
-import ru.yandex.practicum.statistics.exceptions.InvalidDateRequestedException;
+import ru.yandex.practicum.exceptions.InvalidDateRequestedException;
 import ru.yandex.practicum.statistics.storage.StatisticsStorage;
 
 import java.time.LocalDateTime;

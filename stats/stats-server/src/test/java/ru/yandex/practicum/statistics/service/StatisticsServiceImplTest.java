@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.yandex.practicum.common.dto.HitRequest;
-import ru.yandex.practicum.statistics.exceptions.InvalidDateRequestedException;
+import ru.yandex.practicum.exceptions.InvalidDateRequestedException;
 import ru.yandex.practicum.statistics.storage.StatisticsStorage;
 import ru.yandex.practicum.statistics.utils.TestConstants;
 

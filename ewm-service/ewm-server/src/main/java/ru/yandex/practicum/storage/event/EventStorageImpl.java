@@ -164,6 +164,18 @@ public class EventStorageImpl implements EventStorage {
     }
 
     @Override
+    public EventShort getEventShortPublishedById(Long id) {
+        Optional<EventEntity> eventFromStorage = Optional.ofNullable(eventRepository.findByIdAndStatusPublished(id));
+        if (eventFromStorage.isPresent()) {
+            EventEntity eventEntity = eventFromStorage.get();
+            setViewsToEventEntity(eventEntity);
+            setConfirmedRequestsToEventEntity(eventEntity);
+            return eventMapper.mapToEventFull(eventEntity);
+        }
+        throw new EventNotFoundException(id);
+    }
+
+    @Override
     public EventFull getEventFullById(Long id) {
         Optional<EventEntity> eventFromStorage = eventRepository.findById(id);
         if (eventFromStorage.isPresent()) {

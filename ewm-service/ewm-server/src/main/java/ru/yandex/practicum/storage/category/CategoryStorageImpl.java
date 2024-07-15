@@ -10,9 +10,11 @@ import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.exceptions.CategoryNotFoundException;
 import ru.yandex.practicum.exceptions.ForbiddenException;
 import ru.yandex.practicum.mapper.CategoryMapper;
+import ru.yandex.practicum.storage.event.EventEntity;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,25 +29,19 @@ public class CategoryStorageImpl implements CategoryStorage {
     public Collection<Category> getCategories(int from, int pageSize) {
         PageRequest pageRequest = PageRequest.of(from, pageSize, Sort.by(Sort.Direction.ASC, "id"));
         Page<CategoryEntity> categoryEntityPage = categoryRepository.findAll(pageRequest);
-        return categoryEntityPage.stream()
-                .map(categoryMapper::mapCategoryEntityToCategory)
-                .collect(Collectors.toList());
+        return categoryEntityPage.stream().map(categoryMapper::mapCategoryEntityToCategory).collect(Collectors.toList());
     }
 
     @Override
     public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id)
-                .map(categoryMapper::mapCategoryEntityToCategory)
-                .orElseThrow(() -> new CategoryNotFoundException(id));
+        return categoryRepository.findById(id).map(categoryMapper::mapCategoryEntityToCategory).orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
     @Override
     public Category add(Category categoryName) {
-        Optional.ofNullable(categoryRepository.findByName(categoryName.getName()))
-                .ifPresent(categoryFromStorage -> {
-                            throw new ForbiddenException("Category with requested name already exists.");
-                        }
-                );
+        Optional.ofNullable(categoryRepository.findByName(categoryName.getName())).ifPresent(categoryFromStorage -> {
+            throw new ForbiddenException("Category with requested name already exists.");
+        });
         CategoryEntity categoryEntity = categoryMapper.mapCategoryToCategoryEntity(categoryName);
         CategoryEntity categoryFromStorage = categoryRepository.saveAndFlush(categoryEntity);
         return categoryMapper.mapCategoryEntityToCategory(categoryFromStorage);
@@ -53,11 +49,9 @@ public class CategoryStorageImpl implements CategoryStorage {
 
     @Override
     public Category update(Category category) {
-        Optional.ofNullable(categoryRepository.findByName(category.getName()))
-                .ifPresent(categoryFromStorage -> {
-                            throw new ForbiddenException("Category with requested name already exists.");
-                        }
-                );
+        Optional.ofNullable(categoryRepository.findByName(category.getName())).ifPresent(categoryFromStorage -> {
+            throw new ForbiddenException("Category with requested name already exists.");
+        });
         CategoryEntity categoryEntity = categoryMapper.mapCategoryToCategoryEntity(category);
         CategoryEntity categoryFromStorage = categoryRepository.saveAndFlush(categoryEntity);
         return categoryMapper.mapCategoryEntityToCategory(categoryFromStorage);
@@ -68,13 +62,15 @@ public class CategoryStorageImpl implements CategoryStorage {
     public void delete(Long catId) {
         Optional<CategoryEntity> categoryById = categoryRepository.findById(catId);
         if (categoryById.isPresent()) {
-            if (categoryById.get().getEvents().isEmpty()) {
+            Set<EventEntity> events = categoryById.get().getEvents();
+            if (events == null || events.isEmpty()) {
                 categoryRepository.deleteById(catId);
             } else {
                 throw new ForbiddenException("Not allowed to remove category with linked events.");
             }
+        } else {
+            throw new CategoryNotFoundException(catId);
         }
-        throw new CategoryNotFoundException(catId);
 
     }
 

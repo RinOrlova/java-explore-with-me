@@ -15,6 +15,8 @@ import java.util.Collection;
 @Jacksonized
 public class CompilationRequest {
     @Nullable
+    Long id;
+    @Nullable
     Collection<Long> events;
     @Builder.Default
     Boolean pinned = false;

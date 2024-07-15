@@ -165,7 +165,7 @@ public class EventStorageImpl implements EventStorage {
     @Transactional
     public EventFull getEventFullPublishedById(Long id) {
         return Optional.ofNullable(eventRepository.findByIdAndStatusPublished(id))
-                .map(this::getEventFull)
+                .map(entity -> getEventFull(entity, true))
                 .orElseThrow(() -> new EventNotFoundException(id));
     }
 
@@ -173,15 +173,17 @@ public class EventStorageImpl implements EventStorage {
     @Transactional
     public EventFull getEventFullById(Long id) {
         return eventRepository.findById(id)
-                .map(this::getEventFull)
+                .map(entity -> getEventFull(entity, false))
                 .orElseThrow(() -> new EventNotFoundException(id));
     }
 
-    private EventFull getEventFull(EventEntity eventFromStorage) {
+    private EventFull getEventFull(EventEntity eventFromStorage, boolean shouldIncreaseViews) {
         long views = eventFromStorage.getViews();
-        eventFromStorage.setViews(views + 1);
-        eventRepository.saveAndFlush(eventFromStorage);
-        eventRepository.refresh(eventFromStorage);
+        if (shouldIncreaseViews) {
+            eventFromStorage.setViews(views + 1);
+            eventRepository.saveAndFlush(eventFromStorage);
+            eventRepository.refresh(eventFromStorage);
+        }
         setConfirmedRequestsToEventEntity(eventFromStorage);
         return eventMapper.mapToEventFull(eventFromStorage);
     }

@@ -118,7 +118,7 @@ public class ParticipationServiceImpl implements ParticipationService {
                 participationStorage.confirmRequest(requestId);
             } else {
                 participationStorage.declineAllPendingRequestsForEvent(eventId);
-                break;
+                throw new ConflictException("Event limit reached.");
             }
         }
         return participationStorage.getAllParticipationRequestsResponsesForEvent(eventId);

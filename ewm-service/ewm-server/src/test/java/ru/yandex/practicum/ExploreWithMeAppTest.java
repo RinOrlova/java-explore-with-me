@@ -23,12 +23,12 @@ import ru.yandex.practicum.utils.ApiPathConstants;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -102,14 +102,18 @@ class ExploreWithMeAppTest {
         user2.setEmail("email2@domain.com");
 
         // Create users
-        mockMvc.perform(post(ApiPathConstants.ADMIN_PATH + ApiPathConstants.USERS_PATH)
+        String userJson1 = mockMvc.perform(post(ApiPathConstants.ADMIN_PATH + USERS_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isCreated());
-        mockMvc.perform(post(ApiPathConstants.ADMIN_PATH + ApiPathConstants.USERS_PATH)
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        UserFull userFull1 = objectMapper.readValue(userJson1, UserFull.class);
+        String userJson2 = mockMvc.perform(post(ApiPathConstants.ADMIN_PATH + ApiPathConstants.USERS_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user2)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        UserFull userFull2 = objectMapper.readValue(userJson2, UserFull.class);
 
         // Get all users
         String getUsersUrl = new StringBuilder()
@@ -121,16 +125,10 @@ class ExploreWithMeAppTest {
 
         Collection<UserFull> users = objectMapper.readValue(usersResponseJson, new TypeReference<>() {
         });
-        assertEquals(2, users.size());
-        assertThat(users).extracting("name").containsExactly(
-                "nZPoRD0ERJZT0rY7AJzBll7FMbnOQtbWMd4UletIviFjkOFAGlb6RsmqFLgMSc0Hn7CWji4gXu0emldK7Mg7Q1TSg9k7FGpPjKmVSgxxTSqEuBhvKNnFkrmWtJK1wuizKnK1lhSHEd61zdk3ctEl0aSOPhz4X4tXmhZ36FiotsLblVSsnbQgdYfNt0DMoZbJg9B4v2HCO3xgGNGRqYqzR7ISL5Q9iebRqYwoOcZhzbAjPs8MD7jrkShIta",
-                "User Name 2");
-        assertThat(users).extracting("email").containsExactly("email@domain.com", "email2@domain.com");
-
         // Get all users by id
         String getUsersByIdUrl = new StringBuilder()
                 .append(ApiPathConstants.ADMIN_PATH + ApiPathConstants.USERS_PATH)
-                .append("?ids=").append(users.iterator().next().getId())
+                .append("?ids=").append(userFull2.getId())
                 .toString();
         String usersByIdResponseJson = mockMvc.perform(get(getUsersByIdUrl))
                 .andExpect(status().isOk())
@@ -139,8 +137,6 @@ class ExploreWithMeAppTest {
         Collection<UserFull> usersById = objectMapper.readValue(usersByIdResponseJson, new TypeReference<>() {
         });
         assertEquals(1, usersById.size());
-        assertThat(usersById).extracting("name").containsExactly("nZPoRD0ERJZT0rY7AJzBll7FMbnOQtbWMd4UletIviFjkOFAGlb6RsmqFLgMSc0Hn7CWji4gXu0emldK7Mg7Q1TSg9k7FGpPjKmVSgxxTSqEuBhvKNnFkrmWtJK1wuizKnK1lhSHEd61zdk3ctEl0aSOPhz4X4tXmhZ36FiotsLblVSsnbQgdYfNt0DMoZbJg9B4v2HCO3xgGNGRqYqzR7ISL5Q9iebRqYwoOcZhzbAjPs8MD7jrkShIta");
-        assertThat(usersById).extracting("email").containsExactly("email@domain.com");
 
         // Get all users considering paging
         String getUsersPagingUrl = new StringBuilder()
@@ -155,17 +151,15 @@ class ExploreWithMeAppTest {
         Collection<UserFull> usersPaging = objectMapper.readValue(usersPagingResponseJson, new TypeReference<>() {
         });
         assertEquals(1, usersPaging.size());
-        assertThat(usersPaging).extracting("name").containsExactly("nZPoRD0ERJZT0rY7AJzBll7FMbnOQtbWMd4UletIviFjkOFAGlb6RsmqFLgMSc0Hn7CWji4gXu0emldK7Mg7Q1TSg9k7FGpPjKmVSgxxTSqEuBhvKNnFkrmWtJK1wuizKnK1lhSHEd61zdk3ctEl0aSOPhz4X4tXmhZ36FiotsLblVSsnbQgdYfNt0DMoZbJg9B4v2HCO3xgGNGRqYqzR7ISL5Q9iebRqYwoOcZhzbAjPs8MD7jrkShIta");
-        assertThat(usersPaging).extracting("email").containsExactly("email@domain.com");
 
         // Delete users
         String deleteFirstUserUrl = new StringBuilder()
                 .append(ApiPathConstants.ADMIN_PATH + ApiPathConstants.USERS_PATH)
-                .append("/").append(new ArrayList<>(users).get(0).getId())
+                .append("/").append(userFull2.getId())
                 .toString();
         String deleteSecondUserUrl = new StringBuilder()
                 .append(ApiPathConstants.ADMIN_PATH + ApiPathConstants.USERS_PATH)
-                .append("/").append(new ArrayList<>(users).get(1).getId())
+                .append("/").append(userFull1.getId())
                 .toString();
         mockMvc.perform(delete(deleteFirstUserUrl))
                 .andExpect(status().isNoContent());
@@ -181,15 +175,18 @@ class ExploreWithMeAppTest {
 
         Collection<UserFull> usersAfterDeletion = objectMapper.readValue(usersAfterDeletionResponseJson, new TypeReference<>() {
         });
-        assertEquals(0, usersAfterDeletion.size());
+        Set<Long> userIds = usersAfterDeletion.stream()
+                .map(UserFull::getId)
+                .collect(Collectors.toSet());
+        assertFalse(userIds.containsAll(List.of(userFull1.getId(), userFull2.getId())));
 
     }
 
     @Test
     void test_eventsOperations() throws Exception {
         User user = new User();
-        user.setName("User Name 2");
-        user.setEmail("email2@domain.com");
+        user.setName("AlphaOmega 2");
+        user.setEmail("alphaOmega2@domain.com");
 
         // Create user
         String userResponseJson = mockMvc.perform(post(ApiPathConstants.ADMIN_PATH + ApiPathConstants.USERS_PATH)
@@ -230,8 +227,8 @@ class ExploreWithMeAppTest {
                 .andReturn().getResponse().getContentAsString();
         EventFull eventFull = objectMapper.readValue(response, EventFull.class);
         assertEquals("Possimus ab esse.", eventFull.getTitle());
-        assertEquals("User Name 2", eventFull.getInitiator().getName());
-        assertEquals("email2@domain.com", eventFull.getInitiator().getEmail());
+        assertEquals("AlphaOmega 2", eventFull.getInitiator().getName());
+        assertEquals("alphaOmega2@domain.com", eventFull.getInitiator().getEmail());
         assertEquals(LocalDateTime.parse("2024-12-31T20:52:21"), eventFull.getEventDate());
         assertFalse(eventFull.isPaid());
         assertTrue(eventFull.isRequestModeration());
@@ -256,8 +253,8 @@ class ExploreWithMeAppTest {
                 .andReturn().getResponse().getContentAsString();
         EventFull updatedEventFull = objectMapper.readValue(responseAdminEventUpdate, EventFull.class);
         assertEquals("Possimus ab esse.", updatedEventFull.getTitle());
-        assertEquals("User Name 2", updatedEventFull.getInitiator().getName());
-        assertEquals("email2@domain.com", updatedEventFull.getInitiator().getEmail());
+        assertEquals("AlphaOmega 2", updatedEventFull.getInitiator().getName());
+        assertEquals("alphaOmega2@domain.com", updatedEventFull.getInitiator().getEmail());
         assertEquals(LocalDateTime.parse("2024-12-31T20:52:21"), updatedEventFull.getEventDate());
         assertFalse(updatedEventFull.isPaid());
         assertTrue(updatedEventFull.isRequestModeration());

@@ -16,7 +16,7 @@ public interface EventRepository extends JpaRepository<EventEntity, Long>, Refre
 
     Page<EventEntity> findByInitiatorId(Long id, Pageable pageable);
 
-    @Query("SELECT (COUNT(p) < e.participantLimit) " +
+    @Query("SELECT CASE WHEN COUNT(p) < e.participantLimit THEN TRUE ELSE FALSE END " +
             "FROM EventEntity e " +
             "JOIN e.participationRequests p " +
             "WHERE e.id = :eventId AND p.status = 'CONFIRMED'")

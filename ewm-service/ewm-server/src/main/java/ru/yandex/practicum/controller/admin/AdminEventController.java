@@ -44,7 +44,7 @@ public class AdminEventController {
             adminSearchBuilder.rangeStart(rangeStart);
         }
         if (rangeEnd != null) {
-            adminSearchBuilder.rangeStart(rangeEnd);
+            adminSearchBuilder.rangeEnd(rangeEnd);
         }
         AdminSearch adminSearch = adminSearchBuilder
                 .from(from)

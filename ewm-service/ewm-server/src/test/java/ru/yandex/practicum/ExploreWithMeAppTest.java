@@ -263,5 +263,20 @@ class ExploreWithMeAppTest {
         assertEquals(EventStatus.PUBLISHED, updatedEventFull.getState());
         assertEquals(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), updatedEventFull.getPublishedOn().truncatedTo(ChronoUnit.MINUTES));
 
+        // Admin search
+        String adminSearchResp = mockMvc.perform(get("/admin/events" +
+                        "?states=PUBLISHED" +
+                        "&rangeStart=" + LocalDateTime.parse("2022-01-06T13:30:38") +
+                        "&rangeEnd=" + LocalDateTime.parse("2097-09-06T13:30:38") +
+                        "&from=0&size=1000" +
+                        "&users=" +
+                        updatedEventFull.getInitiator().getId() +
+                        "&categories=" +
+                        updatedEventFull.getCategory().getId()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Collection<EventFull> resultAdminSearch = objectMapper.readValue(adminSearchResp, new TypeReference<>() {
+        });
+        assertFalse(resultAdminSearch.isEmpty());
     }
 }

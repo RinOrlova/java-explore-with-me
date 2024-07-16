@@ -51,7 +51,7 @@ public class PublicEventController {
             searchBuilder.rangeStart(LocalDateTime.now());
         }
         if (rangeEnd != null) {
-            searchBuilder.rangeStart(rangeEnd);
+            searchBuilder.rangeEnd(rangeEnd);
         }
         if (sortType != null) {
             searchBuilder.sort(sortType);

@@ -5,7 +5,6 @@ import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 
@@ -18,6 +17,6 @@ public class UpdateCompilationRequest {
     @Builder.Default
     Boolean pinned = false;
     @Nullable
-    @NotBlank @Size(max = 50) String title;
+    @Size(max = 50) String title;
 
 }

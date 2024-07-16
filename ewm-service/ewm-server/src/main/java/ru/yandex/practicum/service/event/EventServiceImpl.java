@@ -3,6 +3,8 @@ package ru.yandex.practicum.service.event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.client.StatisticsClient;
+import ru.yandex.practicum.common.dto.StatisticsResponse;
 import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.dto.event.*;
 import ru.yandex.practicum.dto.location.Location;
@@ -28,6 +30,7 @@ public class EventServiceImpl implements EventService {
     private final UserStorage userStorage;
     private final CategoryStorage categoryStorage;
     private final LocationStorage locationStorage;
+    private final StatisticsClient statisticsClient;
 
     @Override
     public Collection<EventShort> getEventsPublic(PublicSearch publicSearch) {
@@ -36,7 +39,17 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFull getEventById(Long id) {
-        return eventStorage.getEventFullPublishedById(id);
+        Collection<StatisticsResponse> statistics = statisticsClient.getStatistics(
+                LocalDateTime.now().minusHours(1),
+                LocalDateTime.now(),
+                List.of("http://localhost:9090/events/" + id),
+                true
+        );
+        StatisticsResponse statisticsResponse = statistics.iterator().next();
+        Long hits = statisticsResponse.getHits();
+        EventFull eventFullPublishedById = eventStorage.getEventFullPublishedById(id);
+        eventFullPublishedById.setViews(hits);
+        return eventFullPublishedById;
     }
 
     @Override

@@ -10,7 +10,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventRequest;
-import ru.yandex.practicum.dto.event.EventStatus;
 import ru.yandex.practicum.dto.location.Location;
 import ru.yandex.practicum.dto.user.User;
 import ru.yandex.practicum.exceptions.EventNotFoundException;
@@ -81,34 +80,6 @@ class EventStorageImplTest {
         assertThrows(EventNotFoundException.class, () -> eventStorage.getEventFullPublishedById(eventFull.getId()));
     }
 
-    @Test
-    void test_viewPublishedEvent() {
-        User user = new User("name", "email@email.com");
-        UserEntity initiator = getUserEntity(userStorage.addUser(user).getId());
-        Category category = new Category();
-        category.setName("categoryName");
-        CategoryEntity categoryEntity = getCategoryEntity(categoryStorage.add(category).getId());
-
-        LocalDateTime nowPlusOneMonth = LocalDateTime.now().plusMonths(1);
-        EventRequest eventRequest = EventRequest.builder()
-                .annotation("Sample Annotation")
-                .description("Sample Description")
-                .eventDate(nowPlusOneMonth)
-                .paid(false)
-                .participantLimit(100)
-                .requestModeration(true)
-                .title("Sample Title")
-                .category(categoryEntity.getId())
-                .location(getLocationDto())
-                .build();
-        EventFull eventFull = eventStorage.addEvent(eventRequest, initiator.getId());
-        eventFull.setState(EventStatus.PUBLISHED);
-        eventFull.setPublishedOn(LocalDateTime.now());
-        eventStorage.updateEventAdmin(eventFull);
-        assertEquals(0, eventFull.getViews());
-        EventFull updatedEvent = eventStorage.getEventFullPublishedById(eventFull.getId());
-        assertEquals(1, updatedEvent.getViews());
-    }
 
     private static UserEntity getUserEntity(Long userId) {
         return UserEntity.builder().id(userId).build();

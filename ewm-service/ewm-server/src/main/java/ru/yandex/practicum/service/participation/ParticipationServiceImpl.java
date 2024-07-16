@@ -45,9 +45,7 @@ public class ParticipationServiceImpl implements ParticipationService {
                     throw new ConflictException("Event limit reached.");
                 }
             } else {
-                return eventFull.isRequestModeration()
-                        ? participationStorage.addDefaultParticipationRequest(userId, eventId)
-                        : participationStorage.addApprovedParticipationRequest(userId, eventId);
+                return participationStorage.addApprovedParticipationRequest(userId, eventId);
             }
         }
         throw new

@@ -36,16 +36,23 @@ public class ParticipationServiceImpl implements ParticipationService {
             throw new ConflictException("Event initiator can't create participation requests for their event.");
         }
         if (eventFull.getState() == EventStatus.PUBLISHED) {
-            if (eventFull.isFreeToJoinEvent()) {
-                return participationStorage.addApprovedParticipationRequest(userId, eventId);
-            } else if (eventFull.getParticipantLimit() == 0) {
-                return participationStorage.addDefaultParticipationRequest(userId, eventId);
-            } else if (eventFull.getParticipantLimit() > eventFull.getConfirmedRequests()) {
-                return participationStorage.addDefaultParticipationRequest(userId, eventId);
+            if (eventFull.getParticipantLimit() > 0) {
+                if (eventFull.getParticipantLimit() > eventFull.getConfirmedRequests()) {
+                    return eventFull.isRequestModeration()
+                            ? participationStorage.addDefaultParticipationRequest(userId, eventId)
+                            : participationStorage.addApprovedParticipationRequest(userId, eventId);
+                } else {
+                    throw new ConflictException("Event limit reached.");
+                }
+            } else {
+                return eventFull.isRequestModeration()
+                        ? participationStorage.addDefaultParticipationRequest(userId, eventId)
+                        : participationStorage.addApprovedParticipationRequest(userId, eventId);
             }
-            throw new ConflictException("Event limit reached.");
         }
-        throw new ConflictException("Not allowed to create request for not published event.");
+        throw new
+
+                ConflictException("Not allowed to create request for not published event.");
     }
 
     @Override

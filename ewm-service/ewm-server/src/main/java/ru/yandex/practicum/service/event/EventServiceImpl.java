@@ -42,7 +42,7 @@ public class EventServiceImpl implements EventService {
         Collection<StatisticsResponse> statistics = statisticsClient.getStatistics(
                 LocalDateTime.now().minusHours(1),
                 LocalDateTime.now(),
-                List.of("http://localhost:9090/events/" + id),
+                List.of("/events/" + id),
                 true
         );
         StatisticsResponse statisticsResponse = statistics.iterator().next();

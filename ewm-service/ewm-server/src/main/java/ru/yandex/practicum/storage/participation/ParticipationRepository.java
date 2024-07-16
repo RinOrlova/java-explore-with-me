@@ -22,7 +22,7 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
 
     @Modifying
     @Transactional
-    @Query("UPDATE ParticipationEntity p SET p.status = 'DECLINED' WHERE p.id IN :ids")
+    @Query("UPDATE ParticipationEntity p SET p.status = 'REJECTED' WHERE p.id IN :ids")
     int declineParticipationByIds(@Param("ids") Collection<Long> ids);
 
     @Modifying
@@ -32,7 +32,7 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
 
     @Modifying
     @Transactional
-    @Query("UPDATE ParticipationEntity p SET p.status = 'DECLINED' WHERE p.event.id = :eventId")
+    @Query("UPDATE ParticipationEntity p SET p.status = 'REJECTED' WHERE p.event.id = :eventId")
     int declineAllRequestsForEvent(@Param("eventId") Long eventId);
 
     @Modifying

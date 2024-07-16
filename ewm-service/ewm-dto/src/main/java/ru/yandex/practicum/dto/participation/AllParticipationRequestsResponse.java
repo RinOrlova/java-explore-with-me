@@ -18,7 +18,7 @@ public class AllParticipationRequestsResponse {
 
     public void addRequests(ParticipationRequestStatus status, Collection<ParticipationRequestResponse> requestResponses) {
         switch (status) {
-            case DECLINED:
+            case REJECTED:
                 rejectedRequests.addAll(requestResponses);
                 break;
             case CONFIRMED:

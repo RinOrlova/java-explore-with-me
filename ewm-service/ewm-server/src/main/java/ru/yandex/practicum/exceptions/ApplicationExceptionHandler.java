@@ -77,7 +77,7 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleUnknownException(RuntimeException exc) {
-        log.error("Operation failed with an exception: ", exc);
+        log.error("Operation failed with an RuntimeException: ", exc);
         return ErrorResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.name())
                 .reason("Server error")

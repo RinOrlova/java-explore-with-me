@@ -263,7 +263,7 @@ public class ParticipationRequestsIntegrationTest {
         // Decline request
         ParticipationStatusUpdateRequest approveRequest = new ParticipationStatusUpdateRequest();
         approveRequest.setRequestIds(List.of(toBeRejectedRequest.getId()));
-        approveRequest.setStatus(ParticipationRequestStatus.DECLINED);
+        approveRequest.setStatus(ParticipationRequestStatus.REJECTED);
         String allReqResponsesJson = mockMvc.perform(patch("/users/" + initiatorResultUser.getId() + "/events/" + publishedEventFull.getId() + "/requests")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(approveRequest)))

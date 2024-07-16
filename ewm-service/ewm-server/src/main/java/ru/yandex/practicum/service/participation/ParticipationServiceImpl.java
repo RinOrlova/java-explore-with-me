@@ -87,7 +87,7 @@ public class ParticipationServiceImpl implements ParticipationService {
                 switch (participationStatusUpdateRequest.getStatus()) {
                     case CONFIRMED:
                         return confirmAllRequests(participationStatusUpdateRequest, eventId);
-                    case DECLINED:
+                    case REJECTED:
                         return declineAllRequests(participationStatusUpdateRequest, eventId);
                     case PENDING:
                         throw new ForbiddenException("Status changing to PENDING is not allowed.");

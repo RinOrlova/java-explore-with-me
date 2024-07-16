@@ -12,7 +12,7 @@ import java.util.Collection;
 public interface ParticipationRepository extends JpaRepository<ParticipationEntity, Long>, RefreshRepository {
 
     @Query("SELECT p FROM ParticipationEntity p WHERE p.requester.id = :requesterId AND p.event.id = :eventId")
-    Collection<ParticipationEntity> findAllByRequesterIdAndEventId(Long requesterId, Long eventId);
+    Collection<ParticipationEntity> findAllByUserInEvent(Long requesterId, Long eventId);
 
     Collection<ParticipationEntity> findAllByEventId(Long eventId);
 

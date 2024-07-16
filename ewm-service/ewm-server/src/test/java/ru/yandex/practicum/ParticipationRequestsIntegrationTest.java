@@ -1,5 +1,6 @@
 package ru.yandex.practicum;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,9 +24,11 @@ import ru.yandex.practicum.dto.user.User;
 import ru.yandex.practicum.dto.user.UserFull;
 import ru.yandex.practicum.utils.ApiPathConstants;
 
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.yandex.practicum.utils.ApiPathConstants.EVENT_PATH;
@@ -158,6 +161,13 @@ public class ParticipationRequestsIntegrationTest {
         EventFull eventFullWithOneApprovedRequests = objectMapper.readValue(eventFullWithOneApprovedRequestsJson, EventFull.class);
         assertEquals(1, eventFullWithOneApprovedRequests.getParticipantLimit());
         assertEquals(1, eventFullWithOneApprovedRequests.getConfirmedRequests());
+
+        String eventRequestForRequestRequestor = mockMvc.perform(get("/users/" + approvedResultUser.getId() + "/events/" + publishedEventFull.getId() + "/requests"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        Collection<ParticipationRequestResponse> responsesForRequestRequestor = objectMapper.readValue(eventRequestForRequestRequestor, new TypeReference<>() {
+        });
+        assertFalse(responsesForRequestRequestor.isEmpty());
 
         // To be rejected request
         mockMvc.perform(post("/users/" + notApprovedResultUser.getId() + "/requests?eventId=" + publishedEventFull.getId()))

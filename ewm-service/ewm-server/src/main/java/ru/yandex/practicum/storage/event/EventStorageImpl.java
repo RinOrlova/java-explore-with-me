@@ -81,7 +81,7 @@ public class EventStorageImpl implements EventStorage {
     @Override
     public EventFull getEventByCreatorAndId(Long userId, Long eventId) {
         EventEntity eventEntity = eventRepository.findByIdAndInitiatorId(eventId, userId);
-        return eventMapper.mapToEventFull(eventEntity);
+        return getEventFull(eventEntity, false);
     }
 
     @Override

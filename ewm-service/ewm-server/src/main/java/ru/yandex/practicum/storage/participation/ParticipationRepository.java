@@ -5,10 +5,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+import ru.yandex.practicum.storage.RefreshRepository;
 
 import java.util.Collection;
 
-public interface ParticipationRepository extends JpaRepository<ParticipationEntity, Long> {
+public interface ParticipationRepository extends JpaRepository<ParticipationEntity, Long>, RefreshRepository {
 
     Collection<ParticipationEntity> findAllByRequesterIdAndEventId(Long requesterId, Long eventId);
 

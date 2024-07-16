@@ -54,8 +54,8 @@ public class PrivateEventController {
     }
 
     @GetMapping(ApiPathConstants.EVENT_BY_ID_PATH + ApiPathConstants.REQUESTS_PATH)
-    public Collection<ParticipationRequestResponse> createParticipationRequest(@PathVariable("id") Long id,
-                                                                               @PathVariable("eventId") Long eventId) {
+    public Collection<ParticipationRequestResponse> getRequestsByUserAndEventIds(@PathVariable("id") Long id,
+                                                                                 @PathVariable("eventId") Long eventId) {
         return participationService.getRequestsByUserAndEventIds(id, eventId);
     }
 

@@ -3,6 +3,7 @@ package ru.yandex.practicum.storage.participation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.participation.AllParticipationRequestsResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestStatus;
@@ -10,6 +11,7 @@ import ru.yandex.practicum.exceptions.ParticipationNotFoundException;
 import ru.yandex.practicum.mapper.ParticipationMapper;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -21,16 +23,20 @@ public class ParticipationStorageImpl implements ParticipationStorage {
     private final ParticipationMapper participationMapper;
 
     @Override
+    @Transactional
     public ParticipationRequestResponse addDefaultParticipationRequest(Long userId, Long eventId) {
         ParticipationEntity participationEntity = participationMapper.mapDefaultUserEventParamsToEntity(userId, eventId);
         ParticipationEntity entityFromStorage = participationRepository.saveAndFlush(participationEntity);
+        participationRepository.refresh(entityFromStorage);
         return participationMapper.mapEntityToParticipationRequestResponse(entityFromStorage);
     }
 
     @Override
+    @Transactional
     public ParticipationRequestResponse addApprovedParticipationRequest(Long userId, Long eventId) {
         ParticipationEntity participationEntity = participationMapper.mapApprovedUserEventParamsToEntity(userId, eventId);
         ParticipationEntity entityFromStorage = participationRepository.saveAndFlush(participationEntity);
+        participationRepository.refresh(entityFromStorage);
         return participationMapper.mapEntityToParticipationRequestResponse(entityFromStorage);
     }
 
@@ -60,12 +66,17 @@ public class ParticipationStorageImpl implements ParticipationStorage {
     }
 
     @Override
+    @Transactional
     public ParticipationRequestResponse cancelRequest(Long requestById) {
         participationRepository.cancelRequestById(requestById);
         log.info("Request by id={} is confirmed.", requestById);
-        return participationRepository.findById(requestById)
-                .map(participationMapper::mapEntityToParticipationRequestResponse)
-                .orElseThrow(() -> new ParticipationNotFoundException(requestById));
+        Optional<ParticipationEntity> optParticipationEntity = participationRepository.findById(requestById);
+        if (optParticipationEntity.isPresent()) {
+            var participationEntity = optParticipationEntity.get();
+            participationRepository.refresh(participationEntity);
+            return participationMapper.mapEntityToParticipationRequestResponse(participationEntity);
+        }
+        throw new ParticipationNotFoundException(requestById);
     }
 
     private Collection<ParticipationRequestResponse> mapAllResults(Collection<ParticipationEntity> entities) {
@@ -82,20 +93,29 @@ public class ParticipationStorageImpl implements ParticipationStorage {
     }
 
     @Override
+    @Transactional
     public void declineAllRequests(Collection<Long> requestIds) {
         int declinedRequests = participationRepository.declineParticipationByIds(requestIds);
+        requestIds.forEach(id -> {
+            ParticipationEntity participationEntity = participationRepository.findById(id).get();
+            participationRepository.refresh(participationEntity);
+        });
         log.info("Number of requests declined: {}.", declinedRequests);
     }
 
     @Override
+    @Transactional
     public void declineAllPendingRequestsForEvent(Long eventId) {
         int declinedRequests = participationRepository.declineAllRequestsForEvent(eventId);
         log.info("Number of requests declined: {}.", declinedRequests);
     }
 
     @Override
+    @Transactional
     public void confirmRequest(Long id) {
         participationRepository.confirmRequestById(id);
+        ParticipationEntity participationEntity = participationRepository.findById(id).get();
+        participationRepository.refresh(participationEntity);
         log.info("Request by id={} is confirmed.", id);
     }
 

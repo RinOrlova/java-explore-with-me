@@ -105,7 +105,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     private boolean allRequestsArePresentAndInStatusPending(@NonNull ParticipationStatusUpdateRequest participationStatusUpdateRequest) {
         for (Long requestId : participationStatusUpdateRequest.getRequestIds()) {
             if (!participationStorage.isRequestPresentInStatusPending(requestId)) {
-                throw new ForbiddenException("Request must have status PENDING");
+                throw new ConflictException("Request must have status PENDING");
             }
         }
         return true;

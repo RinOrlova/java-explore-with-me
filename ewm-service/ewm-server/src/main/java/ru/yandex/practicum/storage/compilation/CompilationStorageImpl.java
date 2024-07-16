@@ -27,7 +27,6 @@ public class CompilationStorageImpl implements CompilationStorage {
     public CompilationResponse addCompilation(CompilationRequest compilationRequest) {
         CompilationEntity compilationEntity = compilationMapper.mapCompilatioDtoToCompilationEntity(compilationRequest);
         CompilationEntity compilationFromStorage = compilationRepository.saveAndFlush(compilationEntity);
-        compilationRepository.refresh(compilationFromStorage);
         return compilationMapper.mapCompilationEntityToCompilationResponse(compilationFromStorage);
     }
 
@@ -35,7 +34,6 @@ public class CompilationStorageImpl implements CompilationStorage {
     public CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest) {
         CompilationEntity compilationEntity = compilationMapper.mapCompilationRequestToCompilationEntity(id, compilationRequest);
         CompilationEntity compilationFromStorage = compilationRepository.saveAndFlush(compilationEntity);
-        compilationRepository.refresh(compilationFromStorage);
         return compilationMapper.mapCompilationEntityToCompilationResponse(compilationFromStorage);
     }
 

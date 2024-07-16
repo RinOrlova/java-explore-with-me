@@ -5,9 +5,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.compilation.CompilationRequest;
 import ru.yandex.practicum.dto.compilation.CompilationResponse;
+import ru.yandex.practicum.dto.compilation.UpdateCompilationRequest;
 import ru.yandex.practicum.storage.compilation.CompilationStorage;
 import ru.yandex.practicum.storage.event.EventStorage;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @Service
@@ -48,7 +50,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest) {
+    public CompilationResponse updateCompilation(Long id, @Valid UpdateCompilationRequest compilationRequest) {
         compilationStorage.getCompilationById(id); // Make sure compilation exists
         if (compilationRequest.getEvents() != null) {
             for (Long eventId : compilationRequest.getEvents()) {

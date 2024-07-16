@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.compilation.CompilationRequest;
 import ru.yandex.practicum.dto.compilation.CompilationResponse;
+import ru.yandex.practicum.dto.compilation.UpdateCompilationRequest;
 import ru.yandex.practicum.service.compilation.CompilationService;
 import ru.yandex.practicum.utils.ApiPathConstants;
 
@@ -33,7 +34,7 @@ public class AdminCompilationController {
 
     @PatchMapping(ApiPathConstants.BY_ID_PATH)
     public CompilationResponse updateCompilation(@PathVariable(name = "id") @Positive Long id,
-                                                 @Valid @RequestBody CompilationRequest compilationRequest) {
+                                                 @Valid @RequestBody UpdateCompilationRequest compilationRequest) {
         return compilationService.updateCompilation(id, compilationRequest);
     }
 

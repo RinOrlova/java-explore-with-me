@@ -2,6 +2,7 @@ package ru.yandex.practicum.storage.compilation;
 
 import ru.yandex.practicum.dto.compilation.CompilationRequest;
 import ru.yandex.practicum.dto.compilation.CompilationResponse;
+import ru.yandex.practicum.dto.compilation.UpdateCompilationRequest;
 
 import java.util.Collection;
 
@@ -17,5 +18,5 @@ public interface CompilationStorage {
 
     CompilationResponse addCompilation(CompilationRequest compilationRequest);
 
-    CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest);
+    CompilationResponse updateCompilation(Long id, UpdateCompilationRequest compilationRequest);
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.compilation.CompilationRequest;
 import ru.yandex.practicum.dto.compilation.CompilationResponse;
+import ru.yandex.practicum.dto.compilation.UpdateCompilationRequest;
 import ru.yandex.practicum.exceptions.CompilationNotFoundException;
 import ru.yandex.practicum.mapper.CompilationMapper;
 
@@ -31,9 +32,19 @@ public class CompilationStorageImpl implements CompilationStorage {
     }
 
     @Override
-    public CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest) {
-        CompilationEntity compilationEntity = compilationMapper.mapCompilationRequestToCompilationEntity(id, compilationRequest);
-        CompilationEntity compilationFromStorage = compilationRepository.saveAndFlush(compilationEntity);
+    public CompilationResponse updateCompilation(Long id, UpdateCompilationRequest compilationRequest) {
+        CompilationEntity compilationEntity = compilationMapper.mapUpdateCompilationRequestToCompilationEntity(id, compilationRequest);
+        CompilationEntity compilationEntityToBeUpdated = compilationRepository.findById(id).get();
+        if (compilationEntity.getTitle() != null) {
+            compilationEntityToBeUpdated.setTitle(compilationEntity.getTitle());
+        }
+        if (compilationEntity.getEvents() != null) {
+            compilationEntityToBeUpdated.setEvents(compilationEntity.getEvents());
+        }
+        if (compilationEntity.isPinned() != compilationEntityToBeUpdated.isPinned()) {
+            compilationEntityToBeUpdated.setPinned(compilationEntity.isPinned());
+        }
+        CompilationEntity compilationFromStorage = compilationRepository.saveAndFlush(compilationEntityToBeUpdated);
         return compilationMapper.mapCompilationEntityToCompilationResponse(compilationFromStorage);
     }
 

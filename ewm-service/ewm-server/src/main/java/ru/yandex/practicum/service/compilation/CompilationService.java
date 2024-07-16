@@ -3,7 +3,9 @@ package ru.yandex.practicum.service.compilation;
 import org.springframework.lang.Nullable;
 import ru.yandex.practicum.dto.compilation.CompilationRequest;
 import ru.yandex.practicum.dto.compilation.CompilationResponse;
+import ru.yandex.practicum.dto.compilation.UpdateCompilationRequest;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 public interface CompilationService {
@@ -17,6 +19,6 @@ public interface CompilationService {
 
     void deleteCompilation(Long id);
 
-    CompilationResponse updateCompilation(Long id, CompilationRequest compilationRequest);
+    CompilationResponse updateCompilation(Long id, @Valid UpdateCompilationRequest compilationRequest);
 
 }

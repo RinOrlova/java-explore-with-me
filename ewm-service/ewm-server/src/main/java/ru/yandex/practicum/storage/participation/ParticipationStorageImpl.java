@@ -42,7 +42,7 @@ public class ParticipationStorageImpl implements ParticipationStorage {
 
     @Override
     public Collection<ParticipationRequestResponse> getAllRequestsForUserAndEventId(Long userId, Long eventId) {
-        Collection<ParticipationEntity> allByRequesterIdAndEventId = participationRepository.findAllByUserInEvent(userId, eventId);
+        Collection<ParticipationEntity> allByRequesterIdAndEventId = participationRepository.findAllByUserInEvent(userId);
         return mapAllResults(allByRequesterIdAndEventId);
     }
 

@@ -14,7 +14,7 @@ public interface CategoryService {
 
     Category addCategory(Category categoryName);
 
-    Category updateCategory(Long catId, @Valid Category newName);
+    Category updateCategory(Long catId, Category newName);
 
     void deleteCategory(Long catId);
 

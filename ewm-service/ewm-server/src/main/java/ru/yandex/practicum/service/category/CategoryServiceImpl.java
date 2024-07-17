@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(Long catId, @Valid Category updatedCategory) {
+    public Category updateCategory(Long catId, Category updatedCategory) {
         Category categoryById = getCategoryById(catId);
         categoryById.setName(updatedCategory.getName());
         return categoryStorage.update(categoryById);

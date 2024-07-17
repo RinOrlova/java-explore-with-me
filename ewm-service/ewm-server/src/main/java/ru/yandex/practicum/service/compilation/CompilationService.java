@@ -19,6 +19,6 @@ public interface CompilationService {
 
     void deleteCompilation(Long id);
 
-    CompilationResponse updateCompilation(Long id, @Valid UpdateCompilationRequest compilationRequest);
+    CompilationResponse updateCompilation(Long id, UpdateCompilationRequest compilationRequest);
 
 }

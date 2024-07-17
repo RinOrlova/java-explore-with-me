@@ -40,16 +40,20 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFull getEventById(Long id) {
-        Collection<StatisticsResponse> statistics = statisticsClient.getStatistics(
-                LocalDateTime.now().minusHours(1),
-                LocalDateTime.now(),
-                List.of("/events/" + id),
-                true
-        );
-        StatisticsResponse statisticsResponse = statistics.iterator().next();
-        Long hits = statisticsResponse.getHits();
         EventFull eventFullPublishedById = eventStorage.getEventFullPublishedById(id);
-        eventFullPublishedById.setViews(hits);
+        if (eventFullPublishedById.getPublishedOn() != null) {
+            Collection<StatisticsResponse> statistics = statisticsClient.getStatistics(
+                    eventFullPublishedById.getPublishedOn(),
+                    LocalDateTime.now(),
+                    List.of("/events/" + id),
+                    true
+            );
+            StatisticsResponse statisticsResponse = statistics.iterator().next();
+            Long hits = statisticsResponse.getHits();
+            eventFullPublishedById.setViews(hits);
+        } else {
+            eventFullPublishedById.setViews(0L);
+        }
         return eventFullPublishedById;
     }
 

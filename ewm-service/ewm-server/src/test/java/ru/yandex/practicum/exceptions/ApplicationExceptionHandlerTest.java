@@ -17,6 +17,9 @@ import ru.yandex.practicum.storage.compilation.CompilationEntity;
 import ru.yandex.practicum.storage.event.EventEntity;
 import ru.yandex.practicum.storage.user.UserEntity;
 
+import javax.validation.ValidationException;
+import java.time.LocalDateTime;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -68,6 +71,16 @@ class ApplicationExceptionHandlerTest {
         public void throwForbiddenExceptionDefault() {
             throw new ForbiddenException();
         }
+
+        @GetMapping("/invalidDateRequestedException")
+        public void throwInvalidDateRequestedException() {
+            throw new InvalidDateRequestedException(LocalDateTime.parse("2024-12-31T20:52:21"), LocalDateTime.parse("2024-12-31T20:52:21"));
+        }
+
+        @GetMapping("/validationException")
+        public void throwValidationException() {
+            throw new ValidationException("Validation failed");
+        }
     }
 
     @Test
@@ -115,5 +128,21 @@ class ApplicationExceptionHandlerTest {
                 .andExpect(jsonPath("$.status").value("FORBIDDEN"))
                 .andExpect(jsonPath("$.reason").value("For the requested operation the conditions are not met."))
                 .andExpect(jsonPath("$.message").value("Action forbidden"));
+    }
+
+    @Test
+    void hanldeBasRequestException() throws Exception {
+        mockMvc.perform(get("/invalidDateRequestedException"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.reason").value("Request validation failed."))
+                .andExpect(jsonPath("$.message").value("Start=2024-12-31T20:52:21 must be before or equal end=2024-12-31T20:52:21"));
+        mockMvc.perform(get("/validationException"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.reason").value("Request validation failed."))
+                .andExpect(jsonPath("$.message").value("Validation failed"));
+
+
     }
 }

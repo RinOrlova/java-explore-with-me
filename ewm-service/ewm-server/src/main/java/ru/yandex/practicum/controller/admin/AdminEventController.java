@@ -1,6 +1,7 @@
 package ru.yandex.practicum.controller.admin;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventStatus;
@@ -10,10 +11,13 @@ import ru.yandex.practicum.service.event.EventService;
 import ru.yandex.practicum.utils.ApiPathConstants;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ApiPathConstants.ADMIN_PATH + ApiPathConstants.EVENT_PATH)
@@ -23,13 +27,13 @@ public class AdminEventController {
 
     @GetMapping
     public Collection<EventFull> getAllEvents(
-            @RequestParam(name = "users", required = false) List<Long> userIds,
+            @RequestParam(name = "users", required = false) List<@PositiveOrZero Long> userIds,
             @RequestParam(name = "states", required = false) List<EventStatus> states,
-            @RequestParam(name = "categories", required = false) List<Long> categories,
+            @RequestParam(name = "categories", required = false) List<@Positive Long> categories,
             @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
             @RequestParam(name = "rangeEnd", required = false) LocalDateTime rangeEnd,
-            @RequestParam(name = "from", defaultValue = "0") Integer from,
-            @RequestParam(name = "size", defaultValue = "10") Integer size) {
+            @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero Integer from,
+            @RequestParam(name = "size", defaultValue = "10") @Positive Integer size) {
         AdminSearch.AdminSearchBuilder<?, ?> adminSearchBuilder = AdminSearch.builder();
         if (userIds != null) {
             adminSearchBuilder.userIds(userIds);

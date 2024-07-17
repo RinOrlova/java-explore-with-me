@@ -27,21 +27,9 @@ public class ApplicationExceptionHandler {
     }
 
 
-    @ExceptionHandler
+    @ExceptionHandler({InvalidDateRequestedException.class, ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleInvalidDateRequestedException(InvalidDateRequestedException exc) {
-        log.error("Operation failed with an exception: {}", exc.getMessage());
-        return ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST.name())
-                .reason("Request validation failed.")
-                .message(exc.getMessage())
-                .timestamp(LocalDateTime.now())
-                .build();
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleInvalidDateRequestedException(ValidationException exc) {
+    public ErrorResponse handleInvalidRequetException(RuntimeException exc) {
         log.error("Operation failed with an exception: {}", exc.getMessage());
         return ErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.name())
@@ -66,6 +54,7 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictException(ConflictException exc) {
+        log.error("Operation failed due to conflict: {}", exc.getMessage(), exc);
         return ErrorResponse.builder()
                 .status(HttpStatus.CONFLICT.name())
                 .reason("Can't update entity.")

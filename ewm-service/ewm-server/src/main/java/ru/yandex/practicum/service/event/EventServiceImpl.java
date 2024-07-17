@@ -3,6 +3,7 @@ package ru.yandex.practicum.service.event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import ru.yandex.practicum.client.StatisticsClient;
 import ru.yandex.practicum.common.dto.StatisticsResponse;
 import ru.yandex.practicum.dto.category.Category;
@@ -105,17 +106,20 @@ public class EventServiceImpl implements EventService {
         if (Objects.nonNull(updateEventRequest.getEventDate())) {
             fullBuilder.eventDate(updateEventRequest.getEventDate());
         }
-        if (Objects.nonNull(updateEventRequest.getAnnotation())) {
-            fullBuilder.annotation(updateEventRequest.getAnnotation());
+        String annotation = updateEventRequest.getAnnotation();
+        if (Objects.nonNull(annotation) && StringUtils.hasText(annotation)) {
+            fullBuilder.annotation(annotation);
         }
         if (Objects.nonNull(updateEventRequest.getPaid())) {
             fullBuilder.paid(updateEventRequest.getPaid());
         }
-        if (Objects.nonNull(updateEventRequest.getTitle())) {
-            fullBuilder.title(updateEventRequest.getTitle());
+        String title = updateEventRequest.getTitle();
+        if (Objects.nonNull(title) && StringUtils.hasText(title)) {
+            fullBuilder.title(title);
         }
-        if (Objects.nonNull(updateEventRequest.getDescription())) {
-            fullBuilder.description(updateEventRequest.getDescription());
+        String description = updateEventRequest.getDescription();
+        if (Objects.nonNull(description) && StringUtils.hasText(description)) {
+            fullBuilder.description(description);
         }
         if (Objects.nonNull(updateEventRequest.getCategory())) {
             Category category = categoryStorage.getCategoryById(updateEventRequest.getCategory());

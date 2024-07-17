@@ -10,6 +10,7 @@ import ru.yandex.practicum.common.serialization.LocalDateTimeDeserializer;
 import ru.yandex.practicum.dto.location.Location;
 import ru.yandex.practicum.dto.validation.EventDateConfigurableConstraint;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -38,6 +39,7 @@ public class EventRequest {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime eventDate;
 
+    @Valid
     @NotNull
     private Location location;
 

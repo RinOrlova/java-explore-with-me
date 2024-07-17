@@ -5,7 +5,6 @@ import ru.yandex.practicum.dto.compilation.CompilationRequest;
 import ru.yandex.practicum.dto.compilation.CompilationResponse;
 import ru.yandex.practicum.dto.compilation.UpdateCompilationRequest;
 
-import javax.validation.Valid;
 import java.util.Collection;
 
 public interface CompilationService {

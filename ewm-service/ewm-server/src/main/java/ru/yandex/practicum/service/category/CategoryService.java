@@ -2,7 +2,6 @@ package ru.yandex.practicum.service.category;
 
 import ru.yandex.practicum.dto.category.Category;
 
-import javax.validation.Valid;
 import java.util.Collection;
 
 public interface CategoryService {

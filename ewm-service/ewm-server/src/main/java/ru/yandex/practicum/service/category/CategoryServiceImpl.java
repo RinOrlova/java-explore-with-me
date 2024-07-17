@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.storage.category.CategoryStorage;
 
-import javax.validation.Valid;
 import java.util.Collection;
 
 @Service

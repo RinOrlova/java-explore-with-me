@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.yandex.practicum.dto.category.Category;
-import ru.yandex.practicum.exceptions.CategoryNotFoundException;
+import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.mapper.CategoryMapper;
 
 import java.util.Collection;
@@ -98,7 +98,7 @@ public class CategoryStorageImplTest {
     public void testDeleteNonExistentUser() {
         Long nonExistentCategoryId = 999L;
         assertThatThrownBy(() -> categoryStorage.delete(nonExistentCategoryId))
-                .isInstanceOf(CategoryNotFoundException.class);
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
 

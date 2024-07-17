@@ -53,7 +53,7 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFoundException(NotFoundException exc) {
+    public ErrorResponse handleNotFoundException(EntityNotFoundException exc) {
         log.warn("Requested entity not found: {}", exc.getMessage());
         return ErrorResponse.builder()
                 .status(HttpStatus.NOT_FOUND.name())

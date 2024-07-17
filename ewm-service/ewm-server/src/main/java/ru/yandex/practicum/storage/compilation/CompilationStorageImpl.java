@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.compilation.CompilationRequest;
 import ru.yandex.practicum.dto.compilation.CompilationResponse;
 import ru.yandex.practicum.dto.compilation.UpdateCompilationRequest;
-import ru.yandex.practicum.exceptions.CompilationNotFoundException;
+import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.mapper.CompilationMapper;
 
 import java.util.Collection;
@@ -64,9 +64,7 @@ public class CompilationStorageImpl implements CompilationStorage {
 
     @Override
     public CompilationResponse getCompilationById(Long id) {
-        return compilationRepository.findById(id)
-                .map(compilationMapper::mapCompilationEntityToCompilationResponse)
-                .orElseThrow(() -> new CompilationNotFoundException(id));
+        return compilationRepository.findById(id).map(compilationMapper::mapCompilationEntityToCompilationResponse).orElseThrow(() -> new EntityNotFoundException(id, CompilationEntity.class));
     }
 
     @Override
@@ -75,15 +73,13 @@ public class CompilationStorageImpl implements CompilationStorage {
             compilationRepository.deleteById(id);
         } catch (EmptyResultDataAccessException exception) {
             log.warn("Compilation not found by requested id:{}", id);
-            throw new CompilationNotFoundException(id);
+            throw new EntityNotFoundException(id, CompilationEntity.class);
         }
     }
 
 
     private Collection<CompilationResponse> mapCompilationEntitiesToCompilationResponse(Page<CompilationEntity> compilationEntityPage) {
-        return compilationEntityPage.stream()
-                .map(compilationMapper::mapCompilationEntityToCompilationResponse)
-                .collect(Collectors.toList());
+        return compilationEntityPage.stream().map(compilationMapper::mapCompilationEntityToCompilationResponse).collect(Collectors.toList());
     }
 
 }

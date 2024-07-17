@@ -12,7 +12,7 @@ import ru.yandex.practicum.dto.event.EventShort;
 import ru.yandex.practicum.dto.participation.ParticipationRequestStatus;
 import ru.yandex.practicum.dto.search.AdminSearch;
 import ru.yandex.practicum.dto.search.PublicSearch;
-import ru.yandex.practicum.exceptions.EventNotFoundException;
+import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.mapper.EventMapper;
 import ru.yandex.practicum.storage.location.LocationEntity;
 import ru.yandex.practicum.storage.location.LocationStorage;
@@ -159,7 +159,7 @@ public class EventStorageImpl implements EventStorage {
             setConfirmedRequestsToEventEntity(eventEntity);
             return eventMapper.mapToEventShort(eventEntity);
         }
-        throw new EventNotFoundException(id);
+        throw new EntityNotFoundException(id, EventEntity.class);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class EventStorageImpl implements EventStorage {
     public EventFull getEventFullPublishedById(Long id) {
         return Optional.ofNullable(eventRepository.findByIdAndStatusPublished(id))
                 .map(this::getEventFull)
-                .orElseThrow(() -> new EventNotFoundException(id));
+                .orElseThrow(() -> new EntityNotFoundException(id, EventEntity.class));
     }
 
     @Override
@@ -175,7 +175,7 @@ public class EventStorageImpl implements EventStorage {
     public EventFull getEventFullById(Long id) {
         return eventRepository.findById(id)
                 .map(this::getEventFull)
-                .orElseThrow(() -> new EventNotFoundException(id));
+                .orElseThrow(() -> new EntityNotFoundException(id, EventEntity.class));
     }
 
     private EventFull getEventFull(EventEntity eventFromStorage) {

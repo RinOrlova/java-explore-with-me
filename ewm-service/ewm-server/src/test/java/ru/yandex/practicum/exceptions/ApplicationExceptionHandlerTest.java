@@ -12,6 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.yandex.practicum.dto.category.Category;
+import ru.yandex.practicum.storage.compilation.CompilationEntity;
+import ru.yandex.practicum.storage.event.EventEntity;
+import ru.yandex.practicum.storage.user.UserEntity;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -32,22 +36,22 @@ class ApplicationExceptionHandlerTest {
     public static class TestController {
         @GetMapping("/notFound/category")
         public void throwCategoryNotFoundException() {
-            throw new CategoryNotFoundException(1L);
+            throw new EntityNotFoundException(1L, Category.class);
         }
 
         @GetMapping("/notFound/user")
         public void throwUserNotFoundException() {
-            throw new UserNotFoundException(1L);
+            throw new EntityNotFoundException(1L, UserEntity.class);
         }
 
         @GetMapping("/notFound/event")
         public void throwEventNotFoundException() {
-            throw new EventNotFoundException(1L);
+            throw new EntityNotFoundException(1L, EventEntity.class);
         }
 
         @GetMapping("/notFound/compilation")
         public void throwCompilationNotFoundException() {
-            throw new CompilationNotFoundException(1L);
+            throw new EntityNotFoundException(1L, CompilationEntity.class);
         }
 
         @GetMapping("/technical")
@@ -72,22 +76,22 @@ class ApplicationExceptionHandlerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andExpect(jsonPath("$.reason").value("The required object was not found."))
-                .andExpect(jsonPath("$.message").value("Category by id=1 not found"));
+                .andExpect(jsonPath("$.message").value("Entity ru.yandex.practicum.dto.category.Category by id=1 not found"));
         mockMvc.perform(get("/notFound/user"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andExpect(jsonPath("$.reason").value("The required object was not found."))
-                .andExpect(jsonPath("$.message").value("User by id=1 not found"));
+                .andExpect(jsonPath("$.message").value("Entity ru.yandex.practicum.storage.user.UserEntity by id=1 not found"));
         mockMvc.perform(get("/notFound/event"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andExpect(jsonPath("$.reason").value("The required object was not found."))
-                .andExpect(jsonPath("$.message").value("Event by id=1 not found"));
+                .andExpect(jsonPath("$.message").value("Entity ru.yandex.practicum.storage.event.EventEntity by id=1 not found"));
         mockMvc.perform(get("/notFound/compilation"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andExpect(jsonPath("$.reason").value("The required object was not found."))
-                .andExpect(jsonPath("$.message").value("Compilation by id=1 not found"));
+                .andExpect(jsonPath("$.message").value("Entity ru.yandex.practicum.storage.compilation.CompilationEntity by id=1 not found"));
     }
 
     @Test

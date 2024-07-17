@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.yandex.practicum.dto.user.User;
 import ru.yandex.practicum.dto.user.UserFull;
-import ru.yandex.practicum.exceptions.UserNotFoundException;
+import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.mapper.UserMapper;
 
 import java.util.Collection;
@@ -72,7 +72,7 @@ public class UserStorageImplTest {
     public void testDeleteNonExistentUser() {
         Long nonExistentUserId = 999L;
         assertThatThrownBy(() -> userStorage.deleteUser(nonExistentUserId))
-                .isInstanceOf(UserNotFoundException.class);
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test

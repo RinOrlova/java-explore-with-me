@@ -12,7 +12,7 @@ import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventRequest;
 import ru.yandex.practicum.dto.location.Location;
 import ru.yandex.practicum.dto.user.User;
-import ru.yandex.practicum.exceptions.EventNotFoundException;
+import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.storage.category.CategoryEntity;
 import ru.yandex.practicum.storage.category.CategoryStorage;
 import ru.yandex.practicum.storage.location.LocationStorage;
@@ -77,7 +77,7 @@ class EventStorageImplTest {
         assertEquals(Double.valueOf("0.0"), eventFull.getLocation().getLon());
 
         // Public request for published Event
-        assertThrows(EventNotFoundException.class, () -> eventStorage.getEventFullPublishedById(eventFull.getId()));
+        assertThrows(EntityNotFoundException.class, () -> eventStorage.getEventFullPublishedById(eventFull.getId()));
     }
 
 

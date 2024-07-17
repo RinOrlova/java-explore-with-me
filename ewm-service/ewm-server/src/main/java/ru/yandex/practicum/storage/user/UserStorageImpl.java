@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.dto.user.User;
 import ru.yandex.practicum.dto.user.UserFull;
 import ru.yandex.practicum.exceptions.ConflictException;
-import ru.yandex.practicum.exceptions.UserNotFoundException;
+import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.mapper.UserMapper;
 
 import java.util.Collection;
@@ -41,7 +41,7 @@ public class UserStorageImpl implements UserStorage {
             userRepository.deleteById(userId);
         } catch (EmptyResultDataAccessException exception) {
             log.warn("User not found by requested id:{}", userId);
-            throw new UserNotFoundException(userId);
+            throw new EntityNotFoundException(userId, UserEntity.class);
         }
     }
 
@@ -61,9 +61,9 @@ public class UserStorageImpl implements UserStorage {
 
     @Override
     public UserFull getUserById(Long id) {
-        return userRepository.findById(id).map(userMapper::mapUserEntityToUserFull).orElseThrow(() -> new UserNotFoundException(id));
+        return userRepository.findById(id).map(userMapper::mapUserEntityToUserFull)
+                .orElseThrow(() -> new EntityNotFoundException(id, UserEntity.class));
     }
-
 
     private Collection<UserFull> mapUserEntitiesToUser(Page<UserEntity> userEntityPage) {
         return userEntityPage.stream().map(userMapper::mapUserEntityToUserFull).collect(Collectors.toList());

@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.participation.AllParticipationRequestsResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestStatus;
-import ru.yandex.practicum.exceptions.ParticipationNotFoundException;
+import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.mapper.ParticipationMapper;
 
 import java.util.Collection;
@@ -56,7 +56,7 @@ public class ParticipationStorageImpl implements ParticipationStorage {
     public ParticipationRequestResponse getRequestById(Long requestId) {
         return participationRepository.findById(requestId)
                 .map(participationMapper::mapEntityToParticipationRequestResponse)
-                .orElseThrow(() -> new ParticipationNotFoundException(requestId));
+                .orElseThrow(() -> new EntityNotFoundException(requestId, ParticipationEntity.class));
     }
 
     @Override
@@ -67,16 +67,16 @@ public class ParticipationStorageImpl implements ParticipationStorage {
 
     @Override
     @Transactional
-    public ParticipationRequestResponse cancelRequest(Long requestById) {
-        participationRepository.cancelRequestById(requestById);
-        log.info("Request by id={} is confirmed.", requestById);
-        Optional<ParticipationEntity> optParticipationEntity = participationRepository.findById(requestById);
+    public ParticipationRequestResponse cancelRequest(Long requestId) {
+        participationRepository.cancelRequestById(requestId);
+        log.info("Request by id={} is confirmed.", requestId);
+        Optional<ParticipationEntity> optParticipationEntity = participationRepository.findById(requestId);
         if (optParticipationEntity.isPresent()) {
             var participationEntity = optParticipationEntity.get();
             participationRepository.refresh(participationEntity);
             return participationMapper.mapEntityToParticipationRequestResponse(participationEntity);
         }
-        throw new ParticipationNotFoundException(requestById);
+        throw new EntityNotFoundException(requestId, ParticipationEntity.class);
     }
 
     private Collection<ParticipationRequestResponse> mapAllResults(Collection<ParticipationEntity> entities) {

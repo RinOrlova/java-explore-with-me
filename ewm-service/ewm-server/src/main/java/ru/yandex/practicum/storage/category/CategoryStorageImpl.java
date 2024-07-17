@@ -8,8 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.category.Category;
 import ru.yandex.practicum.exceptions.CategoryNameConstraintException;
-import ru.yandex.practicum.exceptions.CategoryNotFoundException;
 import ru.yandex.practicum.exceptions.ConflictException;
+import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.mapper.CategoryMapper;
 import ru.yandex.practicum.storage.event.EventEntity;
 
@@ -35,7 +35,8 @@ public class CategoryStorageImpl implements CategoryStorage {
 
     @Override
     public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).map(categoryMapper::mapCategoryEntityToCategory).orElseThrow(() -> new CategoryNotFoundException(id));
+        return categoryRepository.findById(id).map(categoryMapper::mapCategoryEntityToCategory)
+                .orElseThrow(() -> new EntityNotFoundException(id, Category.class));
     }
 
     @Override
@@ -72,7 +73,7 @@ public class CategoryStorageImpl implements CategoryStorage {
                 throw new ConflictException("Not allowed to remove category with linked events.");
             }
         } else {
-            throw new CategoryNotFoundException(catId);
+            throw new EntityNotFoundException(catId, Category.class);
         }
 
     }

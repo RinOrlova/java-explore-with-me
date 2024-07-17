@@ -7,16 +7,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = EventDateAdminValidator.class)
+@Constraint(validatedBy = EventDateConfigurableValidator.class)
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EventDateAdminConstraint {
-    String message() default "Event date must be at least 1 hour from now.";
+public @interface EventDateConfigurableConstraint {
+    String message() default "Event date must be at least {hours} hours from now.";
+
+    int hours() default 2;
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
 }
-
-

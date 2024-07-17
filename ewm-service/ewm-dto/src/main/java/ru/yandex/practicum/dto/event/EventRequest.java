@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 import ru.yandex.practicum.common.serialization.LocalDateTimeDeserializer;
 import ru.yandex.practicum.dto.location.Location;
-import ru.yandex.practicum.dto.validation.EventDateConstraint;
+import ru.yandex.practicum.dto.validation.EventDateConfigurableConstraint;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -34,7 +34,7 @@ public class EventRequest {
     private String description;
 
     @NotNull
-    @EventDateConstraint
+    @EventDateConfigurableConstraint(hours = 1)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime eventDate;
 

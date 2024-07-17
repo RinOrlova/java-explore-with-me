@@ -7,7 +7,7 @@ import lombok.extern.jackson.Jacksonized;
 import org.springframework.lang.Nullable;
 import ru.yandex.practicum.common.serialization.LocalDateTimeDeserializer;
 import ru.yandex.practicum.dto.location.Location;
-import ru.yandex.practicum.dto.validation.EventDateAdminConstraint;
+import ru.yandex.practicum.dto.validation.EventDateConfigurableConstraint;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.PositiveOrZero;
@@ -29,7 +29,7 @@ public class UpdateEventRequest {
     private String description;
     @Nullable
     @Future
-    @EventDateAdminConstraint
+    @EventDateConfigurableConstraint(hours = 2)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime eventDate;
     @Nullable

@@ -35,4 +35,6 @@ public interface EventStorage {
     EventFull updateEventAdmin(EventFull updatedEvent);
 
     List<EventShort> getEventByCreator(Long userId, int from, int size);
+
+    Collection<EventShort> getEventsShortByIds(Collection<Long> ids);
 }

@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventRequest;
 import ru.yandex.practicum.dto.event.EventShort;
-import ru.yandex.practicum.dto.participation.ParticipationRequestStatus;
 import ru.yandex.practicum.dto.search.AdminSearch;
 import ru.yandex.practicum.dto.search.PublicSearch;
 import ru.yandex.practicum.exceptions.EntityNotFoundException;
@@ -184,6 +183,14 @@ public class EventStorageImpl implements EventStorage {
                 .orElseThrow(() -> new EntityNotFoundException(id, EventEntity.class));
     }
 
+    @Override
+    public Collection<EventShort> getEventsShortByIds(Collection<Long> ids) {
+        List<EventEntity> eventsByIds = eventRepository.findAllById(ids);
+        return eventsByIds.stream()
+                .map(eventMapper::mapToEventShort)
+                .collect(Collectors.toList());
+    }
+
     private EventFull getEventFull(EventEntity eventFromStorage) {
         setConfirmedRequestsToEventEntity(eventFromStorage);
         return eventMapper.mapToEventFull(eventFromStorage);
@@ -197,14 +204,6 @@ public class EventStorageImpl implements EventStorage {
             eventFromStorage.setConfirmedRequests(0L);
         }
         return eventFromStorage;
-    }
-
-    private long getConfirmedRequests(EventEntity entity) {
-        return entity.getParticipationRequests()
-                .stream()
-                .filter(participationEntity -> ParticipationRequestStatus.CONFIRMED == participationEntity.getStatus())
-                .count();
-
     }
 
 }

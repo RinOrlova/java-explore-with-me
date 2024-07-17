@@ -63,9 +63,6 @@ public class EventEntity {
     @Column(nullable = false, length = 120)
     private String title;
 
-    @Column(name = "views", nullable = false)
-    private Long views;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;

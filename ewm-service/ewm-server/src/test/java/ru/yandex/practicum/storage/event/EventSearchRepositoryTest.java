@@ -55,7 +55,7 @@ public class EventSearchRepositoryTest {
         CategoryEntity categoryEntity = getCategoryEntity(categoryStorage.add(category).getId());
         LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(getLocationEntity());
 
-        EventEntity event = EventEntity.builder().id(1L).views(0L).annotation("Sample Annotation").description("Sample Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PENDING).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
+        EventEntity event = EventEntity.builder().id(1L).annotation("Sample Annotation").description("Sample Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PENDING).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
         eventRepository.save(event);
 
         // Search with matching UserId
@@ -89,7 +89,7 @@ public class EventSearchRepositoryTest {
         LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(getLocationEntity());
 
         EventEntity event = EventEntity.builder()
-                .id(1L).annotation("Sample Annotation").views(0L).description("Sample Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
+                .id(1L).annotation("Sample Annotation").description("Sample Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
         eventRepository.save(event);
 
         // Create AdminSearch with states
@@ -113,7 +113,7 @@ public class EventSearchRepositoryTest {
         CategoryEntity categoryEntity = getCategoryEntity(categoryStorage.add(category).getId());
         LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(getLocationEntity());
 
-        EventEntity event = EventEntity.builder().views(0L).id(1L).annotation("Sample Annotation").description("Sample Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
+        EventEntity event = EventEntity.builder().id(1L).annotation("Sample Annotation").description("Sample Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
         eventRepository.save(event);
 
         // Create AdminSearch with categories
@@ -136,7 +136,7 @@ public class EventSearchRepositoryTest {
         CategoryEntity categoryEntity = getCategoryEntity(categoryStorage.add(category).getId());
         LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(getLocationEntity());
 
-        EventEntity event = EventEntity.builder().id(1L).views(0L).annotation("Sample Annotation").description("Sample Description").createdOn(LocalDateTime.now()).eventDate(LocalDateTime.now().plusHours(2)).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
+        EventEntity event = EventEntity.builder().id(1L).annotation("Sample Annotation").description("Sample Description").createdOn(LocalDateTime.now()).eventDate(LocalDateTime.now().plusHours(2)).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
         eventRepository.save(event);
 
         // Create AdminSearch within date range
@@ -158,7 +158,7 @@ public class EventSearchRepositoryTest {
         CategoryEntity categoryEntity = getCategoryEntity(categoryStorage.add(category).getId());
         LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(getLocationEntity());
 
-        EventEntity event = EventEntity.builder().id(1L).views(0L).annotation("Sample Annotation").description("Sample Description").createdOn(LocalDateTime.now()).eventDate(LocalDateTime.now().plusHours(2)).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
+        EventEntity event = EventEntity.builder().id(1L).annotation("Sample Annotation").description("Sample Description").createdOn(LocalDateTime.now()).eventDate(LocalDateTime.now().plusHours(2)).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
         eventRepository.save(event);
 
 
@@ -184,7 +184,7 @@ public class EventSearchRepositoryTest {
         CategoryEntity categoryEntity = getCategoryEntity(categoryStorage.add(category).getId());
         LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(getLocationEntity());
 
-        EventEntity event = EventEntity.builder().id(1L).views(0L).annotation("Sample Event Annotation").description("Sample Event Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
+        EventEntity event = EventEntity.builder().id(1L).annotation("Sample Event Annotation").description("Sample Event Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
         eventRepository.save(event);
 
         PublicSearch publicSearch = PublicSearch.builder().text("sAmPLe EvEnT").build();
@@ -204,7 +204,7 @@ public class EventSearchRepositoryTest {
         CategoryEntity categoryEntity = getCategoryEntity(categoryStorage.add(category).getId());
         LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(getLocationEntity());
 
-        EventEntity event = EventEntity.builder().id(1L).views(0L).annotation("Sample Event Annotation").description("Sample Event Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now().plusHours(2)).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
+        EventEntity event = EventEntity.builder().id(1L).annotation("Sample Event Annotation").description("Sample Event Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now().plusHours(2)).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
         eventRepository.save(event);
 
         PublicSearch publicSearch = PublicSearch.builder().rangeStart(LocalDateTime.now().plusHours(1)).rangeEnd(LocalDateTime.now().plusHours(3)).build();
@@ -224,8 +224,8 @@ public class EventSearchRepositoryTest {
         CategoryEntity categoryEntity = getCategoryEntity(categoryStorage.add(category).getId());
         LocationEntity locationEntity = locationStorage.addLocationEntityIfAbsent(getLocationEntity());
 
-        EventEntity event = EventEntity.builder().id(1L).views(0L).annotation("Sample Event Annotation").description("Sample Event Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
-        EventEntity eventPaid = EventEntity.builder().id(2L).views(0L).annotation("Sample Paid Event Annotation").description("Sample Paid Event Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(true).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Paid Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
+        EventEntity event = EventEntity.builder().id(1L).annotation("Sample Event Annotation").description("Sample Event Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(false).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
+        EventEntity eventPaid = EventEntity.builder().id(2L).annotation("Sample Paid Event Annotation").description("Sample Paid Event Description").createdOn(LocalDateTime.now().minusDays(1)).eventDate(LocalDateTime.now()).publishedOn(null).paid(true).participantLimit(100).requestModeration(true).status(EventStatus.PUBLISHED).title("Sample Paid Title").category(categoryEntity).initiator(initiator).location(locationEntity).build();
         eventRepository.saveAll(List.of(event, eventPaid));
 
 

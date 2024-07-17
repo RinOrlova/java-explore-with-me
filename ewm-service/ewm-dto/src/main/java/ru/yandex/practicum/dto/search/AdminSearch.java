@@ -6,6 +6,7 @@ import lombok.Value;
 import lombok.experimental.SuperBuilder;
 import ru.yandex.practicum.dto.event.EventStatus;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @SuperBuilder
 public class AdminSearch extends AbstractSearch {
     @Builder.Default
-    List<Long> userIds = Collections.emptyList();
+    Collection<Long> userIds = Collections.emptySet();
     @Builder.Default
     List<EventStatus> states = Collections.emptyList();
 }

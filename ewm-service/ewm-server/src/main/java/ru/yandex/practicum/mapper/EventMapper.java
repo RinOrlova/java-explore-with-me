@@ -32,7 +32,6 @@ public interface EventMapper {
     @Mapping(target = "status", constant = "PENDING")
     @Mapping(target = "category", source = "eventRequest.category", qualifiedByName = "mapCategoryIdToCategoryEntity")
     @Mapping(target = "initiator", source = "userId", qualifiedByName = "mapUserIdToUserEntity")
-    @Mapping(target = "views", constant = "0L")
     EventEntity eventRequestToEventEntity(EventRequest eventRequest, Long userId);
 
     default EventEntity mapContext(EventRequest eventRequest, @Context Long userId) {

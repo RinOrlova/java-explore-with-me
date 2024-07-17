@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 @Builder
 public class EventRequest {
 
-    @NotNull
     @Size(min = 20, max = 2000)
     @NotBlank
     private String annotation;
@@ -30,7 +29,6 @@ public class EventRequest {
     @NotNull
     private Long category;
 
-    @NotNull
     @Size(min = 20, max = 7000)
     @NotBlank
     private String description;

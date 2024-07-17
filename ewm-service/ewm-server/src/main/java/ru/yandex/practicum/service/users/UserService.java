@@ -4,6 +4,7 @@ import ru.yandex.practicum.dto.user.User;
 import ru.yandex.practicum.dto.user.UserFull;
 
 import java.util.Collection;
+import java.util.Set;
 
 public interface UserService {
 
@@ -11,7 +12,7 @@ public interface UserService {
 
     void deleteUser(Long userId);
 
-    Collection<UserFull> getAllUsers(Collection<Long> userIds, int from, int to);
+    Collection<UserFull> getAllUsers(Set<Long> userIds, int from, int to);
 
 
 }

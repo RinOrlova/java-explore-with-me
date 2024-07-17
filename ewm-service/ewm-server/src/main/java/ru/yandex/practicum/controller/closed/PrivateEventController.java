@@ -35,8 +35,8 @@ public class PrivateEventController {
 
     @GetMapping
     public List<EventShort> getEventsByCreator(@PathVariable("id") Long userId,
-                                               @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
-                                               @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+                                               @RequestParam(value = "from", defaultValue = "0") Integer from,
+                                               @RequestParam(value = "size", defaultValue = "10") Integer size) {
         return eventService.getEventsByCreator(userId, from, size);
     }
 

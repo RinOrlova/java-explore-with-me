@@ -28,8 +28,8 @@ public class AdminEventController {
             @RequestParam(name = "categories", required = false) List<Long> categories,
             @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
             @RequestParam(name = "rangeEnd", required = false) LocalDateTime rangeEnd,
-            @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
-            @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
+            @RequestParam(name = "from", defaultValue = "0") Integer from,
+            @RequestParam(name = "size", defaultValue = "10") Integer size) {
         AdminSearch.AdminSearchBuilder<?, ?> adminSearchBuilder = AdminSearch.builder();
         if (userIds != null) {
             adminSearchBuilder.userIds(userIds);

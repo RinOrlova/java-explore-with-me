@@ -30,10 +30,10 @@ public class PublicEventController {
                                             @RequestParam(name = "paid", required = false) Boolean paid,
                                             @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
                                             @RequestParam(name = "rangeEnd", required = false) LocalDateTime rangeEnd,
-                                            @RequestParam(name = "onlyAvailable", required = false, defaultValue = "false") Boolean onlyAvailable,
+                                            @RequestParam(name = "onlyAvailable", defaultValue = "false") Boolean onlyAvailable,
                                             @RequestParam(name = "sortType", required = false) SortType sortType,
-                                            @RequestParam(name = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
-                                            @RequestParam(name = "size", required = false, defaultValue = "10") @PositiveOrZero Integer size) {
+                                            @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero Integer from,
+                                            @RequestParam(name = "size", defaultValue = "10") @PositiveOrZero Integer size) {
         if (rangeStart != null && rangeEnd != null) {
             if (!rangeStart.isBefore(rangeEnd)) {
                 throw new InvalidDateRequestedException(rangeStart, rangeEnd);

@@ -8,6 +8,7 @@ import ru.yandex.practicum.dto.user.UserFull;
 import ru.yandex.practicum.storage.user.UserStorage;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Collection<UserFull> getAllUsers(@Nullable Collection<Long> userIds, int from, int pageSize) {
+    public Collection<UserFull> getAllUsers(@Nullable Set<Long> userIds, int from, int pageSize) {
         if (userIds == null || userIds.isEmpty()) {
             return userStorage.getAllUsers(from, pageSize);
         }

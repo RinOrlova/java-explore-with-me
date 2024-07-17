@@ -12,7 +12,7 @@ import ru.yandex.practicum.utils.ApiPathConstants;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +23,9 @@ public class AdminUserController {
 
     @GetMapping
     public Collection<UserFull> getAllUsers(
-            @RequestParam(name = "ids", required = false) @Nullable List<Long> userIds,
-            @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
-            @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
+            @RequestParam(name = "ids", required = false) @Nullable Set<Long> userIds,
+            @RequestParam(name = "from", defaultValue = "0") Integer from,
+            @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return userService.getAllUsers(userIds, from, size);
     }
 

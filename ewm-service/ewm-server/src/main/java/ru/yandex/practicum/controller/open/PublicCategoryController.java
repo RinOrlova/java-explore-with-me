@@ -18,8 +18,8 @@ public class PublicCategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public Collection<Category> getCategories(@RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
-                                              @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
+    public Collection<Category> getCategories(@RequestParam(name = "from", defaultValue = "0") Integer from,
+                                              @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return categoryService.getCategories(from, size);
     }
 

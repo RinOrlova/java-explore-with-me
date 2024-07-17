@@ -45,4 +45,17 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
     @Transactional
     @Query("UPDATE ParticipationEntity p SET p.status = 'CANCELED' WHERE p.id = :id")
     void cancelRequestById(@Param("id") Long id);
+
+    @Query("SELECT p.event.id AS eventId, COUNT(p) AS confirmedRequestsNumber " +
+            "FROM ParticipationEntity p " +
+            "WHERE p.status = 'CONFIRMED' AND p.event.id = :eventId " +
+            "GROUP BY p.event.id")
+    ConfirmedRequestsProjection getConfirmedRequestsForEventNumber(@Param("eventId") Long eventId);
+
+
+    @Query("SELECT p.event.id AS eventId, COUNT(p) AS confirmedRequestsNumber " +
+            "FROM ParticipationEntity p " +
+            "WHERE p.status = 'CONFIRMED' " +
+            "GROUP BY p.event.id")
+    Collection<ConfirmedRequestsProjection> getAllConfirmedRequestsNumber();
 }

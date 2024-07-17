@@ -16,11 +16,11 @@ import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.mapper.EventMapper;
 import ru.yandex.practicum.storage.location.LocationEntity;
 import ru.yandex.practicum.storage.location.LocationStorage;
+import ru.yandex.practicum.storage.participation.ConfirmedRequestsProjection;
+import ru.yandex.practicum.storage.participation.ParticipationStorage;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +29,7 @@ public class EventStorageImpl implements EventStorage {
 
     private final EventRepository eventRepository;
     private final EventSearchRepository eventSearchRepository;
+    private final ParticipationStorage participationStorage;
     private final EventMapper eventMapper;
     private final LocationStorage locationStorage;
 
@@ -72,9 +73,14 @@ public class EventStorageImpl implements EventStorage {
                 adminSearch.getSize(),
                 Sort.by(Sort.Direction.ASC, "id")
         );
-        return eventSearchRepository.findAllByAdminSearchParams(adminSearch, pageRequest)
-                .stream()
-                .map(this::setConfirmedRequestsToEventEntity)
+
+        Map<Long, Long> allConfirmedRequestsNumber = participationStorage.getAllConfirmedRequestsNumber();
+        Page<EventEntity> allEventsByAdminSearchParams = eventSearchRepository.findAllByAdminSearchParams(adminSearch, pageRequest);
+        return allEventsByAdminSearchParams.stream()
+                .peek(eventEntity -> {
+                    Long confirmedRequests = allConfirmedRequestsNumber.get(eventEntity.getId());
+                    eventEntity.setConfirmedRequests(Objects.requireNonNullElse(confirmedRequests, 0L));
+                })
                 .map(eventMapper::mapToEventFull)
                 .collect(Collectors.toList());
     }
@@ -183,10 +189,14 @@ public class EventStorageImpl implements EventStorage {
         return eventMapper.mapToEventFull(eventFromStorage);
     }
 
-    private EventEntity setConfirmedRequestsToEventEntity(EventEntity entity) {
-        long confirmedRequests = getConfirmedRequests(entity);
-        entity.setConfirmedRequests(confirmedRequests);
-        return entity;
+    private EventEntity setConfirmedRequestsToEventEntity(EventEntity eventFromStorage) {
+        ConfirmedRequestsProjection confirmedRequestsForEvent = participationStorage.getConfirmedRequestsForEvent(eventFromStorage.getId());
+        if (confirmedRequestsForEvent != null) {
+            eventFromStorage.setConfirmedRequests(confirmedRequestsForEvent.getConfirmedRequestsNumber());
+        } else {
+            eventFromStorage.setConfirmedRequests(0L);
+        }
+        return eventFromStorage;
     }
 
     private long getConfirmedRequests(EventEntity entity) {

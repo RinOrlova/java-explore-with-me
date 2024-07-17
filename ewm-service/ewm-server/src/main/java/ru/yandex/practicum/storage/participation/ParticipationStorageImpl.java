@@ -11,6 +11,7 @@ import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.mapper.ParticipationMapper;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -128,5 +129,17 @@ public class ParticipationStorageImpl implements ParticipationStorage {
                 .collect(Collectors.groupingBy(ParticipationRequestResponse::getStatus))
                 .forEach(allParticipationRequestsResponse::addRequests);
         return allParticipationRequestsResponse;
+    }
+
+    @Override
+    public ConfirmedRequestsProjection getConfirmedRequestsForEvent(Long eventId) {
+        return participationRepository.getConfirmedRequestsForEventNumber(eventId);
+    }
+
+    @Override
+    public Map<Long, Long> getAllConfirmedRequestsNumber() {
+        return participationRepository.getAllConfirmedRequestsNumber()
+                .stream()
+                .collect(Collectors.toMap(ConfirmedRequestsProjection::getEventId, ConfirmedRequestsProjection::getConfirmedRequestsNumber));
     }
 }

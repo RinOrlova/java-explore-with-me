@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.participation.AllParticipationRequestsResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
-import ru.yandex.practicum.dto.participation.ParticipationRequestStatus;
 import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.mapper.ParticipationMapper;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -87,10 +87,8 @@ public class ParticipationStorageImpl implements ParticipationStorage {
     }
 
     @Override
-    public boolean isRequestPresentInStatusPending(Long id) {
-        return participationRepository.findById(id)
-                .map(request -> request.getStatus() == ParticipationRequestStatus.PENDING)
-                .orElse(false);
+    public Collection<ParticipationRequestResponse> getAllRequestsByIds(Collection<Long> requestIds) {
+        return mapAllResults(participationRepository.findAllById(requestIds));
     }
 
     @Override
@@ -106,18 +104,20 @@ public class ParticipationStorageImpl implements ParticipationStorage {
 
     @Override
     @Transactional
-    public void declineAllPendingRequestsForEvent(Long eventId) {
-        int declinedRequests = participationRepository.declineAllRequestsForEvent(eventId);
+    public void confirmAllRequests(List<Long> requestIds) {
+        int declinedRequests = participationRepository.confirmParticipationByIds(requestIds);
+        requestIds.forEach(id -> {
+            ParticipationEntity participationEntity = participationRepository.findById(id).get();
+            participationRepository.refresh(participationEntity);
+        });
         log.info("Number of requests declined: {}.", declinedRequests);
     }
 
     @Override
     @Transactional
-    public void confirmRequest(Long id) {
-        participationRepository.confirmRequestById(id);
-        ParticipationEntity participationEntity = participationRepository.findById(id).get();
-        participationRepository.refresh(participationEntity);
-        log.info("Request by id={} is confirmed.", id);
+    public void declineAllPendingRequestsForEvent(Long eventId) {
+        int declinedRequests = participationRepository.declineAllRequestsForEvent(eventId);
+        log.info("Number of requests declined: {}.", declinedRequests);
     }
 
     @Override

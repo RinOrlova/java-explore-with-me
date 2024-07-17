@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.storage.RefreshRepository;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface ParticipationRepository extends JpaRepository<ParticipationEntity, Long>, RefreshRepository {
 
@@ -33,11 +34,6 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
 
     @Modifying
     @Transactional
-    @Query("UPDATE ParticipationEntity p SET p.status = 'CONFIRMED' WHERE p.id = :id")
-    void confirmRequestById(@Param("id") Long id);
-
-    @Modifying
-    @Transactional
     @Query("UPDATE ParticipationEntity p SET p.status = 'REJECTED' WHERE p.event.id = :eventId")
     int declineAllRequestsForEvent(@Param("eventId") Long eventId);
 
@@ -58,4 +54,9 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
             "WHERE p.status = 'CONFIRMED' " +
             "GROUP BY p.event.id")
     Collection<ConfirmedRequestsProjection> getAllConfirmedRequestsNumber();
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE ParticipationEntity p SET p.status = 'CONFIRMED' WHERE p.id IN :requestIds")
+    int confirmParticipationByIds(List<Long> requestIds);
 }

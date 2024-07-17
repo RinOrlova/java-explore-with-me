@@ -157,6 +157,17 @@ public class EventStorageImpl implements EventStorage {
     }
 
     @Override
+    public Long getFreePlacesAmount(Long eventId) {
+        Optional<EventEntity> optEventEntity = eventRepository.findById(eventId);
+        if (optEventEntity.isPresent()) {
+            EventEntity eventEntity = optEventEntity.get();
+            setConfirmedRequestsToEventEntity(eventEntity);
+            return eventEntity.getParticipantLimit() - eventEntity.getConfirmedRequests();
+        }
+        return 0L;
+    }
+
+    @Override
     public EventShort getEventShortById(Long id) {
         Optional<EventEntity> eventFromStorage = eventRepository.findById(id);
         if (eventFromStorage.isPresent()) {

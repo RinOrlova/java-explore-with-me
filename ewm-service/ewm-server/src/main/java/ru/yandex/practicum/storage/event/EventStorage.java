@@ -12,6 +12,8 @@ import java.util.List;
 public interface EventStorage {
 
 
+    Long getFreePlacesAmount(Long eventId);
+
     EventShort getEventShortById(Long id);
 
     EventFull getEventFullPublishedById(Long id);

@@ -4,6 +4,7 @@ import ru.yandex.practicum.dto.participation.AllParticipationRequestsResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface ParticipationStorage {
@@ -18,11 +19,11 @@ public interface ParticipationStorage {
 
     ParticipationRequestResponse getRequestById(Long requestId);
 
-    boolean isRequestPresentInStatusPending(Long id);
-
-    void confirmRequest(Long id);
+    Collection<ParticipationRequestResponse> getAllRequestsByIds(Collection<Long> requestIds);
 
     void declineAllRequests(Collection<Long> requestIds);
+
+    void confirmAllRequests(List<Long> requestIds);
 
     void declineAllPendingRequestsForEvent(Long eventId);
 

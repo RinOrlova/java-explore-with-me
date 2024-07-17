@@ -22,4 +22,12 @@ public interface EventRepository extends JpaRepository<EventEntity, Long>, Refre
             "FROM EventEntity e " +
             "WHERE e.id = :eventId")
     boolean canAcceptMoreParticipants(@Param("eventId") Long eventId);
+
+    @Query("SELECT e.participantLimit - COUNT(p) " +
+            "FROM EventEntity e " +
+            "LEFT JOIN e.participationRequests p " +
+            "ON p.status = 'CONFIRMED' " +
+            "WHERE e.id = :eventId " +
+            "GROUP BY e.id, e.participantLimit")
+    Long getRemainingFreePlaces(@Param("eventId") Long eventId);
 }

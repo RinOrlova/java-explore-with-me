@@ -7,14 +7,17 @@ import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventStatus;
 import ru.yandex.practicum.dto.participation.AllParticipationRequestsResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
+import ru.yandex.practicum.dto.participation.ParticipationRequestStatus;
 import ru.yandex.practicum.dto.participation.ParticipationStatusUpdateRequest;
 import ru.yandex.practicum.exceptions.ConflictException;
+import ru.yandex.practicum.exceptions.EntityNotFoundException;
 import ru.yandex.practicum.exceptions.ForbiddenException;
 import ru.yandex.practicum.storage.event.EventStorage;
 import ru.yandex.practicum.storage.participation.ParticipationStorage;
 import ru.yandex.practicum.storage.user.UserStorage;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -101,20 +104,38 @@ public class ParticipationServiceImpl implements ParticipationService {
     }
 
     private boolean allRequestsArePresentAndInStatusPending(@NonNull ParticipationStatusUpdateRequest participationStatusUpdateRequest) {
-        for (Long requestId : participationStatusUpdateRequest.getRequestIds()) {
-            if (!participationStorage.isRequestPresentInStatusPending(requestId)) {
-                throw new ConflictException("Request must have status PENDING");
-            }
+
+        Collection<Long> requestIds = participationStatusUpdateRequest.getRequestIds();
+        Collection<ParticipationRequestResponse> allRequestsByIds = participationStorage.getAllRequestsByIds(requestIds);
+        if (allRequestsByIds.size() != requestIds.size()) {
+            throw new EntityNotFoundException(String.format("Not all participation requests were found by ids=%s", requestIds));
+        }
+        if (!areAllRequestsInStatusPending(allRequestsByIds)) {
+            throw new ConflictException("Request must have status PENDING");
         }
         return true;
     }
 
+    private boolean areAllRequestsInStatusPending(Collection<ParticipationRequestResponse> allRequestsByIds) {
+        return allRequestsByIds.stream()
+                .allMatch(request -> request.getStatus() == ParticipationRequestStatus.PENDING);
+    }
+
     private AllParticipationRequestsResponse confirmAllRequests(ParticipationStatusUpdateRequest participationStatusUpdateRequest,
                                                                 Long eventId) {
-        for (Long requestId : participationStatusUpdateRequest.getRequestIds()) {
-            if (eventStorage.anyFreePlacesLeft(eventId)) {
-                participationStorage.confirmRequest(requestId);
+        List<Long> requestIds = List.copyOf(participationStatusUpdateRequest.getRequestIds());
+        EventFull eventFullById = eventStorage.getEventFullById(eventId);
+        if (eventFullById.getParticipantLimit() == 0) {
+            participationStorage.confirmAllRequests(requestIds);
+        } else {
+            Long freePlacesAmount = eventStorage.getFreePlacesAmount(eventId);
+            if (requestIds.size() <= freePlacesAmount) {
+                participationStorage.confirmAllRequests(requestIds);
             } else {
+                if (!freePlacesAmount.equals(0L)) {
+                    List<Long> toBeApprovedRequests = requestIds.subList(0, Math.toIntExact(freePlacesAmount));
+                    participationStorage.confirmAllRequests(toBeApprovedRequests);
+                }
                 participationStorage.declineAllPendingRequestsForEvent(eventId);
                 throw new ConflictException("Event limit reached.");
             }

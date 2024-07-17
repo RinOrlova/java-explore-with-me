@@ -54,8 +54,5 @@ public class EventRequest {
     @Size(min = 3, max = 120)
     @NotBlank
     private String title;
-
-    @Nullable
-    private StateAction stateAction;
 }
 

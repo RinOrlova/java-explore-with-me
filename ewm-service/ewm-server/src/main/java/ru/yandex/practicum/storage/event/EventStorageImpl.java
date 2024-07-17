@@ -74,6 +74,7 @@ public class EventStorageImpl implements EventStorage {
         );
         return eventSearchRepository.findAllByAdminSearchParams(adminSearch, pageRequest)
                 .stream()
+                .map(this::setConfirmedRequestsToEventEntity)
                 .map(eventMapper::mapToEventFull)
                 .collect(Collectors.toList());
     }
@@ -182,9 +183,10 @@ public class EventStorageImpl implements EventStorage {
         return eventMapper.mapToEventFull(eventFromStorage);
     }
 
-    private void setConfirmedRequestsToEventEntity(EventEntity entity) {
+    private EventEntity setConfirmedRequestsToEventEntity(EventEntity entity) {
         long confirmedRequests = getConfirmedRequests(entity);
         entity.setConfirmedRequests(confirmedRequests);
+        return entity;
     }
 
     private long getConfirmedRequests(EventEntity entity) {

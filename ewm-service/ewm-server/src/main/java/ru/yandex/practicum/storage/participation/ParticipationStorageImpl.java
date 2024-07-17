@@ -42,8 +42,14 @@ public class ParticipationStorageImpl implements ParticipationStorage {
 
     @Override
     public Collection<ParticipationRequestResponse> getAllRequestsForUserAndEventId(Long userId, Long eventId) {
-        Collection<ParticipationEntity> allByRequesterIdAndEventId = participationRepository.findAllByUserInEvent(userId);
+        Collection<ParticipationEntity> allByRequesterIdAndEventId = participationRepository.findAllByUserInEvent(userId, eventId);
         return mapAllResults(allByRequesterIdAndEventId);
+    }
+
+    @Override
+    public Collection<ParticipationRequestResponse> findAllRequestsForEventOwner(Long userId, Long eventId) {
+        Collection<ParticipationEntity> allRequestsForEventOwner = participationRepository.findAllRequestsForEventOwner(userId, eventId);
+        return mapAllResults(allRequestsForEventOwner);
     }
 
     @Override
@@ -51,12 +57,6 @@ public class ParticipationStorageImpl implements ParticipationStorage {
         return participationRepository.findById(requestId)
                 .map(participationMapper::mapEntityToParticipationRequestResponse)
                 .orElseThrow(() -> new ParticipationNotFoundException(requestId));
-    }
-
-    @Override
-    public Collection<ParticipationRequestResponse> findAllRequestsByIds(Collection<Long> requestIds) {
-        Collection<ParticipationEntity> allById = participationRepository.findAllById(requestIds);
-        return mapAllResults(allById);
     }
 
     @Override

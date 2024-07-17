@@ -162,12 +162,14 @@ public class ParticipationRequestsIntegrationTest {
         assertEquals(1, eventFullWithOneApprovedRequests.getParticipantLimit());
         assertEquals(1, eventFullWithOneApprovedRequests.getConfirmedRequests());
 
-        String eventRequestForRequestRequestor = mockMvc.perform(get("/users/" + approvedResultUser.getId() + "/events/" + publishedEventFull.getId() + "/requests"))
+        // Get requests by event owner
+        String eventRequestByEventOwner = mockMvc.perform(get("/users/" + initiatorResultUser.getId() + "/events/" + publishedEventFull.getId() + "/requests"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        Collection<ParticipationRequestResponse> responsesForRequestRequestor = objectMapper.readValue(eventRequestForRequestRequestor, new TypeReference<>() {
+        Collection<ParticipationRequestResponse> eventRequestsForEventOwnerResponse = objectMapper.readValue(eventRequestByEventOwner, new TypeReference<>() {
         });
-        assertFalse(responsesForRequestRequestor.isEmpty());
+        assertFalse(eventRequestsForEventOwnerResponse.isEmpty());
+
 
         // To be rejected request
         mockMvc.perform(post("/users/" + notApprovedResultUser.getId() + "/requests?eventId=" + publishedEventFull.getId()))

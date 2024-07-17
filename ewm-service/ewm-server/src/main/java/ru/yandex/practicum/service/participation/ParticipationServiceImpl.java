@@ -48,16 +48,14 @@ public class ParticipationServiceImpl implements ParticipationService {
                 return participationStorage.addApprovedParticipationRequest(userId, eventId);
             }
         }
-        throw new
-
-                ConflictException("Not allowed to create request for not published event.");
+        throw new ConflictException("Not allowed to create request for not published event.");
     }
 
     @Override
-    public Collection<ParticipationRequestResponse> getRequestsByUserAndEventIds(@NonNull Long userId, @NonNull Long eventId) {
+    public Collection<ParticipationRequestResponse> findAllRequestsForEventOwner(@NonNull Long userId, @NonNull Long eventId) {
         userStorage.getUserById(userId); // Make sure user exists, otherwise → UserNotFoundException + Code 404
         eventStorage.getEventFullById(eventId); // Make sure event exists, otherwise → EventNotFoundException + Code 404
-        return participationStorage.getAllRequestsForUserAndEventId(userId, eventId);
+        return participationStorage.findAllRequestsForEventOwner(userId, eventId);
     }
 
     @Override

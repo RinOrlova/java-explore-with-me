@@ -13,9 +13,9 @@ public interface ParticipationStorage {
 
     Collection<ParticipationRequestResponse> getAllRequestsForUserAndEventId(Long userId, Long eventId);
 
-    ParticipationRequestResponse getRequestById(Long requestId);
+    Collection<ParticipationRequestResponse> findAllRequestsForEventOwner(Long userId, Long eventId);
 
-    Collection<ParticipationRequestResponse> findAllRequestsByIds(Collection<Long> requestIds);
+    ParticipationRequestResponse getRequestById(Long requestId);
 
     boolean isRequestPresentInStatusPending(Long id);
 

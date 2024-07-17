@@ -11,8 +11,8 @@ import java.util.Collection;
 
 public interface ParticipationRepository extends JpaRepository<ParticipationEntity, Long>, RefreshRepository {
 
-    @Query("SELECT p FROM ParticipationEntity p WHERE p.requester.id = :requesterId")
-    Collection<ParticipationEntity> findAllByUserInEvent(Long requesterId);
+    @Query("SELECT p FROM ParticipationEntity p WHERE p.requester.id = :requesterId AND p.event.id = :eventId")
+    Collection<ParticipationEntity> findAllByUserInEvent(Long requesterId, Long eventId);
 
     Collection<ParticipationEntity> findAllByEventId(Long eventId);
 
@@ -20,6 +20,11 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
             "WHERE p.requester.id = :requesterId " +
             "AND p.event.initiator.id != :requesterId")
     Collection<ParticipationEntity> findAllByRequesterIdAndEventInitiatorNotRequester(@Param("requesterId") Long requesterId);
+
+    @Query("SELECT p FROM ParticipationEntity p " +
+            "WHERE p.event.id = :eventId " +
+            "AND p.event.initiator.id = :requesterId")
+    Collection<ParticipationEntity> findAllRequestsForEventOwner(@Param("requesterId") Long requesterId, @Param("eventId") Long eventId);
 
     @Modifying
     @Transactional

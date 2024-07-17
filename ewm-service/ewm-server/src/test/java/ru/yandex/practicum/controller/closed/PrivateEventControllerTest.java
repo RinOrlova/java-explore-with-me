@@ -167,11 +167,11 @@ class PrivateEventControllerTest {
     @Test
     void test_createParticipationRequest() throws Exception {
         String urlTemplate = "/users/1/events/1/requests";
-        when(participationService.getRequestsByUserAndEventIds(1L, 1L)).thenReturn(emptyList());
+        when(participationService.findAllRequestsForEventOwner(1L, 1L)).thenReturn(emptyList());
         String responseJson = mockMvc.perform(get(urlTemplate))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        verify(participationService, times(1)).getRequestsByUserAndEventIds(1L, 1L);
+        verify(participationService, times(1)).findAllRequestsForEventOwner(1L, 1L);
         Collection<ParticipationRequestResponse> responseEventShort = objectMapper.readValue(responseJson, new TypeReference<>() {
         });
         assertNotNull(responseEventShort);

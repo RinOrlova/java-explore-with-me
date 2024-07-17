@@ -16,7 +16,7 @@ public interface ParticipationService {
                                                                @NonNull Long eventId,
                                                                @NonNull ParticipationStatusUpdateRequest participationStatusUpdateRequest);
 
-    Collection<ParticipationRequestResponse> getRequestsByUserAndEventIds(@NonNull Long id,
+    Collection<ParticipationRequestResponse> findAllRequestsForEventOwner(@NonNull Long id,
                                                                           @NonNull Long eventId);
 
     Collection<ParticipationRequestResponse> getAllRequestsForUser(Long userId);

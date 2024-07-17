@@ -5,7 +5,6 @@ import ru.yandex.practicum.dto.event.EventStatus;
 import ru.yandex.practicum.storage.category.CategoryEntity;
 import ru.yandex.practicum.storage.compilation.CompilationEntity;
 import ru.yandex.practicum.storage.location.LocationEntity;
-import ru.yandex.practicum.storage.participation.ParticipationEntity;
 import ru.yandex.practicum.storage.user.UserEntity;
 
 import javax.persistence.*;
@@ -16,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "events")
 @Data
-@EqualsAndHashCode(exclude = "participationRequests")
+@EqualsAndHashCode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,7 +41,6 @@ public class EventEntity {
     @Column(name = "event_date", nullable = false)
     private LocalDateTime eventDate;
 
-    // TODO: publishedOn should null until its status changes to PUBLISHED
     @Column(name = "published_on")
     private LocalDateTime publishedOn;
 
@@ -77,9 +75,6 @@ public class EventEntity {
 
     @ManyToMany(mappedBy = "events", fetch = FetchType.LAZY)
     private Set<CompilationEntity> compilations;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "event")
-    private Set<ParticipationEntity> participationRequests;
 
     @Transient
     private long confirmedRequests;

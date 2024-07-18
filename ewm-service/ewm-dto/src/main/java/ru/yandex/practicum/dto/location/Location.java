@@ -14,14 +14,14 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class Location {
     @JsonIgnore
-    Long id;
+    private Long id;
     @Min(-90)
     @Max(90)
     @NotNull
-    Double lat;
+    private Double lat;
     @Min(-180)
     @Max(180)
     @NotNull
-    Double lon;
+    private Double lon;
 
 }

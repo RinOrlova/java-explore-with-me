@@ -49,7 +49,6 @@ public class EventRequest {
 
     private boolean requestModeration = true;
 
-    @NotNull
     @Size(min = 3, max = 120)
     @NotBlank
     private String title;

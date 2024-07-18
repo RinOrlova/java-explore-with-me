@@ -13,9 +13,9 @@ import java.util.Collection;
 public class CompilationResponse {
 
     Collection<EventShort> events;
-    Long id;
-    boolean pinned;
-    String title;
+    private Long id;
+    private boolean pinned;
+    private String title;
 
 
 }

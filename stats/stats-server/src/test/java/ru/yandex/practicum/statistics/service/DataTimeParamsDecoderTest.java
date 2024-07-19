@@ -2,7 +2,7 @@ package ru.yandex.practicum.statistics.service;
 
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.common.utils.StatisticsConstants;
-import ru.yandex.practicum.statistics.exceptions.InvalidDateFormatRequestedException;
+import ru.yandex.practicum.exceptions.InvalidDateFormatRequestedException;
 import ru.yandex.practicum.statistics.utils.TestConstants;
 
 import java.time.LocalDateTime;

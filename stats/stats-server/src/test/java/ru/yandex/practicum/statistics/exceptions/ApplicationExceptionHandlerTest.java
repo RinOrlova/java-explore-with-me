@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.yandex.practicum.exceptions.InvalidDateFormatRequestedException;
+import ru.yandex.practicum.exceptions.InvalidDateRequestedException;
 import ru.yandex.practicum.statistics.utils.TestConstants;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

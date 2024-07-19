@@ -21,7 +21,7 @@ public class StatisticsClient {
 
     private final WebClient webClient;
     @Value("${statistics.service.url}")
-    private final String baseUrl;
+    private String baseUrl;
     private final DateTimeEncoder dateTimeEncoder;
 
     public void saveRequest(HitRequest hitRequest) {

@@ -34,7 +34,7 @@ public class StatisticsController {
                                                         @DateTimeFormat(pattern = StatisticsConstants.DATE_FORMAT)
                                                         @RequestParam(value = "end") String endParam,
                                                         @RequestParam(required = false) List<String> uris,
-                                                        @RequestParam(required = false, defaultValue = "false") Boolean unique) {
+                                                        @RequestParam(defaultValue = "false") Boolean unique) {
         LocalDateTime start = dataTimeParamsDecoder.getLocalDateTimeParamOfEncodedValue(startParam);
         LocalDateTime end = dataTimeParamsDecoder.getLocalDateTimeParamOfEncodedValue(endParam);
         return statisticsService.getStatistics(start, end, uris, unique);

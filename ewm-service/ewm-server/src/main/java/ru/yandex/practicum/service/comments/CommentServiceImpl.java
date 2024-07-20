@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private static boolean isUserAuthorOfComment(Long userId, CommentResponse commentById) {
-        return commentById.getUser().getId().equals(userId);
+        return commentById.getUserId().equals(userId);
     }
 
     @Override
@@ -66,6 +66,7 @@ public class CommentServiceImpl implements CommentService {
 
         if (isUserAuthorOfComment(userId, commentById)) {
             commentsStorage.deleteComment(commentId);
+            return;
         }
         throw new ForbiddenException("Users can delete only their own comments.");
     }

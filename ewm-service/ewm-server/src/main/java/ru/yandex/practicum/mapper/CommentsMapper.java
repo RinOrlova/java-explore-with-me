@@ -9,6 +9,7 @@ import ru.yandex.practicum.dto.comments.CommentResponse;
 import ru.yandex.practicum.dto.comments.UpdateCommentRequest;
 import ru.yandex.practicum.storage.comments.CommentEntity;
 import ru.yandex.practicum.storage.event.EventEntity;
+import ru.yandex.practicum.storage.user.UserEntity;
 
 @Mapper(componentModel = org.mapstruct.MappingConstants.ComponentModel.SPRING, uses = {UserMapper.class})
 public interface CommentsMapper {
@@ -19,7 +20,7 @@ public interface CommentsMapper {
 
     @Mapping(target = "author", source = "userId", qualifiedByName = "mapUserIdToUserEntity")
     @Mapping(target = "event", ignore = true)
-    @Mapping(target = "editedAt", ignore = true)
+    @Mapping(target = "editedAt", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "created", ignore = true)
     CommentEntity mapUpdateCommentRequest(Long userId, Long eventId, UpdateCommentRequest commentRequest);
 
@@ -32,7 +33,8 @@ public interface CommentsMapper {
     }
 
     @Mapping(target = "eventId", source = "event", qualifiedByName = "mapEventEntityToId")
-    @Mapping(target = "user", source = "author", qualifiedByName = "mapUserEntityToUserFull")
+    @Mapping(target = "userId", source = "author", qualifiedByName = "mapUserEntityToId")
+    @Mapping(target = "edited", source = "editedAt")
     CommentResponse mapEntityToResponse(CommentEntity commentEntityFromStorage);
 
     @Named("mapEntityId")
@@ -48,5 +50,10 @@ public interface CommentsMapper {
     @Named("mapEventEntityToId")
     default Long mapEventEntityToId(EventEntity eventEntity) {
         return eventEntity.getId();
+    }
+
+    @Named("mapUserEntityToId")
+    default Long mapUserEntityToId(UserEntity userEntity) {
+        return userEntity.getId();
     }
 }

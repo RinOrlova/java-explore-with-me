@@ -1,10 +1,12 @@
 package ru.yandex.practicum.service.comments;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.dto.comments.CommentRequest;
 import ru.yandex.practicum.dto.comments.CommentResponse;
 import ru.yandex.practicum.dto.comments.UpdateCommentRequest;
+import ru.yandex.practicum.dto.event.EventFull;
 import ru.yandex.practicum.dto.event.EventStatus;
 import ru.yandex.practicum.dto.participation.ParticipationRequestResponse;
 import ru.yandex.practicum.dto.participation.ParticipationRequestStatus;
@@ -17,9 +19,14 @@ import ru.yandex.practicum.storage.user.UserStorage;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
@@ -27,6 +34,16 @@ public class CommentServiceImpl implements CommentService {
     private final EventStorage eventStorage;
     private final UserStorage userStorage;
     private final ParticipationStorage participationStorage;
+
+    private static boolean anyRequestWasConfirmed(Collection<ParticipationRequestResponse> allRequestsForUserOnEvent) {
+        return allRequestsForUserOnEvent
+                .stream()
+                .anyMatch(participationRequestResponse -> participationRequestResponse.getStatus() == ParticipationRequestStatus.CONFIRMED);
+    }
+
+    private static boolean isUserAuthorOfComment(Long userId, CommentResponse commentById) {
+        return commentById.getUser().getId().equals(userId);
+    }
 
     @Override
     public CommentResponse postComment(@Positive @NotNull Long userId, CommentRequest commentRequest) {
@@ -42,12 +59,6 @@ public class CommentServiceImpl implements CommentService {
         throw new ConflictException("User should have at least one approved request.");
     }
 
-    private static boolean anyRequestWasConfirmed(Collection<ParticipationRequestResponse> allRequestsForUserOnEvent) {
-        return allRequestsForUserOnEvent
-                .stream()
-                .anyMatch(participationRequestResponse -> participationRequestResponse.getStatus() == ParticipationRequestStatus.CONFIRMED);
-    }
-
     @Override
     public void deleteComment(@NotNull @Positive Long userId, @Positive @NotNull Long commentId) {
         userStorage.getUserById(userId); // make sure user exists
@@ -61,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentResponse updateComment(Long userId, Long commentId, UpdateCommentRequest updateCommentRequest) {
-        userStorage.getUserById(userId); // make sure user exists
+        userStorage.getUserById(userId);
         CommentResponse commentById = commentsStorage.getCommentById(commentId);
         if (isUserAuthorOfComment(userId, commentById)) {
             return commentsStorage.updateComment(userId, commentId, updateCommentRequest);
@@ -71,7 +82,32 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
-    private static boolean isUserAuthorOfComment(Long userId, CommentResponse commentById) {
-        return commentById.getUser().getId().equals(userId);
+    @Override
+    public void deleteComments(Collection<Long> commentsToDelete) {
+        Collection<CommentResponse> existingComments = commentsStorage.getCommentsByIds(commentsToDelete);
+        Set<Long> existingIds = existingComments.stream()
+                .map(CommentResponse::getId)
+                .collect(Collectors.toSet());
+        Collection<Long> notExistingIds = new ArrayList<>();
+        for (Long id : commentsToDelete) {
+            if (!existingIds.contains(id)) {
+                notExistingIds.add(id);
+            }
+        }
+        if (!notExistingIds.isEmpty()) {
+            log.warn("Comments with ids {} are not found", notExistingIds);
+        }
+        if (!existingIds.isEmpty()) {
+            commentsStorage.deleteComments(existingComments);
+        }
+    }
+
+    @Override
+    public Collection<CommentResponse> getCommentsByEventId(Long eventId, int from, int size) {
+        EventFull eventToCheck = eventStorage.getEventFullById(eventId);
+        if (eventToCheck.getState() != EventStatus.PUBLISHED) {
+            return Collections.emptyList();
+        }
+        return commentsStorage.getCommentsByEventId(eventId, from, size);
     }
 }

@@ -22,5 +22,6 @@ public class CommentResponse {
     @NotNull LocalDateTime created;
     @Nullable
     LocalDateTime edited;
+    @NotNull Long id;
 
 }

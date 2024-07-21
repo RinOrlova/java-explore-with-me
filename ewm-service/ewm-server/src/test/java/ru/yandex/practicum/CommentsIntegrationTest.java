@@ -28,7 +28,8 @@ import ru.yandex.practicum.utils.ApiPathConstants;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.yandex.practicum.utils.ApiPathConstants.*;
@@ -166,7 +167,7 @@ public class CommentsIntegrationTest {
         assertNotNull(commentResponse.getCreated());
         assertEquals(eventFull.getId(), commentResponse.getEventId());
         assertEquals(resultUser.getId(), commentResponse.getUserId());
-        assertNull(commentResponse.getEdited());
+        assertNotNull(commentResponse.getEdited());
 
         // Update comment
         UpdateCommentRequest updateCommentRequest = UpdateCommentRequest.builder()

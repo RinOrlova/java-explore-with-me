@@ -15,12 +15,12 @@ import ru.yandex.practicum.storage.user.UserEntity;
 public interface CommentsMapper {
     @Mapping(target = "author", source = "userId", qualifiedByName = "mapUserIdToUserEntity")
     @Mapping(target = "event", source = "commentRequest.eventId", qualifiedByName = "mapEntityId")
-    @Mapping(target = "created", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "created", ignore = true)
     CommentEntity mapCommentRequest(Long userId, CommentRequest commentRequest);
 
     @Mapping(target = "author", source = "userId", qualifiedByName = "mapUserIdToUserEntity")
     @Mapping(target = "event", ignore = true)
-    @Mapping(target = "editedAt", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "editedAt", ignore = true)
     @Mapping(target = "created", ignore = true)
     CommentEntity mapUpdateCommentRequest(Long userId, Long eventId, UpdateCommentRequest commentRequest);
 

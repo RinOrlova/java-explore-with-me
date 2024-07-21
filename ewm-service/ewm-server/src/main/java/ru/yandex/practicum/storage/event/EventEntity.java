@@ -14,8 +14,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "events")
-@Data
-@EqualsAndHashCode
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

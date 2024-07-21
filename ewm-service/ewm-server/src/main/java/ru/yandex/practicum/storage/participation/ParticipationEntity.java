@@ -1,9 +1,6 @@
 package ru.yandex.practicum.storage.participation;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.yandex.practicum.dto.participation.ParticipationRequestStatus;
 import ru.yandex.practicum.storage.event.EventEntity;
 import ru.yandex.practicum.storage.user.UserEntity;
@@ -13,7 +10,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "requests")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

@@ -17,11 +17,8 @@ import ru.yandex.practicum.storage.event.EventStorage;
 import ru.yandex.practicum.storage.participation.ParticipationStorage;
 import ru.yandex.practicum.storage.user.UserStorage;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponse postComment(@Positive @NotNull Long userId, CommentRequest commentRequest) {
+    public CommentResponse postComment(Long userId, CommentRequest commentRequest) {
         var eventFull = eventStorage.getEventFullById(commentRequest.getEventId()); // make sure event exists
         if (eventFull.getState() != EventStatus.PUBLISHED) {
             throw new ConflictException("Posting comments to unpublished events is not allowed.");
@@ -60,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(@NotNull @Positive Long userId, @Positive @NotNull Long commentId) {
+    public void deleteComment(Long userId, Long commentId) {
         userStorage.getUserById(userId); // make sure user exists
         CommentResponse commentById = commentsStorage.getCommentById(commentId);
 
@@ -84,13 +81,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComments(Collection<Long> commentsToDelete) {
-        Collection<CommentResponse> existingComments = commentsStorage.getCommentsByIds(commentsToDelete);
+    public void deleteComments(Collection<Long> commentsIdsToDelete) {
+        Collection<CommentResponse> existingComments = commentsStorage.getCommentsByIds(commentsIdsToDelete);
         Set<Long> existingIds = existingComments.stream()
                 .map(CommentResponse::getId)
                 .collect(Collectors.toSet());
         Collection<Long> notExistingIds = new ArrayList<>();
-        for (Long id : commentsToDelete) {
+        for (Long id : commentsIdsToDelete) {
             if (!existingIds.contains(id)) {
                 notExistingIds.add(id);
             }
@@ -107,7 +104,7 @@ public class CommentServiceImpl implements CommentService {
     public Collection<CommentResponse> getCommentsByEventId(Long eventId, int from, int size) {
         EventFull eventToCheck = eventStorage.getEventFullById(eventId);
         if (eventToCheck.getState() != EventStatus.PUBLISHED) {
-            return Collections.emptyList();
+            throw new ConflictException("Can't get comments for unpublished event.");
         }
         return commentsStorage.getCommentsByEventId(eventId, from, size);
     }

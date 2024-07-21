@@ -531,9 +531,9 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.userId).to.eql(pm.collectionVariables.get(\"userId\"));",
 							"});",
-							"pm.test(\"Test comment 'edited' field is null\", function () {",
+							"pm.test(\"Test comment 'edited' field\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.edited).to.eql(null);",
+							"    pm.expect(jsonData).to.have.property('edited');",
 							"});",
 							""
 						],

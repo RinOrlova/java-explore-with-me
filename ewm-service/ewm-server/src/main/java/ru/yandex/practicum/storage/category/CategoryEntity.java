@@ -10,7 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "categories")
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"events"})
 @Builder
 @NoArgsConstructor

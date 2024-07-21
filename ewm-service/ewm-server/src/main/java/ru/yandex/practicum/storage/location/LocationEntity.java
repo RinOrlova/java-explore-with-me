@@ -1,8 +1,9 @@
 package ru.yandex.practicum.storage.location;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.yandex.practicum.storage.event.EventEntity;
 
 import javax.persistence.*;
@@ -10,7 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "locations")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class LocationEntity {

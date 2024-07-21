@@ -13,7 +13,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"events"})
 @Builder
 @NoArgsConstructor

@@ -14,4 +14,6 @@ public class ApiPathConstants {
     public static final String ADMIN_PATH = "/admin";
     public static final String USERS_PATH = "/users";
     public static final String CANCEL_PATH = "/cancel";
+    public static final String COMMENT_PATH = "/comments";
+    public static final String COMMENT_BY_ID_PATH = "/{comment_id}";
 }

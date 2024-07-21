@@ -9,7 +9,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "compilations")
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = "events")
 @Builder
 @NoArgsConstructor
